@@ -1,0 +1,16 @@
+name: Build
+description: ビルド
+
+inputs:
+  project-names:
+    description: 処理対象プロジェクト名のリスト
+    required: true
+
+runs:
+  using: composite
+
+  steps:
+    - name: Build
+      shell: cmd
+      run: |
+          echo ${{ inputs.project-names }}

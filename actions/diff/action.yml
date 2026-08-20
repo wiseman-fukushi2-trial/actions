@@ -1,0 +1,38 @@
+name: Diff
+description: 差分を取得する
+
+outputs:
+  changed_files:
+    description: 差分ファイルのリスト
+    value: ${{ steps.changed_files.outputs.changed_files }}
+  changed_projects:
+    description: 差分プロジェクト名のリスト
+    value: ${{ steps.changed_projects.outputs.changed_projects }}
+
+runs:
+  using: composite
+
+  steps:
+    # 差分ファイルを取得
+    - name: Get Changed Files
+      uses: dorny/paths-filter@v4.0.3
+      id: changed_files
+      with:
+        list-files: shell
+        filters: |
+            changed:
+              - '**'
+
+    # 差分プロジェクト名を取得
+    - name: Get Changed Projects
+      shell: cmd
+      id: changed_projects
+      run: |
+        dotnet-script "${{ github.action_path }}/changed_projects.csx" ${{ steps.changed_files.outputs.changed_files }}
+
+    # 出力
+    - name: Output
+      shell: cmd
+      run: |
+        echo steps.changed_files.outputs.changed_files : ${{ steps.changed_files.outputs.changed_files }}
+        echo steps.changed_projects.outputs.changed_projects : ${{ steps.changed_projects.outputs.changed_projects }}

@@ -1,0 +1,47 @@
+name: Toko
+
+on:
+  # 各モジュールから呼び出されたときに実行
+  workflow_call:
+
+jobs:
+  main:
+    runs-on: self-hosted
+
+    steps:
+
+      # 呼び出し元リポジトリをクローン
+      - name: Checkout Caller Repository
+        uses: actions/checkout@v7.0.1
+        with:
+          # チェックアウトするブランチを指定
+          # プルリクエスト：source のブランチ
+          # それ以外：現在のブランチ
+          ref: ${{ github.event.pull_request.head.ref || github.ref_name }}
+
+      # 変更を取得
+      # ${{ steps.diff.outputs.changed_files }} : 差分ファイルのリスト
+      # ${{ steps.diff.outputs.changed_projects }} : 差分プロジェクト名のリスト
+      - name: Get Diff
+        uses: wiseman-fukushi2-trial/actions/actions/diff@main
+        id: diff
+
+      # ビルド
+      - name: Build
+        id: build
+        uses: wiseman-fukushi2-trial/actions/actions/build@main
+        with:
+          project-names: ${{ steps.diff.outputs.changed_projects }}
+
+      # ファイルチェック
+      - name: File Check
+        uses: wiseman-fukushi2-trial/actions/actions/file-check@main
+        with:
+          files: ${{ steps.diff.outputs.changed_files }}
+
+      - name: Info
+        shell: cmd
+        run: |
+            cd
+            echo ${{ github.workspace }}
+            set GITHUB_

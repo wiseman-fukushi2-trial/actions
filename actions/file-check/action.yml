@@ -1,0 +1,16 @@
+name: File Check
+description: ファイルチェック
+
+inputs:
+  files:
+    description: 処理対象ファイルのリスト
+    required: true
+
+runs:
+  using: composite
+
+  steps:
+    - name: File Check
+      shell: cmd
+      run: |
+          echo ${{ inputs.files }}

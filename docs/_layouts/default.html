@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://fonts.xz.style/serve/inter.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css">
+	<style>
+	@media (prefers-color-scheme: dark) {
+		:root {
+			--nc-tx-1: #000000;
+			--nc-tx-2: #1A1A1A;
+			--nc-bg-1: #FFFFFF;
+			--nc-bg-2: #F6F8FA;
+			--nc-bg-3: #E5E7EB;
+			--nc-lk-1: #0070F3;
+			--nc-lk-2: #0366D6;
+			--nc-lk-tx: #FFFFFF;
+			--nc-ac-1: #b6e8ff;
+			--nc-ac-tx: #0C4047;
+		}
+	}
+	.language-mermaid{
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+	</style>
+	<script type="module">
+		import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+		mermaid.initialize({
+			startOnLoad: false
+		});
+		await mermaid.run({
+			querySelector: 'pre code.language-mermaid'
+		});
+	</script>
+</head>
+
+<body>
+	<main>
+		{{ content }}
+	</main>
+</body>
+
+</html>
