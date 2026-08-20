@@ -23,19 +23,19 @@ jobs:
       # ${{ steps.diff.outputs.changed_files }} : 差分ファイルのリスト
       # ${{ steps.diff.outputs.changed_projects }} : 差分プロジェクト名のリスト
       - name: Get Diff
-        uses: wiseman-fukushi2-trial/actions/actions/diff@main
+        uses: wiseman-fukushi2-trial/actions/actions/diff@DX-YKyoya
         id: diff
 
       # ビルド
       - name: Build
         id: build
-        uses: wiseman-fukushi2-trial/actions/actions/build@main
+        uses: wiseman-fukushi2-trial/actions/actions/build@DX-YKyoya
         with:
           project-names: ${{ steps.diff.outputs.changed_projects }}
 
       # ファイルチェック
       - name: File Check
-        uses: wiseman-fukushi2-trial/actions/actions/file-check@main
+        uses: wiseman-fukushi2-trial/actions/actions/file-check@DX-YKyoya
         with:
           files: ${{ steps.diff.outputs.changed_files }}
 
