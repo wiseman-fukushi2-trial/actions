@@ -12,11 +12,11 @@ flowchart TD
     DiffGroup[差分取得]
     Diff[Get Diff]
     diff[[actions/diff]]
-
+    
     BuildGroup[ビルド]
     Build[Build]
     build[[actions/build]]
-
+    
     FileCheckGroup[ファイルチェック]
     FileCheck[File Check]
     filecheck[[actions/file-check]]
@@ -25,26 +25,26 @@ flowchart TD
     Start --> Checkout
     
     Checkout --> DiffGroup
-
+    
     subgraph DiffGroup[差分取得]
     direction TB
     Diff --> diff
     end
-
+    
     DiffGroup -- changed_projects --> BuildGroup
     
     subgraph BuildGroup[ビルド]
     direction TB
     Build --> build
     end
-
+    
     DiffGroup -- changed_files --> FileCheckGroup
     
     subgraph FileCheckGroup[ファイルチェック]
     direction TB
     FileCheck --> filecheck
     end
-
+    
     BuildGroup --> End
     FileCheckGroup --> End
 ```
@@ -52,12 +52,11 @@ flowchart TD
 ## 環境構築
 ### GitHub
 #### Actions 内で Pull Request を参照できるようにする
-Organization と 当リポジトリ それぞれで、以下を ON にする。
+Organization と 当リポジトリ それぞれで、以下にチェックを入れる。
 ```
 Settings > Actions > General
-Workflow permissions セクション内
-Allow GitHub Actions to create and approve pull requests
-``` 
+Workflow permissions > Allow GitHub Actions to create and approve pull requests
+```
 
 ### Server
 #### csx を実行できるようにする
