@@ -6,7 +6,7 @@ outputs:
     description: 差分ファイルのリスト
     value: ${{ steps.changed_files.outputs.changed_files }}
   changed_projects:
-    description: 差分プロジェクトのリスト
+    description: 差分プロジェクトの .vbproj のリスト
     value: ${{ steps.changed_projects.outputs.changed_projects }}
 
 runs:
@@ -16,17 +16,23 @@ runs:
     # 差分ファイルを取得
     - name: Get Changed Files
       uses: dorny/paths-filter@v4.0.3
-      id: changed_files
+      id: changed_files_relative
       with:
         list-files: shell
         filters: |
             changed:
               - '**'
 
-    # 差分プロジェクトを取得
+    - name: Convert To Absolute Path
+      id: changed_files
+      shell: pwsh
+      run: |
+        dotnet-script "${{ github.action_path }}/ChangedFiles.csx" "${{ github.workspace }}" ${{ steps.changed_files_relative.outputs.changed_files }}
+
+    # 差分プロジェクトの .vbproj を取得
     - name: Get Changed Projects
-      shell: cmd
       id: changed_projects
+      shell: cmd
       run: |
         dotnet-script "${{ github.action_path }}/ChangedProjects.csx" ${{ steps.changed_files.outputs.changed_files }}
 

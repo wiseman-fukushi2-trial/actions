@@ -1,3 +1,5 @@
+#nullable enable
+
 // 引数が空の場合は処理を終了する
 if(Args is null || Args.Count == 0)
 {
@@ -14,6 +16,7 @@ HashSet<string> changedProjects = [];
 foreach (string file in changedFiles)
 {
 	string? directoryPath = Path.GetDirectoryName(file);
+
 	if (directoryPath == null || Directory.Exists(directoryPath) == false)
 	{
 		continue;
@@ -24,16 +27,17 @@ foreach (string file in changedFiles)
 	{
 		continue;
 	}
-	changedProjects.Add(projectName);
+	changedProjects.Add(projFilePath);
 }
 
 // 出力
-string outputFile = Environment.GetEnvironmentVariable("GITHUB_OUTPUT");
+string outputFile = Environment.GetEnvironmentVariable("GITHUB_OUTPUT") ?? "GITHUB_OUTPUT.log";
 File.AppendAllText(outputFile,$"changed_projects={string.Join(" ", changedProjects)}" + Environment.NewLine);
 
 
 static string? GetProjFilePath(DirectoryInfo directory)
 {
+	Console.WriteLine(directory.FullName);
 	FileInfo[] files = directory.GetFiles(".vbproj");
 	if (files.Length > 1)
 	{

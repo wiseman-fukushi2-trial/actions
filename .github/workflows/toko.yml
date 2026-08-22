@@ -21,7 +21,7 @@ jobs:
 
       # 変更を取得
       # ${{ steps.diff.outputs.changed_files }} : 差分ファイルのリスト
-      # ${{ steps.diff.outputs.changed_projects }} : 差分プロジェクトのリスト
+      # ${{ steps.diff.outputs.changed_projects }} : 差分プロジェクトの .vbproj のリスト
       - name: Get Diff
         uses: wiseman-fukushi2-trial/actions/actions/diff@DX-RKuji
         id: diff

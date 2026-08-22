@@ -1,0 +1,3 @@
+foreach ($vbproj in $args) {
+	& "C:\Program Files (x86)\Microsoft Visual Studio\18\BuildTools\MSBuild\Current\Bin\MSBuild.exe" "$vbproj"
+}

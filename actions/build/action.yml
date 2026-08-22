@@ -11,6 +11,7 @@ runs:
 
   steps:
     - name: Build
-      shell: cmd
+      shell: pwsh
       run: |
-          echo ${{ inputs.project-files }}
+          Write-Host ${{ inputs.project-files }}
+          "${{ github.action_path }}/BuildProjects.ps1" ${{ inputs.project-files }}
