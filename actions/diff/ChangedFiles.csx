@@ -5,7 +5,6 @@
 if (Args is null || Args.Count == 0)
 {
 	throw new("required {{ github.workspace }} relativePath1 relativePath2 ...");
-	return;
 }
 else if (Args.Count == 1)
 {
@@ -16,7 +15,7 @@ else if (Args.Count == 1)
 string root = Args[0];
 
 // 差分ファイルパスのリスト
-IList<string> relativePaths = Args.Skip(1);
+IEnumerable<string> relativePaths = Args.Skip(1);
 
 // 差分プロジェクトのリスト
 IEnumerable<string> absolutePaths = relativePaths.Select(relative => Path.Combine(root, relative));
