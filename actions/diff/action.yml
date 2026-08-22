@@ -28,7 +28,7 @@ runs:
       shell: cmd
       id: changed_projects
       run: |
-        dotnet-script "${{ github.action_path }}/changed_projects.csx" ${{ steps.changed_files.outputs.changed_files }}
+        dotnet-script "${{ github.action_path }}/ChangedProjects.csx" ${{ steps.changed_files.outputs.changed_files }}
 
     # 出力
     - name: Output
