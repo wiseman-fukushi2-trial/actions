@@ -6,7 +6,7 @@ outputs:
     description: 差分ファイルのリスト
     value: ${{ steps.changed_files.outputs.changed_files }}
   changed_projects:
-    description: 差分プロジェクト名のリスト
+    description: 差分プロジェクトのリスト
     value: ${{ steps.changed_projects.outputs.changed_projects }}
 
 runs:
@@ -23,7 +23,7 @@ runs:
             changed:
               - '**'
 
-    # 差分プロジェクト名を取得
+    # 差分プロジェクトを取得
     - name: Get Changed Projects
       shell: cmd
       id: changed_projects

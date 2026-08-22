@@ -2,8 +2,8 @@ name: Build
 description: ビルド
 
 inputs:
-  project-names:
-    description: 処理対象プロジェクト名のリスト
+  project-files:
+    description: 処理対象プロジェクトファイルのリスト
     required: true
 
 runs:
@@ -13,4 +13,4 @@ runs:
     - name: Build
       shell: cmd
       run: |
-          echo ${{ inputs.project-names }}
+          echo ${{ inputs.project-files }}
