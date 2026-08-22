@@ -59,9 +59,18 @@ Workflow permissions > Allow GitHub Actions to create and approve pull requests
 ```
 
 ### Server
-#### csx を実行できるようにする
-```cmd
-winget install Microsoft.DotNet.SDK.10
-dotnet tool install dotnet-script --tool-path [PATH]
+#### PowerShell7(pws) をインストールする
+```powershell
+winget install --id Microsoft.PowerShell --source winget --installer-type wix
+pwsh -v
 ```
-その後、システム環境変数に ```[PATH]``` を追加する。
+
+#### dotnet-script(csx) をインストールする
+```powershell
+winget install Microsoft.DotNet.SDK.10
+dotnet --list-sdks
+
+dotnet tool install dotnet-script --tool-path [PATH]
+# システム環境変数に ```[PATH]``` を追加
+dotnet-script -v
+```
