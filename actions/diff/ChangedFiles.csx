@@ -24,26 +24,4 @@ string result = string.Join(' ', absolutePaths);
 
 // 出力
 string outputFile = Environment.GetEnvironmentVariable("GITHUB_OUTPUT") ?? "GITHUB_OUTPUT.log";
-File.AppendAllText(outputFile,$"changed_projects={string.Join(" ", absolutePaths)}" + Environment.NewLine);
-
-
-static string? GetProjFilePath(DirectoryInfo directory)
-{
-	FileInfo[] files = directory.GetFiles(".vbproj");
-	if (files.Length > 1)
-	{
-		throw new($"{directory.FullName} に .vbproj が複数存在します。");
-	}
-	if (files.Length == 1)
-	{
-		return files[0].FullName;
-	}
-	else
-	{
-		if (directory.Parent == null)
-		{
-			return null;
-		}
-		return GetProjFilePath(directory.Parent);
-	}
-}
+File.AppendAllText(outputFile,$"changed_files={string.Join(" ", absolutePaths)}" + Environment.NewLine);
