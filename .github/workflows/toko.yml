@@ -31,7 +31,7 @@ jobs:
         id: build
         uses: wiseman-fukushi2-trial/actions/actions/build@DX-RKuji
         with:
-          project-names: ${{ steps.diff.outputs.changed_projects }}
+          project-files: ${{ steps.diff.outputs.changed_projects }}
 
       # ファイルチェック
       - name: File Check
