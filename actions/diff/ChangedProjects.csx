@@ -32,16 +32,15 @@ foreach (string file in changedFiles)
 
 // 出力
 string outputFile = Environment.GetEnvironmentVariable("GITHUB_OUTPUT") ?? "GITHUB_OUTPUT.log";
-File.AppendAllText(outputFile,$"changed_projects={string.Join(" ", changedProjects)}" + Environment.NewLine);
+File.AppendAllText(outputFile,$"changed_projects={string.Join(' ', changedProjects)}" + Environment.NewLine);
 
 
 static string? GetProjFilePath(DirectoryInfo directory)
 {
-	Console.WriteLine(directory.FullName);
-	FileInfo[] files = directory.GetFiles(".vbproj");
+	FileInfo[] files = directory.GetFiles("*.vbproj");
 	if (files.Length > 1)
 	{
-		throw new($"{directory.FullName} に .vbproj が複数存在します。");
+		throw new($"{directory.FullName} に *.vbproj が複数存在します。");
 	}
 	if (files.Length == 1)
 	{
