@@ -2,9 +2,6 @@ name: Build
 description: ビルド
 
 inputs:
-  solution-file:
-    description: 処理対象の .sln
-    required: true
   project-files:
     description: 処理対象の .vbproj のリスト
     required: true
@@ -14,12 +11,12 @@ runs:
 
   steps:
     - name: Sort
-      shell: pwsh
+      shell: cmd
       run: |
-        dotnet-script "${{ github.action_path }}/SortProjects.csx" ${{ inputs.solution-file }} ${{ inputs.projectfiles }}
+        dotnet-script "${{ github.action_path }}/SortProjects.csx" ${{ github.workspace }} ${{ inputs.project-files }}
 
     - name: Build
-      shell: pwsh
+      shell: cmd
       run: |
-          Write-Host ${{ inputs.project-files }}
-          & "${{ github.action_path }}/BuildProjects.ps1" ${{ inputs.project-files }}
+          echo ${{ inputs.project-files }}
+          "${{ github.action_path }}/BuildProjects.ps1" ${{ inputs.project-files }}
