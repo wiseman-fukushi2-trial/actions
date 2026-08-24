@@ -54,5 +54,3 @@ static string? GetProjFilePath(DirectoryInfo directory)
 		return GetProjFilePath(directory.Parent);
 	}
 }
-
-static
