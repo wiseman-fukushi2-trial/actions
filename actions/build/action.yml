@@ -2,14 +2,22 @@ name: Build
 description: ビルド
 
 inputs:
+  solution-file:
+    description: 処理対象の .sln
+    required: true
   project-files:
-    description: 処理対象プロジェクトファイルのリスト
+    description: 処理対象の .vbproj のリスト
     required: true
 
 runs:
   using: composite
 
   steps:
+    - name: Sort
+      shell: pwsh
+      run: |
+        dotnet-script "${{ github.action_path }}/SortProjects.csx" ${{ inputs.solution-file }} ${{ inputs.projectfiles }}
+
     - name: Build
       shell: pwsh
       run: |

@@ -3,7 +3,7 @@
 // 引数が空の場合は処理を終了する
 if(Args is null || Args.Count == 0)
 {
-	Console.WriteLine("差分ファイルがありません。");
+	throw new("required relativePath1 [relativePath2 ...]");
 	return;
 }
 

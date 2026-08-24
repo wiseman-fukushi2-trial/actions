@@ -25,7 +25,7 @@ runs:
 
     - name: Convert To Absolute Path
       id: changed_files
-      shell: pwsh
+      shell: cmd
       run: |
         dotnet-script "${{ github.action_path }}/ChangedFiles.csx" "${{ github.workspace }}" ${{ steps.changed_files_relative.outputs.changed_files }}
 

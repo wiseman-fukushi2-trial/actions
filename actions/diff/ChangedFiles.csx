@@ -1,15 +1,9 @@
 #nullable enable
 
-
 // 引数が空の場合は処理を終了する
-if (Args is null || Args.Count == 0)
+if (Args is null || Args.Count < 2)
 {
-	throw new("required {{ github.workspace }} relativePath1 relativePath2 ...");
-}
-else if (Args.Count == 1)
-{
-	Console.WriteLine("差分ファイルがありません");
-	return;
+	throw new("required changedFile1 [changedFile2 ...]");
 }
 
 string root = Args[0];
