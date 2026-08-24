@@ -1,8 +1,6 @@
-#r "Microsoft.Build"
-#r "Microsoft.Build.Framework"
-#r "Microsoft.Build.Utilities.Core"
-
 #nullable enable
+
+#r "nuget: Microsoft.Build, 18.9.6"
 
 using Microsoft.Build.Graph;
 
