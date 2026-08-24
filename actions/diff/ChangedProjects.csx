@@ -4,7 +4,6 @@
 if(Args is null || Args.Count == 0)
 {
 	throw new("required relativePath1 [relativePath2 ...]");
-	return;
 }
 
 // 差分ファイルパスのリスト
