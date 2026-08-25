@@ -16,6 +16,7 @@ runs:
         dotnet build "${{ github.action_path }}/SortProjects/SortProjects.csproj" -c Release -p:OutDir="${{ github.action_path }}/SortProjects/bin/"
 
     - name: Sort
+      id: sort_projects
       shell: cmd
       run: |
         "${{ github.action_path }}/SortProjects/bin/SortProjects.exe" ${{ github.workspace }} ${{ inputs.project-files }}
@@ -24,4 +25,4 @@ runs:
       shell: cmd
       run: |
           echo ${{ inputs.project-files }}
-          pwsh "${{ github.action_path }}/BuildProjects.ps1" ${{ inputs.project-files }}
+          pwsh "${{ github.action_path }}/BuildProjects.ps1" ${{ steps.sort_projects.outputs.sorted_projects }}

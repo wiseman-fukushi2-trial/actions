@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Text.Json;
 using Microsoft.Build.Graph;
 using Microsoft.Build.Locator;
 
@@ -13,12 +15,13 @@ namespace SortProjects
 		{
 			try
 			{
-				if (args.Length == 0)
+				if (args.Length < 2)
 				{
-					throw new ArgumentException("required solutionFile [projectFile1 projectFile2 ...]");
+					throw new ArgumentException("required solutionFilePath projectFile1 [projectFile2 ...]");
 				}
 
 				string workspace = args[0];
+				IEnumerable<string> projectFiles = args.Skip(1);
 
 				string solutionFile = Directory
 					.GetFiles(workspace, "*.sln", SearchOption.TopDirectoryOnly)
@@ -30,7 +33,14 @@ namespace SortProjects
 
 				Console.WriteLine($"MSBuild registered: {MSBuildLocator.IsRegistered}");
 
-				RunProjectGraph(solutionFile);
+				IEnumerable<string> buildingOrder = GetBuildingOrder(solutionFile);
+				IEnumerable<string> sortedProjects = projectFiles.OrderBy(x => buildingOrder.IndexOf(x));
+
+				string result = string.Join(" ", sortedProjects);
+
+				// 出力
+				string outputFile = Environment.GetEnvironmentVariable("GITHUB_OUTPUT") ?? "GITHUB_OUTPUT.log";
+				File.AppendAllText(outputFile, $"sorted_projects={result}" + Environment.NewLine);
 			}
 			catch (Exception ex)
 			{
@@ -54,14 +64,10 @@ namespace SortProjects
 		}
 
 		[MethodImpl(MethodImplOptions.NoInlining)]
-		static void RunProjectGraph(string solutionFile)
+		static IEnumerable<string> GetBuildingOrder(string solutionFile)
 		{
 			var graph = new ProjectGraph(solutionFile);
-
-			foreach (ProjectGraphNode node in graph.ProjectNodesTopologicallySorted)
-			{
-				Console.WriteLine(node.ProjectInstance.FullPath);
-			}
+			return graph.ProjectNodesTopologicallySorted.Select(x => x.ProjectInstance.FullPath);
 		}
 	}
 }
