@@ -24,7 +24,7 @@ namespace SortProjects
 					.GetFiles(workspace, "*.sln", SearchOption.TopDirectoryOnly)
 					.Single();
 
-				string msbuildPath = Environment.GetEnvironmentVariable("MSBuild") ?? throw new Exception("MSBUILD environment variable not set");
+				string msbuildPath = Environment.GetEnvironmentVariable("MSBUILD") ?? throw new Exception("MSBUILD environment variable not set");
 
 				MSBuildLocator.RegisterMSBuildPath(msbuildPath);
 
