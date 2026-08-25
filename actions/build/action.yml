@@ -13,7 +13,8 @@ runs:
     - name: Sort
       shell: cmd
       run: |
-        dotnet-script "${{ github.action_path }}/SortProjects.csx" ${{ github.workspace }} ${{ inputs.project-files }}
+        dotnet build "${{ github.action_path }}/SortProjects/SortProjects.csproj" -c Release -p:OutDir="${{ github.action_path }}/SortProjects/bin/"
+        "${{ github.action_path }}/SortProjects/bin/SortProjects.exe" ${{ github.workspace }} ${{ inputs.project-files }}
 
     - name: Build
       shell: cmd
