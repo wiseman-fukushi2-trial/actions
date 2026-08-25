@@ -33,7 +33,7 @@ namespace SortProjects
 
 				Console.WriteLine($"MSBuild registered: {MSBuildLocator.IsRegistered}");
 
-				IEnumerable<string> buildingOrder = GetBuildingOrder(solutionFile);
+				List<string> buildingOrder = GetBuildingOrder(solutionFile).ToList();
 				IEnumerable<string> sortedProjects = projectFiles.OrderBy(x => buildingOrder.IndexOf(x));
 
 				string result = string.Join(" ", sortedProjects);
