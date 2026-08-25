@@ -1,3 +1,9 @@
 foreach ($vbproj in $args) {
-	& "C:\Program Files (x86)\Microsoft Visual Studio\18\BuildTools\MSBuild\Current\Bin\MSBuild.exe" "$vbproj"
+	Write-Host "Building $vbproj"
+	if ($vbproj.Contains("front")) {
+		& "%MSBUILD_2019%\MSBuild.exe" "$vbproj"
+	}
+	else {
+		& "%MSBUILD%\MSBuild.exe" "$vbproj"
+	}
 }
