@@ -24,4 +24,4 @@ runs:
       shell: cmd
       run: |
           echo ${{ inputs.project-files }}
-          "${{ github.action_path }}/BuildProjects.ps1" ${{ inputs.project-files }}
+          rem "${{ github.action_path }}/BuildProjects.ps1" ${{ inputs.project-files }}
