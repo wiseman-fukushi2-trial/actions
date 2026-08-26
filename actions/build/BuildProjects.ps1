@@ -1,9 +1,5 @@
-function AddSummary {
-    param(
-        [string[]]$Text
-    )
-
-    $Text | Add-Content $env:GITHUB_STEP_SUMMARY
+function AddSummary ([string[]]$text){
+    $text | Add-Content $env:GITHUB_STEP_SUMMARY
 }
 
 AddSummary "## ビルド結果"
