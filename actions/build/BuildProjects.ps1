@@ -2,7 +2,7 @@ function AddSummary ([string[]]$text){
     $text | Add-Content $env:GITHUB_STEP_SUMMARY
 }
 
-AddSummary '## ビルド結果'
+AddSummary '## ビルド'
 
 $exitCode = 0
 
