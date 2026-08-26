@@ -34,7 +34,18 @@ namespace SortProjects
 				Console.WriteLine($"MSBuild registered: {MSBuildLocator.IsRegistered}");
 
 				List<string> buildingOrder = GetBuildingOrder(solutionFile).ToList();
+				Console.WriteLine("Original order:");
+				foreach (var project in buildingOrder)
+				{
+					Console.WriteLine(project);
+				}
+
 				IEnumerable<string> sortedProjects = projectFiles.OrderBy(x => buildingOrder.IndexOf(x));
+				Console.WriteLine("Sorted order:");
+				foreach (var project in sortedProjects)
+				{
+					Console.WriteLine(project);
+				}
 
 				string result = string.Join(" ", sortedProjects);
 
