@@ -17,13 +17,17 @@ runs:
     - name: Output
       shell: pwsh
       run: |
+        $base = ${{ github.event.pull_request.base.ref || github.ref_name }}
+        $head = ${{ github.event.pull_request.head.ref || github.ref_name }}
+        $baseUrl = '${{ github.server_url }}/${{ github.repository }}/tree/$base'
+        $headUrl = '${{ github.server_url }}/${{ github.repository }}/tree/$head'
         $array = @(
           '```'
-          '${{ github.event.pull_request.base.ref || github.ref_name }}'
+          "[$base]($baseUrl)"
           '```'
-          '<='
+          '⇐'
           '```'
-          '${{ github.event.pull_request.head.ref || github.ref_name }}'
+          "[$head]($headUrl)"
           '```'
         )
         $text = $array -join ' '

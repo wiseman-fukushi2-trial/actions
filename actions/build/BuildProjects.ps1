@@ -15,15 +15,15 @@ foreach ($vbproj in $args) {
 
 	$msBuildArgs = ($vbproj.Contains('front')) ?
 		@(
-			"$vbproj"
-			"/p:TargetFrameworkSDKToolsDirectory=C:\Program Files (x86)\Microsoft SDKs\Windows\v10.0A\bin\NETFX 4.8 Tools"
-			"/v:quiet"
-			"/nologo"
+			$vbproj
+			'/p:TargetFrameworkSDKToolsDirectory=C:\Program Files (x86)\Microsoft SDKs\Windows\v10.0A\bin\NETFX 4.8 Tools'
+			'/v:quiet'
+			'/nologo'
 		) :
 		@(
-			"$vbproj"
-			"/v:quiet"
-			"/nologo"
+			$vbproj
+			'/v:quiet'
+			'/nologo'
 		)
 
 	$output = & $exe @msBuildArgs 2>&1
