@@ -53,6 +53,7 @@ foreach ($vbproj in $args) {
 			"``` test"
 			$($errors -join "`n")
 			"``` "
+			"</details>"
 		)
 		Write-Host "Errors:"
 		$errors | ForEach-Object { Write-Host $_ }
@@ -64,6 +65,7 @@ foreach ($vbproj in $args) {
 			"``` test"
 			$($warnings -join "`n")
 			"``` "
+			"</details>"
 		)
 		Write-Host "Warnings:"
 		$warnings | ForEach-Object { Write-Host $_ }
