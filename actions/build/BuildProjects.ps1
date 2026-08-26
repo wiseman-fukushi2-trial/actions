@@ -1,4 +1,12 @@
-"## ビルド結果" >> $env:GITHUB_STEP_SUMMARY
+function AddSummary {
+    param(
+        [string[]]$Text
+    )
+
+    $Text | Add-Content $env:GITHUB_STEP_SUMMARY
+}
+
+AddSummary @("## ビルド結果")
 
 $exitCode = 0
 
@@ -13,16 +21,16 @@ foreach ($vbproj in $args) {
 		@(
 			"$vbproj"
 			"/p:TargetFrameworkSDKToolsDirectory=C:\Program Files (x86)\Microsoft SDKs\Windows\v10.0A\bin\NETFX 4.8 Tools"
-			"/clp:ErrorsOnly"
+			"/v:quiet"
 			"/nologo"
 		) :
 		@(
 			"$vbproj"
-			"/clp:ErrorsOnly"
+			"/v:quiet"
 			"/nologo"
 		)
 
-	& $exe @msBuildArgs
+	$output = & $exe @msBuildArgs 2>&1
 
 	"### $([System.IO.Path]::GetFileNameWithoutExtension($vbproj))" >> $env:GITHUB_STEP_SUMMARY
 	if ($LASTEXITCODE.Equals(0)) {
@@ -33,6 +41,32 @@ foreach ($vbproj in $args) {
 		$exitCode = $LASTEXITCODE
 		Write-Host "Failed to build $vbproj"
 		"❌ 失敗" >> $env:GITHUB_STEP_SUMMARY
+	}
+
+	$errors = $output | Where-Object { $_ -match ':\s*error\s' }
+	$warnings = $output | Where-Object { $_ -match ':\s*warning\s' }
+
+	if ($errors) {
+		AddSummary @(
+			"<details>"
+			"<summary>❌ Errors ($($errors.Count))</summary>"
+			"``` test"
+			$($errors -join "`n")
+			"``` "
+		)
+		Write-Host "Errors:"
+		$errors | ForEach-Object { Write-Host $_ }
+	}
+	if ($warnings) {
+		AddSummary @(
+			"<details>"
+			"<summary>⚠ Warnings ($($warnings.Count))</summary>"
+			"``` test"
+			$($warnings -join "`n")
+			"``` "
+		)
+		Write-Host "Warnings:"
+		$warnings | ForEach-Object { Write-Host $_ }
 	}
 }
 
