@@ -49,12 +49,11 @@ foreach ($vbproj in $args) {
 	if ($errors) {
 		AddSummary @(
 			"<details>"
-			"<summary>❌ Errors ($($errors.Count))</summary>"
+			"<summary>:x: Errors ($($errors.Count))</summary>"
 			"<pre>"
 			$($errors -join "`n")
 			"</pre>"
 			"</details>"
-			""
 		)
 		Write-Host "Errors:"
 		$errors | ForEach-Object { Write-Host $_ }
@@ -62,12 +61,11 @@ foreach ($vbproj in $args) {
 	if ($warnings) {
 		AddSummary @(
 			"<details>"
-			"<summary>⚠ Warnings ($($warnings.Count))</summary>"
+			"<summary>:warning: Warnings ($($warnings.Count))</summary>"
 			"<pre>"
 			$($warnings -join "`n")
 			"</pre>"
 			"</details>"
-			""
 		)
 		Write-Host "Warnings:"
 		$warnings | ForEach-Object { Write-Host $_ }
