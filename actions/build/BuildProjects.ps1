@@ -60,9 +60,11 @@ foreach ($vbproj in $args) {
 		AddSummary @(
 			'<details>'
 			"<summary>Warnings ($($warnings.Count))</summary>"
+			''
 			'```cmd'
 			$($warnings -join '`n')
 			'```'
+			''
 			'</details>'
 		)
 		Write-Host 'Warnings:'
