@@ -24,5 +24,4 @@ runs:
     - name: Build
       shell: cmd
       run: |
-          echo ${{ inputs.project-files }}
           pwsh "${{ github.action_path }}/BuildProjects.ps1" ${{ steps.sort_projects.outputs.sorted_projects }}

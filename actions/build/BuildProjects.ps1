@@ -1,3 +1,5 @@
+"## ビルド結果" >> $env:GITHUB_STEP_SUMMARY
+
 foreach ($vbproj in $args) {
 	Write-Host "Building $vbproj"
 
@@ -16,4 +18,17 @@ foreach ($vbproj in $args) {
 		)
 
 	& $exe @msBuildArgs
+	$exitCode = $LASTEXITCODE
+
+	"### $vbproj" >> $env:GITHUB_STEP_SUMMARY
+	if ($exitCode.Equals(0)) {
+		Write-Host "Successfully built $vbproj"
+		"✅ **成功**" >> $env:GITHUB_STEP_SUMMARY
+	}
+	else {
+		Write-Host "Failed to build $vbproj"
+		"❌ **失敗**" >> $env:GITHUB_STEP_SUMMARY
+	}
+
+	exit $exitCode
 }
