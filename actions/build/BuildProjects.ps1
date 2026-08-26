@@ -62,7 +62,7 @@ foreach ($vbproj in $args) {
 			"<summary>Warnings ($($warnings.Count))</summary>"
 			''
 			'```cmd'
-			$($warnings -join '`n')
+			$warnings
 			'```'
 			''
 			'</details>'
