@@ -19,14 +19,12 @@ runs:
       run: |
         $base = '${{ github.event.pull_request.base.ref || github.ref_name }}'
         $head = '${{ github.event.pull_request.head.ref || github.ref_name }}'
-        $baseUrl = '${{ github.server_url }}/${{ github.repository }}/tree/$base'
-        $headUrl = '${{ github.server_url }}/${{ github.repository }}/tree/$head'
+        $baseUrl = "${{ github.server_url }}/${{ github.repository }}/tree/$base"
+        $headUrl = "${{ github.server_url }}/${{ github.repository }}/tree/$head"
         $array = @(
-          '```'
           "[$base]($baseUrl)"
-          '``` ⇐ ```'
+          ' ⇐ '
           "[$head]($headUrl)"
-          '```'
         )
         $text = $array -join ' '
         $text | Add-Content -NoNewline $env:GITHUB_STEP_SUMMARY
