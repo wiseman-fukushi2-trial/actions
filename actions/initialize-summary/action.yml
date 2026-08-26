@@ -1,0 +1,11 @@
+name: Initialize Summary
+description: サマリーの初期化
+
+runs:
+  using: composite
+
+  steps:
+    - name: Initialize Summary
+      shell: cmd
+      run: |
+          echo "# 投稿確認" >> $GITHUB_STEP_SUMMARY

@@ -9,15 +9,17 @@ jobs:
     runs-on: self-hosted
 
     steps:
+      - name: Info
+        shell: cmd
+        run: |
+            set GITHUB_
+
+      - name: Initialize Summary
+        uses: wiseman-fukushi2-trial/actions/actions/initialize-summary@DX-RKuji
 
       # 呼び出し元リポジトリをクローン
-      - name: Checkout Caller Repository
-        uses: actions/checkout@v7.0.1
-        with:
-          # チェックアウトするブランチを指定
-          # プルリクエスト：source のブランチ
-          # それ以外：現在のブランチ
-          ref: ${{ github.event.pull_request.head.ref || github.ref_name }}
+      - name: Checkout
+        uses: wiseman-fukushi2-trial/actions/actions/checkout@DX-RKuji
 
       # 変更を取得
       # ${{ steps.diff.outputs.changed_files }} : 差分ファイルのリスト
@@ -28,7 +30,6 @@ jobs:
 
       # ビルド
       - name: Build
-        id: build
         uses: wiseman-fukushi2-trial/actions/actions/build@DX-RKuji
         with:
           project-files: ${{ steps.diff.outputs.changed_projects }}
@@ -38,10 +39,3 @@ jobs:
         uses: wiseman-fukushi2-trial/actions/actions/file-check@DX-RKuji
         with:
           files: ${{ steps.diff.outputs.changed_files }}
-
-      - name: Info
-        shell: cmd
-        run: |
-            cd
-            echo ${{ github.workspace }}
-            set GITHUB_
