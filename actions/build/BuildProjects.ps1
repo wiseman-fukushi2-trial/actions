@@ -52,6 +52,7 @@ foreach ($vbproj in $args) {
 			"<summary>❌ Errors ($($errors.Count))</summary>"
 			$($errors -join "`n")
 			"</details>"
+			""
 		)
 		Write-Host "Errors:"
 		$errors | ForEach-Object { Write-Host $_ }
@@ -62,6 +63,7 @@ foreach ($vbproj in $args) {
 			"<summary>⚠ Warnings ($($warnings.Count))</summary>"
 			$($warnings -join "`n")
 			"</details>"
+			""
 		)
 		Write-Host "Warnings:"
 		$warnings | ForEach-Object { Write-Host $_ }
