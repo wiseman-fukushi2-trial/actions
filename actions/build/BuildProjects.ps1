@@ -70,6 +70,8 @@ foreach ($vbproj in $args) {
 		Write-Host "Warnings:"
 		$warnings | ForEach-Object { Write-Host $_ }
 	}
+
+	AddSummary ""
 }
 
 exit $exitCode
