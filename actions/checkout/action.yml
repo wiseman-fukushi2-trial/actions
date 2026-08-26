@@ -23,7 +23,7 @@ runs:
         $baseUrl = "${{ github.server_url }}/${{ github.repository }}/tree/$base"
         $headUrl = "${{ github.server_url }}/${{ github.repository }}/tree/$head"
         $array = @(
-          "**$type**"
+          "** $type **"
           "[$base]($baseUrl)"
           ' ⇐ '
           "[$head]($headUrl)"
