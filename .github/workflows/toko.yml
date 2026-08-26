@@ -21,21 +21,21 @@ jobs:
 
       # 変更を取得
       # ${{ steps.diff.outputs.changed_files }} : 差分ファイルのリスト
-      # ${{ steps.diff.outputs.changed_projects }} : 差分プロジェクト名のリスト
+      # ${{ steps.diff.outputs.changed_projects }} : 差分プロジェクトの .vbproj のリスト
       - name: Get Diff
-        uses: wiseman-fukushi2-trial/actions/actions/diff@main
+        uses: wiseman-fukushi2-trial/actions/actions/diff@DX-RKuji
         id: diff
 
       # ビルド
       - name: Build
         id: build
-        uses: wiseman-fukushi2-trial/actions/actions/build@main
+        uses: wiseman-fukushi2-trial/actions/actions/build@DX-RKuji
         with:
-          project-names: ${{ steps.diff.outputs.changed_projects }}
+          project-files: ${{ steps.diff.outputs.changed_projects }}
 
       # ファイルチェック
       - name: File Check
-        uses: wiseman-fukushi2-trial/actions/actions/file-check@main
+        uses: wiseman-fukushi2-trial/actions/actions/file-check@DX-RKuji
         with:
           files: ${{ steps.diff.outputs.changed_files }}
 
