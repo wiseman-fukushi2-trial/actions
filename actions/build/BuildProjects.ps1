@@ -21,7 +21,7 @@ foreach ($vbproj in $args) {
 
 	& $exe @msBuildArgs
 
-	"### $vbproj" >> $env:GITHUB_STEP_SUMMARY
+	"### $([System.IO.Path]::GetFileNameWithoutExtension($vbproj))" >> $env:GITHUB_STEP_SUMMARY
 	if ($LASTEXITCODE.Equals(0)) {
 		Write-Host "Successfully built $vbproj"
 		"✅ **成功**" >> $env:GITHUB_STEP_SUMMARY
