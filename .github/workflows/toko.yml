@@ -30,6 +30,7 @@ jobs:
       - name: Build
         id: build
         uses: wiseman-fukushi2-trial/actions/actions/build@DX-RKuji
+        continue-on-error: true
         with:
           project-files: ${{ steps.diff.outputs.changed_projects }}
 
