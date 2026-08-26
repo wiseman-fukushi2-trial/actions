@@ -50,7 +50,9 @@ foreach ($vbproj in $args) {
 		AddSummary @(
 			"<details>"
 			"<summary>❌ Errors ($($errors.Count))</summary>"
+			"<pre>"
 			$($errors -join "`n")
+			"</pre>"
 			"</details>"
 			""
 		)
@@ -61,7 +63,9 @@ foreach ($vbproj in $args) {
 		AddSummary @(
 			"<details>"
 			"<summary>⚠ Warnings ($($warnings.Count))</summary>"
+			"<pre>"
 			$($warnings -join "`n")
+			"</pre>"
 			"</details>"
 			""
 		)
