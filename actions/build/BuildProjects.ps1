@@ -53,7 +53,8 @@ foreach ($vbproj in $args) {
 			''
 			'</details>'
 		)
-		$errors | ForEach-Object { Write-Host "::error::$($_)" }
+		Write-Host '::error::Errors:'
+		$errors | ForEach-Object { Write-Host $_ }
 	}
 	if ($warnings) {
 		AddSummary @(
@@ -66,7 +67,8 @@ foreach ($vbproj in $args) {
 			''
 			'</details>'
 		)
-		$warnings | ForEach-Object { Write-Host "::warning::$($_)" }
+		Write-Host '::warning::Warnings:'
+		$warnings | ForEach-Object { Write-Host $_ }
 	}
 
 	AddSummary ''
