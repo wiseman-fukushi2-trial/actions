@@ -46,9 +46,11 @@ foreach ($vbproj in $args) {
 		AddSummary @(
 			'<details>'
 			"<summary>Errors ($($errors.Count))</summary>"
+			''
 			'```cmd'
 			$($errors -join '`n')
 			'```'
+			''
 			'</details>'
 		)
 		Write-Host 'Errors:'
