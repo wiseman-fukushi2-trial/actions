@@ -24,12 +24,12 @@ foreach ($vbproj in $args) {
 	"### $([System.IO.Path]::GetFileNameWithoutExtension($vbproj))" >> $env:GITHUB_STEP_SUMMARY
 	if ($LASTEXITCODE.Equals(0)) {
 		Write-Host "Successfully built $vbproj"
-		"✅ **成功**" >> $env:GITHUB_STEP_SUMMARY
+		"✅ 成功" >> $env:GITHUB_STEP_SUMMARY
 	}
 	else {
 		$exitCode = $LASTEXITCODE
 		Write-Host "Failed to build $vbproj"
-		"❌ **失敗**" >> $env:GITHUB_STEP_SUMMARY
+		"❌ 失敗" >> $env:GITHUB_STEP_SUMMARY
 	}
 }
 
