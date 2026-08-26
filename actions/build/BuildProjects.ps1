@@ -6,7 +6,7 @@ function AddSummary {
     $Text | Add-Content $env:GITHUB_STEP_SUMMARY
 }
 
-AddSummary ("## ビルド結果")
+AddSummary "## ビルド結果"
 
 $exitCode = 0
 
@@ -32,15 +32,15 @@ foreach ($vbproj in $args) {
 
 	$output = & $exe @msBuildArgs 2>&1
 
-	"### $([System.IO.Path]::GetFileNameWithoutExtension($vbproj))" >> $env:GITHUB_STEP_SUMMARY
+	$projectName = [System.IO.Path]::GetFileNameWithoutExtension($vbproj)
 	if ($LASTEXITCODE.Equals(0)) {
 		Write-Host "Successfully built $vbproj"
-		AddSummary (":white_check_mark: 成功")
+		AddSummary "### :white_check_mark: $projectName"
 	}
 	else {
 		$exitCode = $LASTEXITCODE
 		Write-Host "Failed to build $vbproj"
-		AddSummary (":x: 失敗")
+		AddSummary "### :x: $projectName"
 	}
 
 	$errors = $output | Where-Object { $_ -match ':\s*error\s' }
