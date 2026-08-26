@@ -2,18 +2,18 @@ function AddSummary ([string[]]$text){
     $text | Add-Content $env:GITHUB_STEP_SUMMARY
 }
 
-AddSummary "## ビルド結果"
+AddSummary '## ビルド結果'
 
 $exitCode = 0
 
 foreach ($vbproj in $args) {
 	Write-Host "Building $vbproj"
 
-	$exe = ($vbproj.Contains("front")) ?
+	$exe = ($vbproj.Contains('front')) ?
 		"$env:MSBUILD_2019\MSBuild.exe" :
 		"$env:MSBUILD\MSBuild.exe"
 
-	$msBuildArgs = ($vbproj.Contains("front")) ?
+	$msBuildArgs = ($vbproj.Contains('front')) ?
 		@(
 			"$vbproj"
 			"/p:TargetFrameworkSDKToolsDirectory=C:\Program Files (x86)\Microsoft SDKs\Windows\v10.0A\bin\NETFX 4.8 Tools"
@@ -44,30 +44,30 @@ foreach ($vbproj in $args) {
 
 	if ($errors) {
 		AddSummary @(
-			"<details>"
+			'<details>'
 			"<summary>Errors ($($errors.Count))</summary>"
-			"```cmd"
-			$($errors -join "`n")
-			"``` "
-			"</details>"
+			'```cmd'
+			$($errors -join '`n')
+			'```'
+			'</details>'
 		)
-		Write-Host "Errors:"
+		Write-Host 'Errors:'
 		$errors | ForEach-Object { Write-Host $_ }
 	}
 	if ($warnings) {
 		AddSummary @(
-			"<details>"
+			'<details>'
 			"<summary>Warnings ($($warnings.Count))</summary>"
-			"<pre><code>"
-			$($warnings -join "`n")
-			"</code></pre>"
-			"</details>"
+			'```cmd'
+			$($warnings -join '`n')
+			'```'
+			'</details>'
 		)
-		Write-Host "Warnings:"
+		Write-Host 'Warnings:'
 		$warnings | ForEach-Object { Write-Host $_ }
 	}
 
-	AddSummary ""
+	AddSummary ''
 }
 
 exit $exitCode
