@@ -22,8 +22,8 @@ runs:
         $head = '${{ github.event.pull_request.head.ref || github.ref_name }}'
         $baseUrl = "${{ github.server_url }}/${{ github.repository }}/tree/$base"
         $headUrl = "${{ github.server_url }}/${{ github.repository }}/tree/$head"
+        "**$type**" | Add-Content $env:GITHUB_STEP_SUMMARY
         $array = @(
-          "**$type**"
           "[$base]($baseUrl)"
           ' ⇐ '
           "[$head]($headUrl)"
