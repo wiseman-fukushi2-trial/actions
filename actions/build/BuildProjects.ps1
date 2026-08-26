@@ -46,9 +46,9 @@ foreach ($vbproj in $args) {
 		AddSummary @(
 			"<details>"
 			"<summary>Errors ($($errors.Count))</summary>"
-			"<pre>"
+			"<pre><code>"
 			$($errors -join "`n")
-			"</pre>"
+			"</code></pre>"
 			"</details>"
 		)
 		Write-Host "Errors:"
@@ -58,9 +58,9 @@ foreach ($vbproj in $args) {
 		AddSummary @(
 			"<details>"
 			"<summary>Warnings ($($warnings.Count))</summary>"
-			"<pre>"
+			"<pre><code>"
 			$($warnings -join "`n")
-			"</pre>"
+			"</code></pre>"
 			"</details>"
 		)
 		Write-Host "Warnings:"
