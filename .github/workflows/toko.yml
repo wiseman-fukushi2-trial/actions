@@ -5,17 +5,13 @@ on:
   workflow_call:
 
 jobs:
-  main:
+  build:
     runs-on: self-hosted
-
     steps:
       - name: Info
         shell: cmd
         run: |
             set GITHUB_
-
-      - name: Initialize Summary
-        uses: wiseman-fukushi2-trial/actions/actions/initialize-summary@DX-RKuji
 
       # 呼び出し元リポジトリをクローン
       - name: Checkout
@@ -33,6 +29,25 @@ jobs:
         uses: wiseman-fukushi2-trial/actions/actions/build@DX-RKuji
         with:
           project-files: ${{ steps.diff.outputs.changed_projects }}
+
+  file-check:
+    runs-on: self-hosted
+    steps:
+      - name: Info
+        shell: cmd
+        run: |
+            set GITHUB_
+
+      # 呼び出し元リポジトリをクローン
+      - name: Checkout
+        uses: wiseman-fukushi2-trial/actions/actions/checkout@DX-RKuji
+
+      # 変更を取得
+      # ${{ steps.diff.outputs.changed_files }} : 差分ファイルのリスト
+      # ${{ steps.diff.outputs.changed_projects }} : 差分プロジェクトの .vbproj のリスト
+      - name: Get Diff
+        uses: wiseman-fukushi2-trial/actions/actions/diff@DX-RKuji
+        id: diff
 
       # ファイルチェック
       - name: File Check
