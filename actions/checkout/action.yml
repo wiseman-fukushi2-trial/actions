@@ -13,20 +13,3 @@ runs:
         # プルリクエスト：source のブランチ
         # それ以外：現在のブランチ
         ref: ${{ github.event.pull_request.head.ref || github.ref_name }}
-
-    - name: Output
-      shell: pwsh
-      run: |
-        $type = '${{ github.event_name }}'
-        $base = '${{ github.event.pull_request.base.ref || github.ref_name }}'
-        $head = '${{ github.event.pull_request.head.ref || github.ref_name }}'
-        $baseUrl = "${{ github.server_url }}/${{ github.repository }}/tree/$base"
-        $headUrl = "${{ github.server_url }}/${{ github.repository }}/tree/$head"
-        "**$type**" | Add-Content $env:GITHUB_STEP_SUMMARY
-        $array = @(
-          "[$base]($baseUrl)"
-          ' ⇐ '
-          "[$head]($headUrl)"
-        )
-        $text = $array -join ' '
-        $text | Add-Content -NoNewline $env:GITHUB_STEP_SUMMARY
