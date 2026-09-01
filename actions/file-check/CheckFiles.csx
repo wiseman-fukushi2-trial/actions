@@ -26,13 +26,14 @@ OutputSummary(validation_file_result);
 
 return isValid ? 0 : -1;
 
-static ValidationResult ValidateAssemblyFileVersion(string content, Version expectedVersion)
+static ValidationResult ValidateAssemblyFileVersion(string path, Version expectedVersion)
 {
 	if (Path.GetFileName(path) != "AssemblyInfo.vb")
 	{
 		return ValidationResult.None;
 	}
 
+	string content = File.ReadAllText(path);
 	const string regStr_AssemblyFileVersion = @"<Assembly:\s*AssemblyFileVersion\(""([^""]+)""\)>";
 	Match match = Regex.Match(content, regStr_AssemblyFileVersion);
 
