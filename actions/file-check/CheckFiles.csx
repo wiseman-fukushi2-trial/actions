@@ -159,8 +159,10 @@ static void OutputSummary(List<ValidationResult> results, string rootDir)
 					statusForFile = result.Status;
 				}
 			}
+			summaryForProject.Add("<details>");
 			summaryForProject.Add($"<summary> {ValidationStatus_Icon[statusForFile]} {file} </summary>");
 			summaryForProject.AddRange(summaryForFile);
+			summaryForProject.Add("</details>");
 
 			if (statusForFile > statusForProject)
 			{
@@ -169,9 +171,7 @@ static void OutputSummary(List<ValidationResult> results, string rootDir)
 		}
 
 		summary.Add($"### {ValidationStatus_Icon[statusForProject]} {projectName}");
-		summary.Add("<details>");
 		summary.AddRange(summaryForProject);
-		summary.Add("</details>");
 	}
 
 	// 出力
