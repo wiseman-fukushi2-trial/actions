@@ -161,7 +161,9 @@ static void OutputSummary(List<ValidationResult> results, string rootDir)
 			}
 			summaryForProject.Add("<details>");
 			summaryForProject.Add($"<summary> {ValidationStatus_Icon[statusForFile]} {file} </summary>");
+			summaryForProject.Add("");
 			summaryForProject.AddRange(summaryForFile);
+			summaryForProject.Add("");
 			summaryForProject.Add("</details>");
 
 			if (statusForFile > statusForProject)
