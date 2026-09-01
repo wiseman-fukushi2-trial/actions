@@ -1,6 +1,7 @@
 #nullable enable
 
 using System.Text.RegularExpressions;
+using System.Xml.Linq;
 
 // 引数が空の場合は処理を終了する
 if (Args is null || Args.Count < 2)
