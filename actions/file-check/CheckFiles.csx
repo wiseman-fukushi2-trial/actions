@@ -125,51 +125,45 @@ static void OutputSummary(List<ValidationResult> results, string rootDir)
 {
 	List<string> summary = ["## ファイルチェック"];
 
-	Dictionary<string, Dictionary<string, List<ValidationResult>>> project_file_results = [];
+	Dictionary<string, Dictionary<ValidationStatus, List<ValidationResult>>> project_status_results = [];
 	foreach (ValidationResult result in results)
 	{
 		string relativePath = Path.GetRelativePath(rootDir, result.File);
 		string projectName = relativePath.Split(['\\', '/'], StringSplitOptions.RemoveEmptyEntries)[0];
-		project_file_results.TryAdd(projectName, []);
-		project_file_results[projectName].TryAdd(relativePath, []);
-		project_file_results[projectName][relativePath].Add(result);
+		project_status_results.TryAdd(projectName, []);
+		project_status_results[projectName].TryAdd(result.Status, []);
+		project_status_results[projectName][result.Status].Add(result);
 	}
 
-	foreach (KeyValuePair<string, Dictionary<string, List<ValidationResult>>> project_items in project_file_results)
+	foreach (KeyValuePair<string, Dictionary<ValidationStatus, List<ValidationResult>>> project_items in project_status_results)
 	{
 		string projectName = project_items.Key;
-		Dictionary<string, List<ValidationResult>> file_results = project_items.Value;
+		Dictionary<ValidationStatus, List<ValidationResult>> status_results = project_items.Value;
 
 		ValidationStatus statusForProject = ValidationStatus.None;
 		List<string> summaryForProject = [];
 
-		foreach (KeyValuePair<string, List<ValidationResult>> file_items in file_results)
+		foreach (KeyValuePair<ValidationStatus, List<ValidationResult>> status_items in status_results)
 		{
-			string file = file_items.Key;
-			List<ValidationResult> resultsForFile = file_items.Value;
+			ValidationStatus status = status_items.Key;
+			List<ValidationResult> resultsForStatus = status_items.Value;
 
-			ValidationStatus statusForFile = ValidationStatus.None;
-			List<string> summaryForFile = [];
+			List<string> summaryForStatus = [];
 
-			foreach (ValidationResult result in resultsForFile)
+			foreach (ValidationResult result in resultsForStatus)
 			{
-				summaryForFile.Add($"{ValidationStatus_Icon[result.Status]} {result.ValidationName}");
-				if (result.Status > statusForFile)
+				summaryForStatus.Add($"{ValidationStatus_Icon[result.Status]} {result.ValidationName}");
+				if (result.Status > statusForProject)
 				{
-					statusForFile = result.Status;
+					statusForProject = result.Status;
 				}
 			}
 			summaryForProject.Add("<details>");
-			summaryForProject.Add($"<summary> {ValidationStatus_Icon[statusForFile]} {file} </summary>");
+			summaryForProject.Add($"<summary>{status}</summary>");
 			summaryForProject.Add("");
-			summaryForProject.AddRange(summaryForFile);
+			summaryForProject.AddRange(summaryForStatus);
 			summaryForProject.Add("");
 			summaryForProject.Add("</details>");
-
-			if (statusForFile > statusForProject)
-			{
-				statusForProject = statusForFile;
-			}
 		}
 
 		summary.Add("");
