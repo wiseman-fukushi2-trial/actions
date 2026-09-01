@@ -4,35 +4,71 @@ using System.Text.RegularExpressions;
 using System.Xml.Linq;
 
 // 引数が空の場合は処理を終了する
-if (Args is null || Args.Count < 2)
+if (Args is null || Args.Count < 4)
 {
-	throw new("required branchName file1 [file2 ...]");
+	throw new("required github.workspace branchName file1 [file2 ...] projectFile1 [projectFile2 ...]");
 }
 
-string branchName = Args[0];
+string rootDir = Args[0];
+
+string branchName = Args[1];
 Version expectedVersion = ConvertBranchNameToVersion(branchName);
 
-IEnumerable<string> files = Args.Skip(1);
-files = files.Concat(files.SelectMany(GetAssemblyInfoPaths));
+IEnumerable<string> files = Args.Skip(2).Where(x => x.EndsWith(".vbproj") == false);
+IEnumerable<string> projectFiles = Args.Skip(2).Where(x => x.EndsWith(".vbproj"));
 
-bool isValid = true;
-Dictionary<string, Dictionary<string, ValidationResult>> validation_file_result = [];
+Dictionary<string, List<ValidationResult>> file_results =
+	files
+	.Select(x => new KeyValuePair<string, List<ValidationResult>>(x, []))
+	.ToDictionary(x => x.Key, x => x.Value);
+
 foreach (string file in files)
 {
-	ValidationResult result_ValidateAssemblyFileVersion =
-			ValidateAssemblyFileVersion(file, expectedVersion);
-	AddResult(validation_file_result, "AssemblyFileVersion", file, result_ValidateAssemblyFileVersion);
+	file_results[file].Add(
+		ValidateAssemblyFileVersion(file, expectedVersion)
+	);
 }
 
-OutputSummary(validation_file_result);
+foreach (string projectFile in projectFiles)
+{
+	IEnumerable<string> assemblyInfoFiles = GetAssemblyInfoPaths(projectFile);
+	if (assemblyInfoFiles.Any() == false)
+	{
+		throw new Exception($"No AssemblyInfo.vb found for {projectFile}");
+	}
+	else if (assemblyInfoFiles.Count() > 1)
+	{
+		throw new Exception($"Multiple AssemblyInfo.vb found for {projectFile}");
+	}
 
-return isValid ? 0 : -1;
+	string assemblyInfoFile = assemblyInfoFiles.First();
+	if (file_results.ContainsKey(assemblyInfoFile) == false)
+	{
+		file_results[assemblyInfoFile] = [];
+	}
+
+	file_results[assemblyInfoFile].Add(
+		ValidateAssemblyFileVersion(assemblyInfoFile, expectedVersion)
+	);
+}
+
+OutputSummary(file_results, rootDir);
+
+bool hasFailures =
+	file_results
+	.SelectMany(x => x.Value)
+	.Any(x => x.Status == ValidationStatus.Failure);
+
+return hasFailures ? -1 : 0;
+
 
 static ValidationResult ValidateAssemblyFileVersion(string path, Version expectedVersion)
 {
+	const string validationName = "AssemblyFileVersion";
+
 	if (Path.GetFileName(path) != "AssemblyInfo.vb")
 	{
-		return ValidationResult.None;
+		return new ValidationResult(path, validationName, ValidationStatus.None);
 	}
 
 	string content = File.ReadAllText(path);
@@ -41,7 +77,7 @@ static ValidationResult ValidateAssemblyFileVersion(string path, Version expecte
 
 	if (match.Success == false)
 	{
-		return ValidationResult.Failure;
+		return new ValidationResult(path, validationName, ValidationStatus.Failure);
 	}
 	string versionStr = match.Groups[1].Value;
 	Version version = new(versionStr);
@@ -49,13 +85,13 @@ static ValidationResult ValidateAssemblyFileVersion(string path, Version expecte
 	   version.Minor != expectedVersion.Minor ||
 	   version.Build != expectedVersion.Build)
 	{
-		return ValidationResult.Failure;
+		return new ValidationResult(path, validationName, ValidationStatus.Failure);
 	}
 	if (version.Revision != expectedVersion.Revision)
 	{
-		return ValidationResult.Failure;
+		return new ValidationResult(path, validationName, ValidationStatus.Failure);
 	}
-	return ValidationResult.Success;
+	return new ValidationResult(path, validationName, ValidationStatus.Success);
 }
 
 public static List<string> GetAssemblyInfoPaths(string vbprojPath)
@@ -95,28 +131,25 @@ static Version ConvertBranchNameToVersion(string branchName)
 		);
 }
 
-static void AddResult(
-	Dictionary<string, Dictionary<string, ValidationResult>> validation_file_result,
-	string validationName,
-	string file,
-	ValidationResult result)
-{
-	if (validation_file_result.ContainsKey(validationName) == false)
-	{
-		validation_file_result[validationName] = [];
-	}
-	validation_file_result[validationName][file] = result;
-}
-
-static void OutputSummary(Dictionary<string, Dictionary<string, ValidationResult>> validation_file_result)
+static void OutputSummary(Dictionary<string, List<ValidationResult>> file_results, string rootDir)
 {
 	List<string> summary = ["## ファイルチェック"];
-	foreach (KeyValuePair<string, Dictionary<string, ValidationResult>> line in validation_file_result)
+	List<string> sortedKeys = file_results.Keys.ToList();
+	sortedKeys.Sort();
+
+	foreach (string file in sortedKeys)
 	{
-		summary.Add($"### {line.Key}");
-		foreach (KeyValuePair<string, ValidationResult> result in line.Value)
+		List<ValidationResult> results = file_results[file];
+		// ファイルとしてのステータスを決定する（Failure > Warning > Success > None）
+		ValidationStatus representative =
+			results
+			.Select(x => x.Status)
+			.OrderByDescending(x => x)
+			.FirstOrDefault();
+		summary.Add($"### {ValidationStatus_Icon[representative]} {Path.GetRelativePath(rootDir, file)}");
+		foreach (ValidationResult result in results)
 		{
-			summary.Add($"#### {result.Key}: {result.Value}");
+			summary.Add($"#### {result.ValidationName}: {result.Status}");
 		}
 	}
 
@@ -125,10 +158,24 @@ static void OutputSummary(Dictionary<string, Dictionary<string, ValidationResult
 	File.AppendAllText(summaryFile, string.Join(Environment.NewLine, summary) + Environment.NewLine);
 }
 
-enum ValidationResult
+record ValidationResult(
+	string File,
+	string ValidationName,
+	ValidationStatus Status
+);
+
+enum ValidationStatus
 {
-	Success,
-	Failure,
-	Warning,
 	None,
+	Success,
+	Warning,
+	Failure,
 }
+
+static Dictionary<ValidationStatus, string> ValidationStatus_Icon = new()
+{
+	{ ValidationStatus.Success, ":white_check_mark:" },
+	{ ValidationStatus.Failure, ":x:" },
+	{ ValidationStatus.Warning, ":warning:" },
+	{ ValidationStatus.None, ":small_blue_diamond:" },
+};

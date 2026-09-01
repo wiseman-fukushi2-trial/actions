@@ -19,4 +19,4 @@ runs:
     - name: File Check
       shell: cmd
       run: |
-        dotnet-script "${{ github.action_path }}/CheckFiles.csx" ${{ inputs.branch }} ${{ inputs.files }} ${{ inputs.project-files }}
+        dotnet-script "${{ github.action_path }}/CheckFiles.csx" "${{ github.workspace }}" ${{ inputs.branch }} ${{ inputs.files }} ${{ inputs.project-files }}
