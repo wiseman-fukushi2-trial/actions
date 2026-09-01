@@ -152,8 +152,7 @@ static void OutputSummary(List<ValidationResult> results, string rootDir)
 
 			foreach (ValidationResult result in resultsForStatus)
 			{
-				summaryForStatus.Add($"{result.ValidationName} {result.File}");
-				summaryForStatus.Add("");
+				summaryForStatus.Add($"**{result.ValidationName}** {result.File}   ");
 
 				if (result.Status > statusForProject)
 				{
