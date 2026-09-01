@@ -10,16 +10,18 @@ jobs:
     steps:
       # リポジトリをクローン・チェックアウト
       - name: Checkout
+        id: checkout
         uses: wiseman-fukushi2-trial/actions/actions/checkout@DX-RKuji
 
       # 変更を取得
       # ${{ steps.diff.outputs.changed_projects }} : 差分プロジェクトの .vbproj のリスト
       - name: Get Diff
-        uses: wiseman-fukushi2-trial/actions/actions/diff@DX-RKuji
         id: diff
+        uses: wiseman-fukushi2-trial/actions/actions/diff@DX-RKuji
 
       # ビルド
       - name: Build
+        id: build
         uses: wiseman-fukushi2-trial/actions/actions/build@DX-RKuji
         with:
           project-files: ${{ steps.diff.outputs.changed_projects }}
@@ -28,17 +30,23 @@ jobs:
     runs-on: self-hosted
     steps:
       # リポジトリをクローン・チェックアウト
+      # ${{ steps.checkout.outputs.branch }} : 対象のブランチ名
       - name: Checkout
+        id: checkout
         uses: wiseman-fukushi2-trial/actions/actions/checkout@DX-RKuji
 
       # 変更を取得
       # ${{ steps.diff.outputs.changed_files }} : 差分ファイルのリスト
+      # ${{ steps.diff.outputs.changed_projects }} : 差分プロジェクトの .vbproj のリスト
       - name: Get Diff
-        uses: wiseman-fukushi2-trial/actions/actions/diff@DX-RKuji
         id: diff
+        uses: wiseman-fukushi2-trial/actions/actions/diff@DX-RKuji
 
       # ファイルチェック
       - name: File Check
+        id: file-check
         uses: wiseman-fukushi2-trial/actions/actions/file-check@DX-RKuji
         with:
+          branch: ${{ steps.checkout.outputs.branch }}
           files: ${{ steps.diff.outputs.changed_files }}
+          project-files: ${{ steps.diff.outputs.changed_projects }}

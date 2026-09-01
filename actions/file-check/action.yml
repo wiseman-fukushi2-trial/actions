@@ -2,8 +2,14 @@ name: File Check
 description: ファイルチェック
 
 inputs:
+  branch:
+    description: ブランチ名
+    required: true
   files:
     description: 処理対象ファイルのリスト
+    required: true
+  project-files:
+    description: 処理対象プロジェクトのリスト
     required: true
 
 runs:
@@ -13,4 +19,4 @@ runs:
     - name: File Check
       shell: cmd
       run: |
-          echo ${{ inputs.files }}
+        dotnet-script "${{ github.action_path }}/CheckFiles.csx" ${{ inputs.branch }} ${{ inputs.files }} ${{ inputs.project-files }}
