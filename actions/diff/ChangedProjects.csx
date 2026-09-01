@@ -31,7 +31,7 @@ foreach (string file in changedFiles)
 
 // 出力
 string outputFile = Environment.GetEnvironmentVariable("GITHUB_OUTPUT") ?? "GITHUB_OUTPUT.log";
-File.AppendAllText(outputFile,$"changed_projects={string.Join(' ', changedProjects)}" + Environment.NewLine);
+File.AppendAllText(outputFile, $"changed_projects={string.Join(' ', changedProjects)}" + Environment.NewLine);
 
 
 static string? GetProjFilePath(DirectoryInfo directory)
