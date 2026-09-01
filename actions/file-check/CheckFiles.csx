@@ -172,6 +172,7 @@ static void OutputSummary(List<ValidationResult> results, string rootDir)
 			}
 		}
 
+		summary.Add("");
 		summary.Add($"### {ValidationStatus_Icon[statusForProject]} {projectName}");
 		summary.AddRange(summaryForProject);
 	}
