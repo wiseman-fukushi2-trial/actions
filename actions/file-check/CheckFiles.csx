@@ -14,25 +14,31 @@ Version expectedVersion = ConvertBranchNameToVersion(branchName);
 IEnumerable<string> files = Args.Skip(1);
 
 bool isValid = true;
+Dictionary<string, Dictionary<string, ValidationResult>> validation_file_result = [];
 foreach (string file in files)
 {
-	isValid &= ValidateAssemblyFileVersion(file, expectedVersion);
+	ValidationResult result_ValidateAssemblyFileVersion =
+			ValidateAssemblyFileVersion(file, expectedVersion);
+	AddResult(validation_file_result, "AssemblyFileVersion", file, result_ValidateAssemblyFileVersion);
 }
 
-// 出力
-string outputFile = Environment.GetEnvironmentVariable("GITHUB_OUTPUT") ?? "GITHUB_OUTPUT.log";
-File.AppendAllText(outputFile,$"changed_files={string.Join(" ", absolutePaths)}" + Environment.NewLine);
+OutputSummary(validation_file_result);
 
 return isValid ? 0 : -1;
 
-static bool ValidateAssemblyFileVersion(string content, Version expectedVersion)
+static ValidationResult ValidateAssemblyFileVersion(string content, Version expectedVersion)
 {
+	if (Path.GetFileName(path) != "AssemblyInfo.vb")
+	{
+		return ValidationResult.None;
+	}
+
 	const string regStr_AssemblyFileVersion = @"<Assembly:\s*AssemblyFileVersion\(""([^""]+)""\)>";
 	Match match = Regex.Match(content, regStr_AssemblyFileVersion);
 
 	if (match.Success == false)
 	{
-		return false;
+		return ValidationResult.Failure;
 	}
 	string versionStr = match.Groups[1].Value;
 	Version version = new(versionStr);
@@ -40,13 +46,13 @@ static bool ValidateAssemblyFileVersion(string content, Version expectedVersion)
 	   version.Minor != expectedVersion.Minor ||
 	   version.Build != expectedVersion.Build)
 	{
-		return false;
+		return ValidationResult.Failure;
 	}
 	if (version.Revision != expectedVersion.Revision)
 	{
-		return false;
+		return ValidationResult.Failure;
 	}
-	return version == expectedVersion;
+	return ValidationResult.Success;
 }
 
 static Version ConvertBranchNameToVersion(string branchName)
@@ -63,4 +69,38 @@ static Version ConvertBranchNameToVersion(string branchName)
 		int.Parse(match.Groups[3].Value),
 		int.Parse(match.Groups[4].Value)
 		);
+}
+
+static void AddResult(
+	Dictionary<string, Dictionary<string, ValidationResult>> results,
+	string validationName,
+	string file,
+	ValidationResult result)
+{
+	summary.Add($"### {result}");
+}
+
+static void OutputSummary(Dictionary<string, Dictionary<string, ValidationResult>> validation_file_result)
+{
+	List<string> summary = ["## ファイルチェック"];
+	foreach (KeyValuePair<string, Dictionary<string, ValidationResult>> line in validation_file_result)
+	{
+		summary.Add($"### {line.Key}");
+		foreach (KeyValuePair<string, ValidationResult> result in line.Value)
+		{
+			summary.Add($"#### {result.Key}: {result.Value}");
+		}
+	}
+
+	// 出力
+	string summaryFile = Environment.GetEnvironmentVariable("GITHUB_STEP_SUMMARY") ?? "GITHUB_STEP_SUMMARY.log";
+	File.AppendAllText(summaryFile, string.Join(Environment.NewLine, summary) + Environment.NewLine);
+}
+
+enum ValidationResult
+{
+	Success,
+	Failure,
+	Warning,
+	None,
 }
