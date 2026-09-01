@@ -72,12 +72,16 @@ static Version ConvertBranchNameToVersion(string branchName)
 }
 
 static void AddResult(
-	Dictionary<string, Dictionary<string, ValidationResult>> results,
+	Dictionary<string, Dictionary<string, ValidationResult>> validation_file_result,
 	string validationName,
 	string file,
 	ValidationResult result)
 {
-	summary.Add($"### {result}");
+	if (validation_file_result.ContainsKey(validationName) == false)
+	{
+		validation_file_result[validationName] = [];
+	}
+	validation_file_result[validationName][file] = result;
 }
 
 static void OutputSummary(Dictionary<string, Dictionary<string, ValidationResult>> validation_file_result)
