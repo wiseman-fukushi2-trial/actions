@@ -17,14 +17,11 @@ Version expectedVersion = ConvertBranchNameToVersion(branchName);
 IEnumerable<string> files = Args.Skip(2).Where(x => x.EndsWith(".vbproj") == false);
 IEnumerable<string> projectFiles = Args.Skip(2).Where(x => x.EndsWith(".vbproj"));
 
-Dictionary<string, List<ValidationResult>> file_results =
-	files
-	.Select(x => new KeyValuePair<string, List<ValidationResult>>(x, []))
-	.ToDictionary(x => x.Key, x => x.Value);
+List<ValidationResult> results = [];
 
 foreach (string file in files)
 {
-	file_results[file].Add(
+	results.Add(
 		ValidateAssemblyFileVersion(file, expectedVersion)
 	);
 }
@@ -42,22 +39,15 @@ foreach (string projectFile in projectFiles)
 	}
 
 	string assemblyInfoFile = assemblyInfoFiles.First();
-	if (file_results.ContainsKey(assemblyInfoFile) == false)
-	{
-		file_results[assemblyInfoFile] = [];
-	}
 
-	file_results[assemblyInfoFile].Add(
+	results.Add(
 		ValidateAssemblyFileVersion(assemblyInfoFile, expectedVersion)
 	);
 }
 
-OutputSummary(file_results, rootDir);
+OutputSummary(results, rootDir);
 
-bool hasFailures =
-	file_results
-	.SelectMany(x => x.Value)
-	.Any(x => x.Status == ValidationStatus.Failure);
+bool hasFailures = results.Any(x => x.Status == ValidationStatus.Failure);
 
 return hasFailures ? -1 : 0;
 
@@ -131,26 +121,56 @@ static Version ConvertBranchNameToVersion(string branchName)
 		);
 }
 
-static void OutputSummary(Dictionary<string, List<ValidationResult>> file_results, string rootDir)
+static void OutputSummary(List<ValidationResult> results, string rootDir)
 {
 	List<string> summary = ["## ファイルチェック"];
-	List<string> sortedKeys = file_results.Keys.ToList();
-	sortedKeys.Sort();
 
-	foreach (string file in sortedKeys)
+	Dictionary<string, Dictionary<string, List<ValidationResult>>> project_file_results = [];
+	foreach (ValidationResult result in results)
 	{
-		List<ValidationResult> results = file_results[file];
-		// ファイルとしてのステータスを決定する（Failure > Warning > Success > None）
-		ValidationStatus representative =
-			results
-			.Select(x => x.Status)
-			.OrderByDescending(x => x)
-			.FirstOrDefault();
-		summary.Add($"### {ValidationStatus_Icon[representative]} {Path.GetRelativePath(rootDir, file)}");
-		foreach (ValidationResult result in results)
+		string relativePath = Path.GetRelativePath(rootDir, result.File);
+		string projectName = relativePath.Split(['\\', '/'], StringSplitOptions.RemoveEmptyEntries)[0];
+		project_file_results.TryAdd(projectName, []);
+		project_file_results[projectName].TryAdd(relativePath, []);
+		project_file_results[projectName][relativePath].Add(result);
+	}
+
+	foreach (KeyValuePair<string, Dictionary<string, List<ValidationResult>>> project_items in project_file_results)
+	{
+		string projectName = project_items.Key;
+		Dictionary<string, List<ValidationResult>> file_results = project_items.Value;
+
+		ValidationStatus statusForProject = ValidationStatus.None;
+		List<string> summaryForProject = [];
+
+		foreach (KeyValuePair<string, List<ValidationResult>> file_items in file_results)
 		{
-			summary.Add($"#### {result.ValidationName}: {result.Status}");
+			string file = file_items.Key;
+			List<ValidationResult> resultsForFile = file_items.Value;
+
+			ValidationStatus statusForFile = ValidationStatus.None;
+			List<string> summaryForFile = [];
+
+			foreach (ValidationResult result in resultsForFile)
+			{
+				summaryForFile.Add($"{ValidationStatus_Icon[result.Status]} {result.ValidationName}");
+				if (result.Status > statusForFile)
+				{
+					statusForFile = result.Status;
+				}
+			}
+
+			summaryForProject.Add($"{ValidationStatus_Icon[statusForFile]} {file}");
+			summaryForProject.AddRange(summaryForFile);
+
+			if (statusForFile > statusForProject)
+			{
+				statusForProject = statusForFile;
+			}
 		}
+
+		summary.Add($"### {ValidationStatus_Icon[statusForProject]} {projectName}");
+		summary.AddRange(summaryForProject);
 	}
 
 	// 出力
