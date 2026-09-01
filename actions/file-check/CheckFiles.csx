@@ -12,6 +12,7 @@ string branchName = Args[0];
 Version expectedVersion = ConvertBranchNameToVersion(branchName);
 
 IEnumerable<string> files = Args.Skip(1);
+files = files.Concat(files.SelectMany(GetAssemblyInfoPaths));
 
 bool isValid = true;
 Dictionary<string, Dictionary<string, ValidationResult>> validation_file_result = [];
@@ -54,6 +55,27 @@ static ValidationResult ValidateAssemblyFileVersion(string path, Version expecte
 		return ValidationResult.Failure;
 	}
 	return ValidationResult.Success;
+}
+
+public static List<string> GetAssemblyInfoPaths(string vbprojPath)
+{
+	if (Path.GetExtension(vbprojPath) != ".vbproj")
+	{
+		return [];
+	}
+
+	string projectDir = Path.GetDirectoryName(vbprojPath) ?? throw new ArgumentException("vbprojPath is not valid.");
+
+	XDocument doc = XDocument.Load(vbprojPath);
+
+	return doc.Descendants()
+		.Where(x => x.Name.LocalName == "Compile")
+		.Select(x => x.Attribute("Include")?.Value)
+		.Where(x => string.IsNullOrWhiteSpace(x) == false)
+		.Where(x => Path.GetFileName(x) == "AssemblyInfo.vb")
+		.Select(x => Path.GetFullPath(
+			Path.Combine(projectDir, x!)))
+		.ToList();
 }
 
 static Version ConvertBranchNameToVersion(string branchName)
