@@ -153,14 +153,14 @@ static void OutputSummary(List<ValidationResult> results, string rootDir)
 
 			foreach (ValidationResult result in resultsForFile)
 			{
-				summaryForFile.Add($">> {ValidationStatus_Icon[result.Status]} {result.ValidationName}");
+				summaryForFile.Add($"    - {ValidationStatus_Icon[result.Status]} {result.ValidationName}");
 				if (result.Status > statusForFile)
 				{
 					statusForFile = result.Status;
 				}
 			}
 
-			summaryForProject.Add($"> {ValidationStatus_Icon[statusForFile]} {file}");
+			summaryForProject.Add($"- {ValidationStatus_Icon[statusForFile]} {file}");
 			summaryForProject.AddRange(summaryForFile);
 
 			if (statusForFile > statusForProject)
