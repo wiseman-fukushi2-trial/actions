@@ -162,7 +162,7 @@ static void OutputSummary(List<ValidationResult> results, string rootDir, string
 			{
 				string relativePath = Path.GetRelativePath(rootDir, result.File);
 				summaryForStatus.Add($"#### {result.ValidationName}");
-				summaryForStatus.Add($"[{relativePath}](./{branchName}/{relativePath})");
+				summaryForStatus.Add($"[{relativePath}](./blob/{branchName}/{relativePath})");
 
 				if (result.Status > statusForProject)
 				{
