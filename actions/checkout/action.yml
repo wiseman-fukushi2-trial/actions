@@ -4,20 +4,20 @@ description: 呼び出し元リポジトリのチェックアウト
 outputs:
   branch:
     description: 対象のブランチ名
-    value: ${{ steps.branch.outputs.branch }}
+    value: ${{ steps.refs.outputs.branch }}
   sha:
     description: 対象のコミット SHA
-    value: ${{ steps.ref.outputs.sha }}
+    value: ${{ steps.refs.outputs.sha }}
 
 runs:
   using: composite
   steps:
-    - id: branch
+    - id: refs
       shell: pwsh
       run: |
-        "branch=${{ github.event.pull_request.head.ref || github.ref_name }}" >> $env:GITHUB_OUTPUT
+        "branch=${{ github.event.pull_request.head.ref || github.ref_name }}" >> $env:GITHUB_OUTPUT `
         "sha=${{ github.event.pull_request.head.sha || github.sha }}" >> $env:GITHUB_OUTPUT
 
     - uses: actions/checkout@v7
       with:
-        ref: ${{ steps.branch.outputs.branch }}
+        ref: ${{ steps.refs.outputs.branch }}
