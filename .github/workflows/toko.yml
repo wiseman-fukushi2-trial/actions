@@ -31,6 +31,7 @@ jobs:
     steps:
       # リポジトリをクローン・チェックアウト
       # ${{ steps.checkout.outputs.branch }} : 対象のブランチ名
+      # ${{ steps.checkout.outputs.sha }} : 対象のコミット SHA
       - name: Checkout
         id: checkout
         uses: wiseman-fukushi2-trial/actions/actions/checkout@DX-RKuji
@@ -48,5 +49,6 @@ jobs:
         uses: wiseman-fukushi2-trial/actions/actions/file-check@DX-RKuji
         with:
           branch: ${{ steps.checkout.outputs.branch }}
+          sha: ${{ steps.checkout.outputs.sha }}
           files: ${{ steps.diff.outputs.changed_files }}
           project-files: ${{ steps.diff.outputs.changed_projects }}

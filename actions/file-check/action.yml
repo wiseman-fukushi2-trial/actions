@@ -5,6 +5,9 @@ inputs:
   branch:
     description: ブランチ名
     required: true
+  sha:
+    description: コミット SHA
+    required: true
   files:
     description: 処理対象ファイルのリスト
     required: true
@@ -19,4 +22,10 @@ runs:
     - name: File Check
       shell: cmd
       run: |
-        dotnet-script "${{ github.action_path }}/CheckFiles.csx" "${{ github.workspace }}" "${{ github.server_url }}/${{ github.repository }}" "${{ inputs.branch }}" ${{ inputs.files }} ${{ inputs.project-files }}
+        dotnet-script "${{ github.action_path }}/CheckFiles.csx" ^
+          "${{ github.workspace }}" ^
+          "${{ github.server_url }}/${{ github.repository }}" ^
+          "${{ inputs.branch }}" ^
+          "${{ inputs.sha }}" ^
+          ${{ inputs.files }} ^
+          ${{ inputs.project-files }}

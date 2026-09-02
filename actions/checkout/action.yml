@@ -5,6 +5,9 @@ outputs:
   branch:
     description: 対象のブランチ名
     value: ${{ steps.branch.outputs.branch }}
+  sha:
+    description: 対象のコミット SHA
+    value: ${{ steps.ref.outputs.sha }}
 
 runs:
   using: composite
@@ -13,6 +16,7 @@ runs:
       shell: pwsh
       run: |
         "branch=${{ github.event.pull_request.head.ref || github.ref_name }}" >> $env:GITHUB_OUTPUT
+        "sha=${{ github.event.pull_request.head.sha || github.sha }}" >> $env:GITHUB_OUTPUT
 
     - uses: actions/checkout@v7
       with:
