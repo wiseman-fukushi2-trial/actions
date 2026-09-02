@@ -164,7 +164,7 @@ static void OutputSummary(List<ValidationResult> results, string rootDir, string
 				string relativePath = Path.GetRelativePath(rootDir, result.File);
 
 				string encodedPath = HttpUtility.UrlEncode(relativePath);
-				string encodedUrl = HttpUtility.UrlEncode($"blob/{branchName}/{encodedPath}");
+				string encodedUrl = HttpUtility.UrlEncode($"blob/{branchName}/{relativePath}");
 
 				summaryForStatus.Add($"#### {result.ValidationName}");
 				summaryForStatus.Add($"[{encodedPath}]({encodedUrl})");
