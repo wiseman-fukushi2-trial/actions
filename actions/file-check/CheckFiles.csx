@@ -165,7 +165,7 @@ static void OutputSummary(List<ValidationResult> results, string rootDir, string
 
 				string path = relativePath.Replace(" ", "");
 				// [repository]/actions/runs/ からの相対パス
-				string url = $"/../../blob/{branchName}/{relativePath}".Replace("\\", "/").Replace(" ", "%20");
+				string url = $"/blob/{branchName}/{relativePath}".Replace("\\", "/").Replace(" ", "%20");
 
 				summaryForStatus.Add($"#### {result.ValidationName}");
 				summaryForStatus.Add($"[{path}]({url})");
