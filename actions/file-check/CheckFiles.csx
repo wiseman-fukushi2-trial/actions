@@ -45,7 +45,7 @@ foreach (string projectFile in projectFiles)
 	);
 }
 
-OutputSummary(results, rootDir);
+OutputSummary(results, rootDir, branchName);
 
 bool hasFailures = results.Any(x => x.Status == ValidationStatus.Failure);
 
@@ -121,7 +121,7 @@ static Version ConvertBranchNameToVersion(string branchName)
 		);
 }
 
-static void OutputSummary(List<ValidationResult> results, string rootDir)
+static void OutputSummary(List<ValidationResult> results, string rootDir, string branchName)
 {
 	List<string> summary = ["## ファイルチェック"];
 
@@ -135,7 +135,7 @@ static void OutputSummary(List<ValidationResult> results, string rootDir)
 		project_status_results[projectName][result.Status].Add(result);
 	}
 
-	foreach (KeyValuePair<string, Dictionary<ValidationStatus, List<ValidationResult>>> project_items in project_status_results)
+	foreach (var project_items in project_status_results)
 	{
 		string projectName = project_items.Key;
 		Dictionary<ValidationStatus, List<ValidationResult>> status_results = project_items.Value;
@@ -143,7 +143,44 @@ static void OutputSummary(List<ValidationResult> results, string rootDir)
 		ValidationStatus statusForProject = ValidationStatus.None;
 		List<string> summaryForProject = [];
 
-		foreach (KeyValuePair<ValidationStatus, List<ValidationResult>> status_items in status_results)
+		// ValidationStatus の逆順で表示
+		foreach (ValidationStatus status in Enum.GetValues<ValidationStatus>().Reverse())
+		{
+			if(status == ValidationStatus.None)
+			{
+				continue;
+			}
+
+			if (status_results.TryGetValue(status, out List<ValidationResult>? resultsForStatus) == false)
+			{
+				continue;
+			}
+
+			List<string> summaryForStatus = [];
+
+			foreach (ValidationResult result in resultsForStatus)
+			{
+				string relativePath = Path.GetRelativePath(rootDir, result.File);
+				summaryForStatus.Add($"#### {result.ValidationName}");
+				summaryForStatus.Add($"[{relativePath}](./{branchName}/{relativePath})");
+
+				if (result.Status > statusForProject)
+				{
+					statusForProject = result.Status;
+				}
+			}
+			if (summaryForStatus.Count > 0)
+			{
+				summaryForProject.Add("<details>");
+				summaryForProject.Add($"<summary>{status}</summary>");
+				summaryForProject.Add("");
+				summaryForProject.AddRange(summaryForStatus);
+				summaryForProject.Add("");
+				summaryForProject.Add("</details>");
+			}
+		}
+
+		foreach (var status_items in status_results)
 		{
 			ValidationStatus status = status_items.Key;
 			List<ValidationResult> resultsForStatus = status_items.Value;
@@ -161,12 +198,15 @@ static void OutputSummary(List<ValidationResult> results, string rootDir)
 					statusForProject = result.Status;
 				}
 			}
-			summaryForProject.Add("<details>");
-			summaryForProject.Add($"<summary>{status}</summary>");
-			summaryForProject.Add("");
-			summaryForProject.AddRange(summaryForStatus);
-			summaryForProject.Add("");
-			summaryForProject.Add("</details>");
+			if (status != ValidationStatus.None && summaryForStatus.Count > 0)
+			{
+				summaryForProject.Add("<details>");
+				summaryForProject.Add($"<summary>{status}</summary>");
+				summaryForProject.Add("");
+				summaryForProject.AddRange(summaryForStatus);
+				summaryForProject.Add("");
+				summaryForProject.Add("</details>");
+			}
 		}
 
 		summary.Add("");
