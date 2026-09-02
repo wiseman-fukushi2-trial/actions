@@ -163,8 +163,8 @@ static void OutputSummary(List<ValidationResult> results, string rootDir, string
 			{
 				string relativePath = Path.GetRelativePath(rootDir, result.File);
 
-				string path = relativePath.Replace(" ", "%20");
-				string url = $"blob/{branchName}/{relativePath}";
+				string path = relativePath.Replace(" ", "");
+				string url = $"blob/{branchName}/{relativePath}".Replace("\\", "/").Replace(" ", "%20");
 
 				summaryForStatus.Add($"#### {result.ValidationName}");
 				summaryForStatus.Add($"[{path}]({url})");
