@@ -162,7 +162,7 @@ static void OutputSummary(List<ValidationResult> results, string rootDir, string
 			{
 				string relativePath = Path.GetRelativePath(rootDir, result.File);
 				summaryForStatus.Add($"#### {result.ValidationName}");
-				summaryForStatus.Add($"[{relativePath}](./blob/{branchName}/{relativePath})");
+				summaryForStatus.Add($"[{relativePath}](/blob/{branchName}/{relativePath})");
 
 				if (result.Status > statusForProject)
 				{
@@ -170,35 +170,6 @@ static void OutputSummary(List<ValidationResult> results, string rootDir, string
 				}
 			}
 			if (summaryForStatus.Count > 0)
-			{
-				summaryForProject.Add("<details>");
-				summaryForProject.Add($"<summary>{status}</summary>");
-				summaryForProject.Add("");
-				summaryForProject.AddRange(summaryForStatus);
-				summaryForProject.Add("");
-				summaryForProject.Add("</details>");
-			}
-		}
-
-		foreach (var status_items in status_results)
-		{
-			ValidationStatus status = status_items.Key;
-			List<ValidationResult> resultsForStatus = status_items.Value;
-
-			List<string> summaryForStatus = [];
-
-			foreach (ValidationResult result in resultsForStatus)
-			{
-				string relativePath = Path.GetRelativePath(rootDir, result.File);
-				summaryForStatus.Add($"#### {result.ValidationName}");
-				summaryForStatus.Add(relativePath);
-
-				if (result.Status > statusForProject)
-				{
-					statusForProject = result.Status;
-				}
-			}
-			if (status != ValidationStatus.None && summaryForStatus.Count > 0)
 			{
 				summaryForProject.Add("<details>");
 				summaryForProject.Add($"<summary>{status}</summary>");
