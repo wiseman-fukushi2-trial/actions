@@ -10,13 +10,20 @@ if (Args is null || Args.Count < 6)
 	throw new("required workspace repositoryUrl branchName sha file1 [file2 ...] projectFile1 [projectFile2 ...]");
 }
 
+// ルートディレクトリ
 string rootDir = Args[0];
+// リポジトリの URL
 string repositoryUrl = Args[1];
+// ブランチ名
 string branchName = Args[2];
+// コミット SHA
 string sha = Args[3];
+// 変更されたファイル
 IEnumerable<string> files = Args.Skip(4).Where(x => x.EndsWith(".vbproj") == false);
+// プロジェクトファイル
 IEnumerable<string> projectFiles = Args.Skip(4).Where(x => x.EndsWith(".vbproj"));
 
+// 期待されるバージョンをブランチ名から取得する
 Version expectedVersion = ConvertBranchNameToVersion(branchName);
 
 List<ValidationResult> results = [];
@@ -30,7 +37,9 @@ foreach (string file in files)
 
 foreach (string projectFile in projectFiles)
 {
+	// AssemblyInfo.vb のパス
 	IEnumerable<string> assemblyInfoFiles = GetAssemblyInfoPaths(projectFile);
+	// AssemblyInfo.vb が指定されていない場合・2つ以上指定されている場合はエラーとする
 	if (assemblyInfoFiles.Any() == false)
 	{
 		throw new Exception($"No AssemblyInfo.vb found for {projectFile}");
@@ -49,11 +58,19 @@ foreach (string projectFile in projectFiles)
 
 OutputSummary(results, rootDir, repositoryUrl, sha);
 
+// 失敗が1件でもあれば、終了コード -1 を返す
 bool hasFailures = results.Any(x => x.Status == ValidationStatus.Failure);
 
 return hasFailures ? -1 : 0;
 
-
+/// <summary>
+/// チェック AssemblyFileVersion
+/// </summary>
+/// <param name="path">AssemblyInfo.vb のパス</param>
+/// <param name="expectedVersion">期待されるバージョン</param>
+/// <remarks>
+/// Revision が一致しない場合は警告とする（標準化資料に、Revision はインクリメントするという記載あり）
+/// </remarks>
 static ValidationResult ValidateAssemblyFileVersion(string path, Version expectedVersion)
 {
 	const string validationName = "AssemblyFileVersion";
@@ -64,15 +81,20 @@ static ValidationResult ValidateAssemblyFileVersion(string path, Version expecte
 	}
 
 	string content = File.ReadAllText(path);
+	// <Assembly: AssemblyFileVersion("00.0.0.00")>
 	const string regStr_AssemblyFileVersion = @"<Assembly:\s*AssemblyFileVersion\(""([^""]+)""\)>";
 	Match match = Regex.Match(content, regStr_AssemblyFileVersion);
 
+	// AssemblyFileVersion が見つからない場合は失敗とする
 	if (match.Success == false)
 	{
 		return new ValidationResult(path, validationName, ValidationStatus.Failure);
 	}
+	// 期待されるバージョンと比較
 	string versionStr = match.Groups[1].Value;
 	Version version = new(versionStr);
+	// Major, Minor, Build が一致しない場合は失敗とする
+	// Revision が一致しない場合は警告とする（標準化資料に、Revision はインクリメントするという記載あり）
 	if (version.Major != expectedVersion.Major ||
 	   version.Minor != expectedVersion.Minor ||
 	   version.Build != expectedVersion.Build)
@@ -81,11 +103,16 @@ static ValidationResult ValidateAssemblyFileVersion(string path, Version expecte
 	}
 	if (version.Revision != expectedVersion.Revision)
 	{
-		return new ValidationResult(path, validationName, ValidationStatus.Failure);
+		return new ValidationResult(path, validationName, ValidationStatus.Warning);
 	}
 	return new ValidationResult(path, validationName, ValidationStatus.Success);
 }
 
+/// <summary>
+/// vbproj ファイルから AssemblyInfo.vb のパスを取得する
+/// </summary>
+/// <param name="vbprojPath">vbproj ファイルのパス</param>
+/// <returns>AssemblyInfo.vb のパスのリスト</returns>
 public static List<string> GetAssemblyInfoPaths(string vbprojPath)
 {
 	if (Path.GetExtension(vbprojPath) != ".vbproj")
@@ -93,22 +120,32 @@ public static List<string> GetAssemblyInfoPaths(string vbprojPath)
 		return [];
 	}
 
+	// プロジェクトファイルが配置されているディレクトリをルートとする
 	string projectDir = Path.GetDirectoryName(vbprojPath) ?? throw new ArgumentException("vbprojPath is not valid.");
 
 	XDocument doc = XDocument.Load(vbprojPath);
 
+	// <Compile Include="My Project\AssemblyInfo.vb" />
 	return doc.Descendants()
 		.Where(x => x.Name.LocalName == "Compile")
 		.Select(x => x.Attribute("Include")?.Value)
 		.Where(x => string.IsNullOrWhiteSpace(x) == false)
 		.Where(x => Path.GetFileName(x) == "AssemblyInfo.vb")
-		.Select(x => Path.GetFullPath(
-			Path.Combine(projectDir, x!)))
+		// ルートディレクトリと相対パスを結合する
+		.Select(x => Path.GetFullPath(Path.Combine(projectDir, x!)))
+		// 複数定義される可能性があるため、リストとして返す
 		.ToList();
 }
 
+/// <summary>
+/// ブランチ名からバージョンを取得する
+/// </summary>
+/// <param name="branchName">ブランチ名</param>
+/// <returns>バージョン</returns>
+/// <exception cref="ArgumentException">feature-000000 の形式でない場合</exception>
 static Version ConvertBranchNameToVersion(string branchName)
 {
+	// feature-<Major><Minor><Build><Revision>
 	const string regStr_BranchNameToVersion = @"^DX-(\d{2})(\d{1})(\d{1})(\d{2})";
 	Match match = Regex.Match(branchName, regStr_BranchNameToVersion);
 	if (match.Success == false)
@@ -123,15 +160,27 @@ static Version ConvertBranchNameToVersion(string branchName)
 		);
 }
 
+/// <summary>
+/// 結果を GitHub Actions の Summary に出力する
+/// </summary>
+/// <param name="results">ValidationResult のリスト</param>
+/// <param name="rootDir">ソリューションのルートディレクトリ</param>
+/// <param name="repositoryUrl">リポジトリの URL</param>
+/// <param name="sha">SHA</param>
 static void OutputSummary(List<ValidationResult> results, string rootDir, string repositoryUrl, string sha)
 {
+	// 全体のサマリー
 	List<string> summary = ["## ファイルチェック"];
 
+	// { プロジェクト名, { 検証ステータス, [ 結果レコード ] } }
 	Dictionary<string, Dictionary<ValidationStatus, List<ValidationResult>>> project_status_results = [];
 	foreach (ValidationResult result in results)
 	{
+		// プロジェクトルートからの相対パス
 		string relativePath = Path.GetRelativePath(rootDir, result.File);
+		// 相対パスで最初のディレクトリ名をプロジェクト名とする
 		string projectName = relativePath.Split(['\\', '/'], StringSplitOptions.RemoveEmptyEntries)[0];
+
 		project_status_results.TryAdd(projectName, []);
 		project_status_results[projectName].TryAdd(result.Status, []);
 		project_status_results[projectName][result.Status].Add(result);
@@ -139,25 +188,32 @@ static void OutputSummary(List<ValidationResult> results, string rootDir, string
 
 	foreach (var project_items in project_status_results)
 	{
+		// プロジェクト名
 		string projectName = project_items.Key;
+		// { 検証ステータス, [結果レコード] }
 		Dictionary<ValidationStatus, List<ValidationResult>> status_results = project_items.Value;
 
+		// プロジェクト単位の検証ステータス
 		ValidationStatus statusForProject = ValidationStatus.None;
+		// プロジェクト単位のサマリー
 		List<string> summaryForProject = [];
 
 		// ValidationStatus の逆順で表示
 		foreach (ValidationStatus status in Enum.GetValues<ValidationStatus>().Reverse())
 		{
-			if(status == ValidationStatus.None)
+			// 検証をスキップした場合は表示しない
+			if (status == ValidationStatus.None)
 			{
 				continue;
 			}
 
+			// 検証結果が存在しない場合はスキップ
 			if (status_results.TryGetValue(status, out List<ValidationResult>? resultsForStatus) == false)
 			{
 				continue;
 			}
 
+			// 検証ステータス単位のサマリー
 			List<string> summaryForStatus = [];
 
 			foreach (ValidationResult result in resultsForStatus)
@@ -170,6 +226,7 @@ static void OutputSummary(List<ValidationResult> results, string rootDir, string
 				summaryForStatus.Add($"#### {result.ValidationName}");
 				summaryForStatus.Add($"[{path}]({url})");
 
+				// プロジェクト単位の検証ステータスを更新
 				if (result.Status > statusForProject)
 				{
 					statusForProject = result.Status;
@@ -177,6 +234,7 @@ static void OutputSummary(List<ValidationResult> results, string rootDir, string
 			}
 			if (summaryForStatus.Count > 0)
 			{
+				// 検証ステータス単位のサマリーを折りたたみ表示する
 				summaryForProject.Add("<details>");
 				summaryForProject.Add($"<summary>{status}</summary>");
 				summaryForProject.Add("");
@@ -186,6 +244,7 @@ static void OutputSummary(List<ValidationResult> results, string rootDir, string
 			}
 		}
 
+		// プロジェクト単位のサマリーを追加
 		summary.Add("");
 		summary.Add($"### {ValidationStatus_Icon[statusForProject]} {projectName}");
 		summary.AddRange(summaryForProject);
@@ -196,24 +255,49 @@ static void OutputSummary(List<ValidationResult> results, string rootDir, string
 	File.AppendAllText(summaryFile, string.Join(Environment.NewLine, summary) + Environment.NewLine);
 }
 
+/// <summary>
+/// 検証結果レコード
+/// </summary>
+/// <param name="File">ファイルパス</param>
+/// <param name="ValidationName">検証名</param>
+/// <param name="Status">検証ステータス</param>
 record ValidationResult(
 	string File,
 	string ValidationName,
 	ValidationStatus Status
 );
 
+/// <summary>
+/// 検証ステータス
+/// </summary>
+/// <remarks>
+/// サマリー表示順の決定ロジックが依存している。
+/// 重要度 低 → 高の順に定義すること。
+/// </remarks>
 enum ValidationStatus
 {
+	/// <summary>
+	/// 検証スキップ
+	/// </summary>
 	None,
+	/// <summary>
+	/// 検証成功
+	/// </summary>
 	Success,
+	/// <summary>
+	/// 警告
+	/// </summary>
 	Warning,
+	/// <summary>
+	/// 失敗
+	/// </summary>
 	Failure,
 }
 
 static Dictionary<ValidationStatus, string> ValidationStatus_Icon = new()
 {
-	{ ValidationStatus.Success, ":white_check_mark:" },
-	{ ValidationStatus.Failure, ":x:" },
-	{ ValidationStatus.Warning, ":warning:" },
 	{ ValidationStatus.None, ":small_blue_diamond:" },
+	{ ValidationStatus.Success, ":white_check_mark:" },
+	{ ValidationStatus.Warning, ":warning:" },
+	{ ValidationStatus.Failure, ":x:" },
 };
