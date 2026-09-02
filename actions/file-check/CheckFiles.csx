@@ -1,5 +1,6 @@
 #nullable enable
 
+using System.Web;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 
@@ -161,8 +162,12 @@ static void OutputSummary(List<ValidationResult> results, string rootDir, string
 			foreach (ValidationResult result in resultsForStatus)
 			{
 				string relativePath = Path.GetRelativePath(rootDir, result.File);
+
+				string encodedPath = HttpUtility.UrlEncode(relativePath);
+				string encodedUrl = HttpUtility.UrlEncode($"blob/{branchName}/{encodedPath}");
+
 				summaryForStatus.Add($"#### {result.ValidationName}");
-				summaryForStatus.Add($"[{relativePath}](/blob/{branchName}/{relativePath})");
+				summaryForStatus.Add($"[{encodedPath}]({encodedUrl})");
 
 				if (result.Status > statusForProject)
 				{
