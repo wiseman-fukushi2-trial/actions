@@ -163,13 +163,11 @@ static void OutputSummary(List<ValidationResult> results, string rootDir, string
 			{
 				string relativePath = Path.GetRelativePath(rootDir, result.File);
 
-				string encodedPath = relativePath.Replace(" ", "%20");
+				string path = relativePath.Replace(" ", "%20");
 				string url = $"blob/{branchName}/{relativePath}";
-				url = url.Replace("\\", "/").Replace(" ", "%20");
-				string encodedUrl = HttpUtility.UrlEncode(url);
 
 				summaryForStatus.Add($"#### {result.ValidationName}");
-				summaryForStatus.Add($"[{encodedPath}]({encodedUrl})");
+				summaryForStatus.Add($"[{path}]({url})");
 
 				if (result.Status > statusForProject)
 				{
