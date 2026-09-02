@@ -5,18 +5,19 @@ using System.Text.RegularExpressions;
 using System.Xml.Linq;
 
 // 引数が空の場合は処理を終了する
-if (Args is null || Args.Count < 4)
+if (Args is null || Args.Count < 5)
 {
-	throw new("required github.workspace branchName file1 [file2 ...] projectFile1 [projectFile2 ...]");
+	throw new("required workspace repositoryUrl branchName file1 [file2 ...] projectFile1 [projectFile2 ...]");
 }
 
 string rootDir = Args[0];
 
-string branchName = Args[1];
+string repositoryUrl = Args[1];
+string branchName = Args[2];
 Version expectedVersion = ConvertBranchNameToVersion(branchName);
 
-IEnumerable<string> files = Args.Skip(2).Where(x => x.EndsWith(".vbproj") == false);
-IEnumerable<string> projectFiles = Args.Skip(2).Where(x => x.EndsWith(".vbproj"));
+IEnumerable<string> files = Args.Skip(3).Where(x => x.EndsWith(".vbproj") == false);
+IEnumerable<string> projectFiles = Args.Skip(3).Where(x => x.EndsWith(".vbproj"));
 
 List<ValidationResult> results = [];
 
@@ -46,7 +47,7 @@ foreach (string projectFile in projectFiles)
 	);
 }
 
-OutputSummary(results, rootDir, branchName);
+OutputSummary(results, rootDir, repositoryUrl, branchName);
 
 bool hasFailures = results.Any(x => x.Status == ValidationStatus.Failure);
 
@@ -122,7 +123,7 @@ static Version ConvertBranchNameToVersion(string branchName)
 		);
 }
 
-static void OutputSummary(List<ValidationResult> results, string rootDir, string branchName)
+static void OutputSummary(List<ValidationResult> results, string rootDir, string repositoryUrl, string branchName)
 {
 	List<string> summary = ["## ファイルチェック"];
 
@@ -164,8 +165,7 @@ static void OutputSummary(List<ValidationResult> results, string rootDir, string
 				string relativePath = Path.GetRelativePath(rootDir, result.File);
 
 				string path = relativePath.Replace(" ", "");
-				// [repository]/actions/runs/ からの相対パス
-				string url = $"/blob/{branchName}/{relativePath}".Replace("\\", "/").Replace(" ", "%20");
+				string url = $"{repositoryUrl}/blob/{branchName}/{relativePath}".Replace("\\", "/").Replace(" ", "%20");
 
 				summaryForStatus.Add($"#### {result.ValidationName}");
 				summaryForStatus.Add($"[{path}]({url})");
