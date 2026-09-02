@@ -36,13 +36,6 @@ jobs:
         id: checkout
         uses: wiseman-fukushi2-trial/actions/actions/checkout@DX-RKuji
 
-      - name: run
-        shell: pwsh
-        run: |
-          Write-Host "branch: ${{ steps.checkout.outputs.branch }}"
-          Write-Host "sha: ${{ steps.checkout.outputs.sha }}"
-
-
       # 変更を取得
       # ${{ steps.diff.outputs.changed_files }} : 差分ファイルのリスト
       # ${{ steps.diff.outputs.changed_projects }} : 差分プロジェクトの .vbproj のリスト
