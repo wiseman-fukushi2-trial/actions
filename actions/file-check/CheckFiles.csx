@@ -4,6 +4,8 @@ using System.Web;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 
+#region メイン
+
 // 引数が空の場合は処理を終了する
 if (Args is null || Args.Count < 6)
 {
@@ -31,7 +33,7 @@ List<ValidationResult> results = [];
 foreach (string file in files)
 {
 	results.Add(
-		ValidateAssemblyFileVersion(file, expectedVersion)
+		Validate_AssemblyFileVersion(file, expectedVersion)
 	);
 }
 
@@ -39,7 +41,7 @@ foreach (string projectFile in projectFiles)
 {
 	// AssemblyInfo.vb のパス
 	IEnumerable<string> assemblyInfoFiles = GetAssemblyInfoPaths(projectFile);
-	// AssemblyInfo.vb が指定されていない場合・2つ以上指定されている場合はエラーとする
+	// AssemblyInfo.vb が指定されていない場合、または2つ以上指定されている場合はエラーとする
 	if (assemblyInfoFiles.Any() == false)
 	{
 		throw new Exception($"No AssemblyInfo.vb found for {projectFile}");
@@ -52,7 +54,7 @@ foreach (string projectFile in projectFiles)
 	string assemblyInfoFile = assemblyInfoFiles.First();
 
 	results.Add(
-		ValidateAssemblyFileVersion(assemblyInfoFile, expectedVersion)
+		Validate_AssemblyFileVersion(assemblyInfoFile, expectedVersion)
 	);
 }
 
@@ -63,6 +65,10 @@ bool hasFailures = results.Any(x => x.Status == ValidationStatus.Failure);
 
 return hasFailures ? -1 : 0;
 
+#endregion
+
+#region バリデーション
+
 /// <summary>
 /// チェック AssemblyFileVersion
 /// </summary>
@@ -71,7 +77,7 @@ return hasFailures ? -1 : 0;
 /// <remarks>
 /// Revision が一致しない場合は警告とする（標準化資料に、Revision はインクリメントするという記載あり）
 /// </remarks>
-static ValidationResult ValidateAssemblyFileVersion(string path, Version expectedVersion)
+static ValidationResult Validate_AssemblyFileVersion(string path, Version expectedVersion)
 {
 	const string validationName = "AssemblyFileVersion";
 
@@ -108,6 +114,9 @@ static ValidationResult ValidateAssemblyFileVersion(string path, Version expecte
 	return new ValidationResult(path, validationName, ValidationStatus.Success);
 }
 
+#endregion
+
+#region ヘルパー
 /// <summary>
 /// vbproj ファイルから AssemblyInfo.vb のパスを取得する
 /// </summary>
@@ -255,6 +264,10 @@ static void OutputSummary(List<ValidationResult> results, string rootDir, string
 	File.AppendAllText(summaryFile, string.Join(Environment.NewLine, summary) + Environment.NewLine);
 }
 
+#endregion
+
+#region 定義
+
 /// <summary>
 /// 検証結果レコード
 /// </summary>
@@ -294,6 +307,9 @@ enum ValidationStatus
 	Failure,
 }
 
+/// <summary>
+/// 検証ステータスのアイコン
+/// </summary>
 static Dictionary<ValidationStatus, string> ValidationStatus_Icon = new()
 {
 	{ ValidationStatus.None, ":small_blue_diamond:" },
@@ -301,3 +317,5 @@ static Dictionary<ValidationStatus, string> ValidationStatus_Icon = new()
 	{ ValidationStatus.Warning, ":warning:" },
 	{ ValidationStatus.Failure, ":x:" },
 };
+
+#endregion
