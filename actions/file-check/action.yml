@@ -19,4 +19,5 @@ runs:
     - name: File Check
       shell: cmd
       run: |
+        echo $GITHUB_
         dotnet-script "${{ github.action_path }}/CheckFiles.csx" "${{ github.workspace }}" ${{ inputs.branch }} ${{ inputs.files }} ${{ inputs.project-files }}
