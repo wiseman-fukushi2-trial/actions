@@ -150,7 +150,7 @@ static void OutputSummary(List<ValidationResult> results, string rootDir, string
 		{
 			if(status == ValidationStatus.None)
 			{
-				//continue;
+				continue;
 			}
 
 			if (status_results.TryGetValue(status, out List<ValidationResult>? resultsForStatus) == false)
