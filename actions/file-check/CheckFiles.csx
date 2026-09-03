@@ -32,9 +32,10 @@ List<ValidationResult> results = [];
 
 foreach (string file in files)
 {
-	results.Add(
-		Validate_AssemblyFileVersion(file, expectedVersion)
-	);
+	results.AddRange([
+		Validate_AssemblyFileVersion(file, expectedVersion),
+		Validate_AssemblyVersion(file, rootDir),
+	]);
 }
 
 foreach (string projectFile in projectFiles)
@@ -53,9 +54,10 @@ foreach (string projectFile in projectFiles)
 
 	string assemblyInfoFile = assemblyInfoFiles.First();
 
-	results.Add(
-		Validate_AssemblyFileVersion(assemblyInfoFile, expectedVersion)
-	);
+	results.AddRange([
+		Validate_AssemblyFileVersion(assemblyInfoFile, expectedVersion),
+		Validate_AssemblyVersion(assemblyInfoFile, rootDir),
+	]);
 }
 
 OutputSummary(results, rootDir, repositoryUrl, sha);
@@ -95,29 +97,38 @@ static ValidationResult Validate_AssemblyFileVersion(string path, Version expect
 	// AssemblyFileVersion が見つからない場合は失敗とする
 	if (match.Success == false)
 	{
-		return new ValidationResult(path, validationName, ValidationStatus.Failure);
+		return new ValidationResult(path, validationName, ValidationStatus.Failure, "AssemblyFileVersion が見つかりません");
 	}
+
 	// 期待されるバージョンと比較
-	string versionStr = match.Groups[1].Value;
-	Version version = new(versionStr);
 	// Major, Minor, Build が一致しない場合は失敗とする
 	// Revision が一致しない場合は警告とする（標準化資料に、Revision はインクリメントするという記載あり）
+	string versionStr = match.Groups[1].Value;
+	Version version = new(versionStr);
 	if (version.Major != expectedVersion.Major ||
 	   version.Minor != expectedVersion.Minor ||
 	   version.Build != expectedVersion.Build)
 	{
-		return new ValidationResult(path, validationName, ValidationStatus.Failure);
+		return new ValidationResult(
+			path, validationName, ValidationStatus.Failure,
+			$"AssemblyFileVersion {version} が期待されるバージョン {expectedVersion} と一致しません"
+		);
 	}
 	if (version.Revision != expectedVersion.Revision)
 	{
-		return new ValidationResult(path, validationName, ValidationStatus.Warning);
+		return new ValidationResult(
+			path, validationName, ValidationStatus.Warning,
+			$"AssemblyFileVersion {version} の Revision が期待されるバージョン {expectedVersion} と一致しません"
+		);
 	}
 	return new ValidationResult(path, validationName, ValidationStatus.Success);
 }
 
-static ValidationResult Validate_AssemblyVersion(string path)
+static ValidationResult Validate_AssemblyVersion(string path, string rootDir)
 {
 	const string validationName = "AssemblyVersion";
+	// 基本的には 8.0.0.0
+	// 一部プロジェクト は8.1.0.0
 	Version defaultVersion = new(8, 0, 0, 0);
 	Dictionary<string, Version> specialProject_versions = new()
 	{
@@ -139,7 +150,7 @@ static ValidationResult Validate_AssemblyVersion(string path)
 
 	string content = File.ReadAllText(path);
 
-	// <Assembly: AssemblyVersion("8.0.0.0")>
+	// <Assembly: AssemblyVersion("0.0.0.0")>
 	const string regStr_AssemblyVersion = @"<Assembly:\s*AssemblyVersion\(""([^""]+)""\)>";
 	Match match = Regex.Match(content, regStr_AssemblyVersion);
 
@@ -149,28 +160,25 @@ static ValidationResult Validate_AssemblyVersion(string path)
 		return new ValidationResult(path, validationName, ValidationStatus.Failure);
 	}
 
+	// ソリューションルートからの相対パスで、先頭のディレクトリ名をプロジェクト名とする
+	string relativePath = Path.GetRelativePath(rootDir, path);
+	string projectName = relativePath.Split(['\\', '/'], StringSplitOptions.RemoveEmptyEntries)[0];
 	Version expectedVersion =
-		specialProject_versions.TryGetValue(
-			Path.GetFileNameWithoutExtension(Path.GetDirectoryName(path) ?? ""),
-			out Version? specialVersion
-		)
+		specialProject_versions.TryGetValue(projectName, out Version? specialVersion)
 		? specialVersion : defaultVersion;
 
 	// 期待されるバージョンと比較
 	string versionStr = match.Groups[1].Value;
 	Version version = new(versionStr);
-	// Major, Minor, Build が一致しない場合は失敗とする
-	// Revision が一致しない場合は警告とする（標準化資料に、Revision はインクリメントするという記載あり）
-	if (version.Major != expectedVersion.Major ||
-	   version.Minor != expectedVersion.Minor ||
-	   version.Build != expectedVersion.Build)
+	
+	if (expectedVersion != version)
 	{
-		return new ValidationResult(path, validationName, ValidationStatus.Failure);
+		return new ValidationResult(
+			path, validationName, ValidationStatus.Failure,
+			$"AssemblyVersion {version} が期待されるバージョン {expectedVersion} と一致しません"
+		);
 	}
-	if (version.Revision != expectedVersion.Revision)
-	{
-		return new ValidationResult(path, validationName, ValidationStatus.Warning);
-	}
+
 	return new ValidationResult(path, validationName, ValidationStatus.Success);
 }
 
@@ -211,7 +219,7 @@ public static List<string> GetAssemblyInfoPaths(string vbprojPath)
 /// </summary>
 /// <param name="branchName">ブランチ名</param>
 /// <returns>バージョン</returns>
-/// <exception cref="ArgumentException">feature-000000 の形式でない場合</exception>
+/// <exception cref="ArgumentException">ブランチ名の先頭が feature-000000 の形式から始まらない場合</exception>
 static Version ConvertBranchNameToVersion(string branchName)
 {
 	// feature-<Major><Minor><Build><Revision>
@@ -245,9 +253,8 @@ static void OutputSummary(List<ValidationResult> results, string rootDir, string
 	Dictionary<string, Dictionary<ValidationStatus, List<ValidationResult>>> project_status_results = [];
 	foreach (ValidationResult result in results)
 	{
-		// プロジェクトルートからの相対パス
+		// ソリューションルートからの相対パスで、先頭のディレクトリ名をプロジェクト名とする
 		string relativePath = Path.GetRelativePath(rootDir, result.File);
-		// 相対パスで最初のディレクトリ名をプロジェクト名とする
 		string projectName = relativePath.Split(['\\', '/'], StringSplitOptions.RemoveEmptyEntries)[0];
 
 		project_status_results.TryAdd(projectName, []);
@@ -293,6 +300,10 @@ static void OutputSummary(List<ValidationResult> results, string rootDir, string
 				string url = $"{repositoryUrl}/blob/{sha}/{relativePath}".Replace("\\", "/").Replace(" ", "%20");
 
 				summaryForStatus.Add($"#### {result.ValidationName}");
+				if(string.NullOrWhiteSpace(result.Message) == false)
+				{
+					summaryForStatus.Add($"<sub>{result.Message}</sub>");
+				}
 				summaryForStatus.Add($"[{path}]({url})");
 
 				// プロジェクト単位の検証ステータスを更新
@@ -337,7 +348,8 @@ static void OutputSummary(List<ValidationResult> results, string rootDir, string
 record ValidationResult(
 	string File,
 	string ValidationName,
-	ValidationStatus Status
+	ValidationStatus Status,
+	string Message = string.Empty
 );
 
 /// <summary>
