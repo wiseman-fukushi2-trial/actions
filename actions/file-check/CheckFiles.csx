@@ -1,5 +1,10 @@
 #nullable enable
 
+#r "nuget: Microsoft.CodeAnalysis.VisualBasic, 5.9.0"
+
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.VisualBasic;
+using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 using System.Web;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
