@@ -174,7 +174,7 @@ static ValidationResult Validate_AssemblyVersion(string path, string rootDir)
 
 	// 期待されるバージョンと比較
 	//string versionStr = match.Groups[1].Value;
-	string versionStr = "20.2.2";
+	string versionStr = GetAssemblyAttributeValue(path, "AssemblyVersion") ?? throw new Exception("null value");
 	Version version = new(versionStr);
 	
 	if (expectedVersion != version)
@@ -241,6 +241,45 @@ static Version ConvertBranchNameToVersion(string branchName)
 		int.Parse(match.Groups[3].Value),
 		int.Parse(match.Groups[4].Value)
 		);
+}
+
+static string? GetAssemblyAttributeValue(
+	string assemblyInfoPath,
+	string attributeName)
+{
+	string source = File.ReadAllText(assemblyInfoPath);
+
+	SyntaxTree tree = VisualBasicSyntaxTree.ParseText(source);
+
+	SyntaxNode root = tree.GetRoot();
+
+	IEnumerable<AttributeSyntax> attributes = root
+		.DescendantNodes()
+		.OfType<AttributeSyntax>();
+
+	foreach (AttributeSyntax attribute in attributes)
+	{
+		string name = attribute.Name.ToString();
+
+		if (!string.Equals(
+				name,
+				attributeName,
+				StringComparison.OrdinalIgnoreCase))
+		{
+			continue;
+		}
+
+		ArgumentSyntax? arg = attribute.ArgumentList?
+			.Arguments
+			.FirstOrDefault();
+
+		if (arg?.GetExpression() is LiteralExpressionSyntax literal)
+		{
+			return literal.Token.ValueText;
+		}
+	}
+
+	return null;
 }
 
 /// <summary>
