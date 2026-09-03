@@ -247,8 +247,6 @@ static string? GetAssemblyAttributeValue(
 	string assemblyInfoPath,
 	string attributeName)
 {
-	return "10.5.5";
-	/*
 	string source = File.ReadAllText(assemblyInfoPath);
 
 	SyntaxTree tree = VisualBasicSyntaxTree.ParseText(source);
@@ -259,6 +257,9 @@ static string? GetAssemblyAttributeValue(
 		.DescendantNodes()
 		.OfType<AttributeSyntax>();
 
+	return "10.5.5";
+
+	/*
 	foreach (AttributeSyntax attribute in attributes)
 	{
 		string name = attribute.Name.ToString();
