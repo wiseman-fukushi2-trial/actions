@@ -87,6 +87,7 @@ static ValidationResult Validate_AssemblyFileVersion(string path, Version expect
 	}
 
 	string content = File.ReadAllText(path);
+
 	// <Assembly: AssemblyFileVersion("00.0.0.00")>
 	const string regStr_AssemblyFileVersion = @"<Assembly:\s*AssemblyFileVersion\(""([^""]+)""\)>";
 	Match match = Regex.Match(content, regStr_AssemblyFileVersion);
@@ -96,6 +97,65 @@ static ValidationResult Validate_AssemblyFileVersion(string path, Version expect
 	{
 		return new ValidationResult(path, validationName, ValidationStatus.Failure);
 	}
+	// 期待されるバージョンと比較
+	string versionStr = match.Groups[1].Value;
+	Version version = new(versionStr);
+	// Major, Minor, Build が一致しない場合は失敗とする
+	// Revision が一致しない場合は警告とする（標準化資料に、Revision はインクリメントするという記載あり）
+	if (version.Major != expectedVersion.Major ||
+	   version.Minor != expectedVersion.Minor ||
+	   version.Build != expectedVersion.Build)
+	{
+		return new ValidationResult(path, validationName, ValidationStatus.Failure);
+	}
+	if (version.Revision != expectedVersion.Revision)
+	{
+		return new ValidationResult(path, validationName, ValidationStatus.Warning);
+	}
+	return new ValidationResult(path, validationName, ValidationStatus.Success);
+}
+
+static ValidationResult Validate_AssemblyVersion(string path)
+{
+	const string validationName = "AssemblyVersion";
+	Version defaultVersion = new(8, 0, 0, 0);
+	Dictionary<string, Version> specialProject_versions = new()
+	{
+		{ "CMKCommonSUK", new Version(8, 1, 0, 0) },
+		{ "CMKControlSUK", new Version(8, 1, 0, 0) },
+		{ "CMKFieldSUK", new Version(8, 1, 0, 0) },
+		{ "CMKFormSUK", new Version(8, 1, 0, 0) },
+		{ "CMKGmnSUK", new Version(8, 1, 0, 0) },
+		{ "CMKManagerSUK", new Version(8, 1, 0, 0) },
+		{ "CMKPrintSUK", new Version(8, 1, 0, 0) },
+		{ "CMKTableSUK", new Version(8, 1, 0, 0) },
+		{ "CMKTableExtSUK", new Version(8, 0, 0, 0) },
+	};
+
+	if (Path.GetFileName(path) != "AssemblyInfo.vb")
+	{
+		return new ValidationResult(path, validationName, ValidationStatus.None);
+	}
+
+	string content = File.ReadAllText(path);
+
+	// <Assembly: AssemblyVersion("8.0.0.0")>
+	const string regStr_AssemblyVersion = @"<Assembly:\s*AssemblyVersion\(""([^""]+)""\)>";
+	Match match = Regex.Match(content, regStr_AssemblyVersion);
+
+	// AssemblyVersion が見つからない場合は失敗とする
+	if (match.Success == false)
+	{
+		return new ValidationResult(path, validationName, ValidationStatus.Failure);
+	}
+
+	Version expectedVersion =
+		specialProject_versions.TryGetValue(
+			Path.GetFileNameWithoutExtension(Path.GetDirectoryName(path) ?? ""),
+			out Version? specialVersion
+		)
+		? specialVersion : defaultVersion;
+
 	// 期待されるバージョンと比較
 	string versionStr = match.Groups[1].Value;
 	Version version = new(versionStr);
