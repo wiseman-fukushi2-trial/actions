@@ -247,6 +247,10 @@ static string? GetAssemblyAttributeValue(
 	string assemblyInfoPath,
 	string attributeName)
 {
+	if (string.IsNullOrWhiteSpace(assemblyInfoPath))
+	{
+		return "1.0.0.0";
+	}
 	string source = File.ReadAllText(assemblyInfoPath);
 
 	if(string.IsNullOrWhiteSpace(source))
@@ -255,13 +259,13 @@ static string? GetAssemblyAttributeValue(
 	}
 	SyntaxTree tree = VisualBasicSyntaxTree.ParseText(source);
 
-	if (string.IsNullOrWhiteSpace(source))
+	if (string.IsNullOrWhiteSpace(tree))
 	{
 		return "2.0.0.0";
 	}
 	SyntaxNode root = tree.GetRoot();
 
-	if (string.IsNullOrWhiteSpace(source))
+	if (string.IsNullOrWhiteSpace(root))
 	{
 		return "3.0.0.0";
 	}
