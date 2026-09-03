@@ -249,15 +249,27 @@ static string? GetAssemblyAttributeValue(
 {
 	string source = File.ReadAllText(assemblyInfoPath);
 
+	if(string.IsNullOrWhiteSpace(source))
+	{
+		return "1.0.0.0";
+	}
 	SyntaxTree tree = VisualBasicSyntaxTree.ParseText(source);
 
+	if (string.IsNullOrWhiteSpace(source))
+	{
+		return "2.0.0.0";
+	}
 	SyntaxNode root = tree.GetRoot();
 
+	if (string.IsNullOrWhiteSpace(source))
+	{
+		return "3.0.0.0";
+	}
 	IEnumerable<AttributeSyntax> attributes = root
 		.DescendantNodes()
 		.OfType<AttributeSyntax>();
 
-	return "10.5.5";
+	return "4.0.0.0";
 
 	/*
 	foreach (AttributeSyntax attribute in attributes)
