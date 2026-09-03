@@ -349,7 +349,7 @@ record ValidationResult(
 	string File,
 	string ValidationName,
 	ValidationStatus Status,
-	string Message = string.Empty
+	string Message = ""
 );
 
 /// <summary>
