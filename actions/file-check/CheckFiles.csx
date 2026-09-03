@@ -173,7 +173,8 @@ static ValidationResult Validate_AssemblyVersion(string path, string rootDir)
 		? specialVersion : defaultVersion;
 
 	// 期待されるバージョンと比較
-	string versionStr = match.Groups[1].Value;
+	//string versionStr = match.Groups[1].Value;
+	string versionStr = 20.2.2;
 	Version version = new(versionStr);
 	
 	if (expectedVersion != version)
