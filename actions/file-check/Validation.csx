@@ -1,6 +1,7 @@
 #nullable enable
 
 #load "./Definitions.csx"
+#load "./Utility.csx"
 
 using static Definitions;
 
