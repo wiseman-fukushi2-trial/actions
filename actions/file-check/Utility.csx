@@ -135,7 +135,7 @@ static class Utility
 				status_validation_results = project_items.Value;
 
 			// プロジェクト単位の検証ステータス
-			// 最も悪い結果（= 小さい値）を優先する
+			// 全体の内、最も小さい値を優先する
 			ValidationStatus statusForProject = ValidationStatus.None;
 			// プロジェクト単位のサマリー
 			List<string> summaryForProject = [];
@@ -163,7 +163,7 @@ static class Utility
 					string validationName = validation_items.Key;
 					List<ValidationResult> results = validation_items.Value;
 
-					summaryForStatus.Add($"### {validationName}");
+					summaryForStatus.Add($"#### {validationName}");
 
 					foreach (ValidationResult result in results)
 					{
