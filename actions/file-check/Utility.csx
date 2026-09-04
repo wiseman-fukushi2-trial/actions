@@ -1,3 +1,5 @@
+#nullable enable
+
 #load "./Definitions.csx"
 
 using Microsoft.CodeAnalysis;
