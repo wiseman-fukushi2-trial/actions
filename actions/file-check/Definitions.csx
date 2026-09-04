@@ -20,26 +20,26 @@ static class Definitions
 	/// </summary>
 	/// <remarks>
 	/// サマリー表示順の決定ロジックが依存している。
-	/// 重要度 低 → 高の順に定義すること。
+	/// 重要度 高 → 低の順に定義すること。
 	/// </remarks>
 	public enum ValidationStatus
 	{
 		/// <summary>
-		/// 検証スキップ
+		/// 失敗
 		/// </summary>
-		None,
-		/// <summary>
-		/// 検証成功
-		/// </summary>
-		Success,
+		Failure,
 		/// <summary>
 		/// 警告
 		/// </summary>
 		Warning,
 		/// <summary>
-		/// 失敗
+		/// 検証成功
 		/// </summary>
-		Failure,
+		Success,
+		/// <summary>
+		/// 検証スキップ
+		/// </summary>
+		None,
 	}
 
 	/// <summary>
@@ -47,9 +47,9 @@ static class Definitions
 	/// </summary>
 	public static Dictionary<ValidationStatus, string> ValidationStatus_Icon = new()
 	{
-		{ ValidationStatus.None, ":small_blue_diamond:" },
-		{ ValidationStatus.Success, ":white_check_mark:" },
-		{ ValidationStatus.Warning, ":warning:" },
 		{ ValidationStatus.Failure, ":x:" },
+		{ ValidationStatus.Warning, ":warning:" },
+		{ ValidationStatus.Success, ":white_check_mark:" },
+		{ ValidationStatus.None, ":small_blue_diamond:" },
 	};
 }

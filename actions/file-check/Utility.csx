@@ -64,9 +64,7 @@ static class Utility
 			);
 	}
 
-	public static string? GetAssemblyAttributeValue(
-		string assemblyInfoPath,
-		string attributeName)
+	public static string? GetAssemblyAttributeValue(string assemblyInfoPath, string attributeName)
 	{
 		string source = File.ReadAllText(assemblyInfoPath);
 
@@ -109,38 +107,40 @@ static class Utility
 	/// <param name="rootDir">ソリューションのルートディレクトリ</param>
 	/// <param name="repositoryUrl">リポジトリの URL</param>
 	/// <param name="sha">SHA</param>
-	public static void OutputSummary(List<ValidationResult> results, string rootDir, string repositoryUrl, string sha)
+	public static void OutputSummary(List<ValidationResult> resultItems, string rootDir, string repositoryUrl, string sha)
 	{
 		// 全体のサマリー
 		List<string> summary = ["## ファイルチェック"];
 
-		// { プロジェクト名, { 検証ステータス, [ 結果レコード ] } }
-		Dictionary<string, Dictionary<ValidationStatus, List<ValidationResult>>> project_status_results = [];
-		foreach (ValidationResult result in results)
+		// { プロジェクト名, { 検証ステータス, { 検証名, [ 結果レコード ] } } }
+		Dictionary<string, Dictionary<ValidationStatus, Dictionary<string, List<ValidationResult>>>> project_status_validation_results = [];
+		foreach (ValidationResult result in resultItems)
 		{
 			// ソリューションルートからの相対パスで、先頭のディレクトリ名をプロジェクト名とする
 			string relativePath = Path.GetRelativePath(rootDir, result.File);
 			string projectName = relativePath.Split(['\\', '/'], StringSplitOptions.RemoveEmptyEntries)[0];
 
-			project_status_results.TryAdd(projectName, []);
-			project_status_results[projectName].TryAdd(result.Status, []);
-			project_status_results[projectName][result.Status].Add(result);
+			project_status_validation_results.TryAdd(projectName, []);
+			project_status_validation_results[projectName].TryAdd(result.Status, []);
+			project_status_validation_results[projectName][result.Status].TryAdd(result.ValidationName, []);
+			project_status_validation_results[projectName][result.Status][result.ValidationName].Add(result);
 		}
 
-		foreach (var project_items in project_status_results)
+		foreach (var project_items in project_status_validation_results)
 		{
 			// プロジェクト名
 			string projectName = project_items.Key;
-			// { 検証ステータス, [結果レコード] }
-			Dictionary<ValidationStatus, List<ValidationResult>> status_results = project_items.Value;
+			// { 検証ステータス, { 検証名, [ 結果レコード ] } }
+			Dictionary<ValidationStatus, Dictionary<string, List<ValidationResult>>>
+				status_validation_results = project_items.Value;
 
 			// プロジェクト単位の検証ステータス
 			ValidationStatus statusForProject = ValidationStatus.None;
 			// プロジェクト単位のサマリー
 			List<string> summaryForProject = [];
 
-			// ValidationStatus の逆順で表示
-			foreach (ValidationStatus status in Enum.GetValues<ValidationStatus>().Reverse())
+			// ValidationStatus の順で表示
+			foreach (ValidationStatus status in Enum.GetValues<ValidationStatus>())
 			{
 				// 検証をスキップした場合は表示しない
 				if (status == ValidationStatus.None)
@@ -149,7 +149,7 @@ static class Utility
 				}
 
 				// 検証結果が存在しない場合はスキップ
-				if (status_results.TryGetValue(status, out List<ValidationResult>? resultsForStatus) == false)
+				if (status_validation_results.TryGetValue(status, out Dictionary<string, List<ValidationResult>>? validation_results) == false)
 				{
 					continue;
 				}
@@ -157,26 +157,34 @@ static class Utility
 				// 検証ステータス単位のサマリー
 				List<string> summaryForStatus = [];
 
-				foreach (ValidationResult result in resultsForStatus)
+				foreach (var validation_items in validation_results)
 				{
-					string relativePath = Path.GetRelativePath(rootDir, result.File);
-
-					string path = relativePath.Replace(" ", "");
-					string url = $"{repositoryUrl}/blob/{sha}/{relativePath}".Replace("\\", "/").Replace(" ", "%20");
+					string validationName = validation_items.Key;
+					List<ValidationResult> results = validation_items.Value;
 
 					summaryForStatus.Add($"**{result.ValidationName}**");
-					if (string.IsNullOrWhiteSpace(result.Message) == false)
-					{
-						summaryForStatus.Add($"<sub>{result.Message}</sub>");
-					}
-					summaryForStatus.Add($"[{path}]({url})");
 
-					// プロジェクト単位の検証ステータスを更新
-					if (result.Status > statusForProject)
+					foreach (ValidationResult result in results)
 					{
-						statusForProject = result.Status;
+						string relativePath = Path.GetRelativePath(rootDir, result.File);
+
+						string path = relativePath.Replace(" ", "");
+						string url = $"{repositoryUrl}/blob/{sha}/{relativePath}".Replace("\\", "/").Replace(" ", "%20");
+
+						if (string.IsNullOrWhiteSpace(result.Message) == false)
+						{
+							summaryForStatus.Add($"<sub>{result.Message}</sub>");
+						}
+						summaryForStatus.Add($"[{path}]({url})");
+
+						// プロジェクト単位の検証ステータスを更新
+						if (result.Status > statusForProject)
+						{
+							statusForProject = result.Status;
+						}
 					}
 				}
+
 				if (summaryForStatus.Count > 0)
 				{
 					// 検証ステータス単位のサマリーを折りたたみ表示する
