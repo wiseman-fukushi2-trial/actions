@@ -20,7 +20,7 @@ static class Definitions
 	/// サマリー表示順の決定ロジックが依存している。
 	/// 重要度 低 → 高の順に定義すること。
 	/// </remarks>
-	enum ValidationStatus
+	public enum ValidationStatus
 	{
 		/// <summary>
 		/// 検証スキップ
