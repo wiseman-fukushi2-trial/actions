@@ -259,13 +259,13 @@ static string? GetAssemblyAttributeValue(
 	}
 	SyntaxTree tree = VisualBasicSyntaxTree.ParseText(source);
 
-	if (string.IsNullOrWhiteSpace(tree))
+	if (tree == null)
 	{
 		return "2.0.0.0";
 	}
 	SyntaxNode root = tree.GetRoot();
 
-	if (string.IsNullOrWhiteSpace(root))
+	if (root == null)
 	{
 		return "3.0.0.0";
 	}
