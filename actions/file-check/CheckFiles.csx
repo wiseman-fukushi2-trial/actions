@@ -1,6 +1,6 @@
 #nullable enable
 
-#r "nuget: Microsoft.CodeAnalysis.VisualBasic, 5.9.0"
+#r "nuget: Microsoft.CodeAnalysis.VisualBasic, 4.14.0"
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.VisualBasic;
