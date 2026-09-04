@@ -329,7 +329,7 @@ static void OutputSummary(List<ValidationResult> results, string rootDir, string
 				string path = relativePath.Replace(" ", "");
 				string url = $"{repositoryUrl}/blob/{sha}/{relativePath}".Replace("\\", "/").Replace(" ", "%20");
 
-				summaryForStatus.Add($"#### {result.ValidationName}");
+				summaryForStatus.Add($"**{result.ValidationName}**");
 				if(string.IsNullOrWhiteSpace(result.Message) == false)
 				{
 					summaryForStatus.Add($"<sub>{result.Message}</sub>");
