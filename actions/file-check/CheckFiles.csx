@@ -108,7 +108,12 @@ static ValidationResult Validate_AssemblyFileVersion(string path, Version expect
 	// 期待されるバージョンと比較
 	// Major, Minor, Build が一致しない場合は失敗とする
 	// Revision が一致しない場合は警告とする（標準化資料に、Revision はインクリメントするという記載あり）
-	string versionStr = match.Groups[1].Value;
+	string? versionStr = GetAssemblyAttributeValue(path, "AssemblyFileVersion");
+	if (string.IsNullOrEmpty(versionStr))
+	{
+		return new ValidationResult(path, validationName, ValidationStatus.Failure, "AssemblyVersion が見つかりません");
+	}
+
 	Version version = new(versionStr);
 	if (version.Major != expectedVersion.Major ||
 	   version.Minor != expectedVersion.Minor ||
@@ -173,8 +178,12 @@ static ValidationResult Validate_AssemblyVersion(string path, string rootDir)
 		? specialVersion : defaultVersion;
 
 	// 期待されるバージョンと比較
-	//string versionStr = match.Groups[1].Value;
-	string versionStr = GetAssemblyAttributeValue(path, "AssemblyVersion") ?? throw new Exception("null value");
+	string? versionStr = GetAssemblyAttributeValue(path, "AssemblyVersion");
+	if (string.IsNullOrEmpty(versionStr))
+	{
+		return new ValidationResult(path, validationName, ValidationStatus.Failure, "AssemblyVersion が見つかりません");
+	}
+
 	Version version = new(versionStr);
 	
 	if (expectedVersion != version)
