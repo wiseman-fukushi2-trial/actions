@@ -1,5 +1,9 @@
 #load "./Definitions.csx"
 
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.VisualBasic;
+using Microsoft.CodeAnalysis.VisualBasic.Syntax;
+using System.Text.RegularExpressions;
 using static Definitions;
 
 static class Validation
