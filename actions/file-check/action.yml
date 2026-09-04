@@ -22,7 +22,7 @@ runs:
     - name: File Check
       shell: cmd
       run: |
-        dotnet-script "${{ github.action_path }}/CheckFiles.csx" ^
+        dotnet-script "${{ github.action_path }}/Program.csx" ^
           "${{ github.workspace }}" ^
           "${{ github.server_url }}/${{ github.repository }}" ^
           "${{ inputs.branch }}" ^
