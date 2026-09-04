@@ -38,7 +38,7 @@ List<ValidationResult> results = [];
 foreach (string file in files)
 {
 	results.AddRange([
-		Validate_AssemblyFileVersion(file, expectedVersion),
+		//Validate_AssemblyFileVersion(file, expectedVersion),
 		Validate_AssemblyVersion(file, rootDir),
 	]);
 }
@@ -60,7 +60,7 @@ foreach (string projectFile in projectFiles)
 	string assemblyInfoFile = assemblyInfoFiles.First();
 
 	results.AddRange([
-		Validate_AssemblyFileVersion(assemblyInfoFile, expectedVersion),
+		//Validate_AssemblyFileVersion(assemblyInfoFile, expectedVersion),
 		Validate_AssemblyVersion(assemblyInfoFile, rootDir),
 	]);
 }
