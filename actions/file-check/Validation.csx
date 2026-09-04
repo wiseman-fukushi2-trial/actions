@@ -27,7 +27,7 @@ static class Validation
 		// 期待されるバージョンと比較
 		// Major, Minor, Build が一致しない場合は失敗とする
 		// Revision が一致しない場合は警告とする（標準化資料に、Revision はインクリメントするという記載あり）
-		string? versionStr = GetAssemblyAttributeValue(path, "AssemblyFileVersion");
+		string? versionStr = Utility.GetAssemblyAttributeValue(path, "AssemblyFileVersion");
 		if (string.IsNullOrEmpty(versionStr))
 		{
 			return new ValidationResult(path, validationName, ValidationStatus.Failure, "AssemblyFileVersion が見つかりません");
