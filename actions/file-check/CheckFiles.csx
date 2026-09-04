@@ -93,25 +93,13 @@ static ValidationResult Validate_AssemblyFileVersion(string path, Version expect
 		return new ValidationResult(path, validationName, ValidationStatus.None);
 	}
 
-	string content = File.ReadAllText(path);
-
-	// <Assembly: AssemblyFileVersion("00.0.0.00")>
-	const string regStr_AssemblyFileVersion = @"<Assembly:\s*AssemblyFileVersion\(""([^""]+)""\)>";
-	Match match = Regex.Match(content, regStr_AssemblyFileVersion);
-
-	// AssemblyFileVersion が見つからない場合は失敗とする
-	if (match.Success == false)
-	{
-		return new ValidationResult(path, validationName, ValidationStatus.Failure, "AssemblyFileVersion が見つかりません");
-	}
-
 	// 期待されるバージョンと比較
 	// Major, Minor, Build が一致しない場合は失敗とする
 	// Revision が一致しない場合は警告とする（標準化資料に、Revision はインクリメントするという記載あり）
 	string? versionStr = GetAssemblyAttributeValue(path, "AssemblyFileVersion");
 	if (string.IsNullOrEmpty(versionStr))
 	{
-		return new ValidationResult(path, validationName, ValidationStatus.Failure, "AssemblyVersion が見つかりません");
+		return new ValidationResult(path, validationName, ValidationStatus.Failure, "AssemblyFileVersion が見つかりません");
 	}
 
 	Version version = new(versionStr);
@@ -137,8 +125,14 @@ static ValidationResult Validate_AssemblyFileVersion(string path, Version expect
 static ValidationResult Validate_AssemblyVersion(string path, string rootDir)
 {
 	const string validationName = "AssemblyVersion";
+
+	if (Path.GetFileName(path) != "AssemblyInfo.vb")
+	{
+		return new ValidationResult(path, validationName, ValidationStatus.None);
+	}
+
 	// 基本的には 8.0.0.0
-	// 一部プロジェクト は8.1.0.0
+	// 一部プロジェクト は 8.1.0.0
 	Version defaultVersion = new(8, 0, 0, 0);
 	Dictionary<string, Version> specialProject_versions = new()
 	{
@@ -152,23 +146,6 @@ static ValidationResult Validate_AssemblyVersion(string path, string rootDir)
 		{ "CMKTableSUK", new Version(8, 1, 0, 0) },
 		{ "CMKTableExtSUK", new Version(8, 0, 0, 0) },
 	};
-
-	if (Path.GetFileName(path) != "AssemblyInfo.vb")
-	{
-		return new ValidationResult(path, validationName, ValidationStatus.None);
-	}
-
-	string content = File.ReadAllText(path);
-
-	// <Assembly: AssemblyVersion("0.0.0.0")>
-	const string regStr_AssemblyVersion = @"<Assembly:\s*AssemblyVersion\(""([^""]+)""\)>";
-	Match match = Regex.Match(content, regStr_AssemblyVersion);
-
-	// AssemblyVersion が見つからない場合は失敗とする
-	if (match.Success == false)
-	{
-		return new ValidationResult(path, validationName, ValidationStatus.Failure);
-	}
 
 	// ソリューションルートからの相対パスで、先頭のディレクトリ名をプロジェクト名とする
 	string relativePath = Path.GetRelativePath(rootDir, path);
