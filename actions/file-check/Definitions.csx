@@ -1,3 +1,5 @@
+#nullable enable
+
 static class Definitions
 {
 	/// <summary>

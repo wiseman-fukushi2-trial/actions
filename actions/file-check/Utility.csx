@@ -3,6 +3,7 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.VisualBasic;
 using Microsoft.CodeAnalysis.VisualBasic.Syntax;
+using System.Text.RegularExpressions;
 using System.Web;
 using static Definitions;
 

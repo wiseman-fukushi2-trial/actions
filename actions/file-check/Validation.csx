@@ -1,3 +1,5 @@
+#nullable enable
+
 #load "./Definitions.csx"
 
 using static Definitions;
@@ -83,7 +85,7 @@ static class Validation
 			? specialVersion : defaultVersion;
 
 		// 期待されるバージョンと比較
-		string? versionStr = GetAssemblyAttributeValue(path, "AssemblyVersion");
+		string? versionStr = Utility.GetAssemblyAttributeValue(path, "AssemblyVersion");
 		if (string.IsNullOrEmpty(versionStr))
 		{
 			return new ValidationResult(path, validationName, ValidationStatus.Failure, "AssemblyVersion が見つかりません");
