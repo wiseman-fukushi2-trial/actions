@@ -38,7 +38,7 @@ List<ValidationResult> results = [];
 foreach (string file in files)
 {
 	results.AddRange([
-		//Validate_AssemblyFileVersion(file, expectedVersion),
+		Validate_AssemblyFileVersion(file, expectedVersion),
 		Validate_AssemblyVersion(file, rootDir),
 	]);
 }
@@ -60,7 +60,7 @@ foreach (string projectFile in projectFiles)
 	string assemblyInfoFile = assemblyInfoFiles.First();
 
 	results.AddRange([
-		//Validate_AssemblyFileVersion(assemblyInfoFile, expectedVersion),
+		Validate_AssemblyFileVersion(assemblyInfoFile, expectedVersion),
 		Validate_AssemblyVersion(assemblyInfoFile, rootDir),
 	]);
 }
@@ -247,40 +247,15 @@ static string? GetAssemblyAttributeValue(
 	string assemblyInfoPath,
 	string attributeName)
 {
-	Console.WriteLine("start");
-	if (string.IsNullOrWhiteSpace(assemblyInfoPath))
-	{
-		return "1.0.0.0";
-	}
 	string source = File.ReadAllText(assemblyInfoPath);
-	Console.WriteLine("1");
 
-	if (string.IsNullOrWhiteSpace(source))
-	{
-		return "1.0.0.0";
-	}
 	SyntaxTree tree = VisualBasicSyntaxTree.ParseText(source);
-	Console.WriteLine("2");
-
-	if (tree == null)
-	{
-		return "2.0.0.0";
-	}
-	Console.WriteLine("3");
 	SyntaxNode root = tree.GetRoot();
 
-	if (root == null)
-	{
-		return "3.0.0.0";
-	}
-	Console.WriteLine("4");
 	IEnumerable<AttributeSyntax> attributes = root
 		.DescendantNodes()
 		.OfType<AttributeSyntax>();
 
-	return "4.0.0.0";
-
-	/*
 	foreach (AttributeSyntax attribute in attributes)
 	{
 		string name = attribute.Name.ToString();
@@ -304,7 +279,6 @@ static string? GetAssemblyAttributeValue(
 	}
 
 	return null;
-	*/
 }
 
 /// <summary>
