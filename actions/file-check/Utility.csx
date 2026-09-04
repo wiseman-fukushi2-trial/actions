@@ -135,6 +135,7 @@ static class Utility
 				status_validation_results = project_items.Value;
 
 			// プロジェクト単位の検証ステータス
+			// 最も悪い結果（= 小さい値）を優先する
 			ValidationStatus statusForProject = ValidationStatus.None;
 			// プロジェクト単位のサマリー
 			List<string> summaryForProject = [];
@@ -178,7 +179,7 @@ static class Utility
 						summaryForStatus.Add($"[{path}]({url})");
 
 						// プロジェクト単位の検証ステータスを更新
-						if (result.Status > statusForProject)
+						if (result.Status < statusForProject)
 						{
 							statusForProject = result.Status;
 						}
