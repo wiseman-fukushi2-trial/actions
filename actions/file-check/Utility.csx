@@ -1,5 +1,8 @@
 #load "./Definitions.csx"
 
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.VisualBasic;
+using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 using System.Web;
 using static Definitions;
 
