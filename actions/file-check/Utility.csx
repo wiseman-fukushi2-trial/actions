@@ -162,7 +162,7 @@ static class Utility
 					string validationName = validation_items.Key;
 					List<ValidationResult> results = validation_items.Value;
 
-					summaryForStatus.Add($"**{validationName}**");
+					summaryForStatus.Add($"### {validationName}");
 
 					foreach (ValidationResult result in results)
 					{
