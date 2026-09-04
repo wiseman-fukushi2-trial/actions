@@ -247,28 +247,33 @@ static string? GetAssemblyAttributeValue(
 	string assemblyInfoPath,
 	string attributeName)
 {
+	Console.WriteLine("start");
 	if (string.IsNullOrWhiteSpace(assemblyInfoPath))
 	{
 		return "1.0.0.0";
 	}
 	string source = File.ReadAllText(assemblyInfoPath);
+	Console.WriteLine("1");
 
-	if(string.IsNullOrWhiteSpace(source))
+	if (string.IsNullOrWhiteSpace(source))
 	{
 		return "1.0.0.0";
 	}
 	SyntaxTree tree = VisualBasicSyntaxTree.ParseText(source);
+	Console.WriteLine("2");
 
 	if (tree == null)
 	{
 		return "2.0.0.0";
 	}
+	Console.WriteLine("3");
 	SyntaxNode root = tree.GetRoot();
 
 	if (root == null)
 	{
 		return "3.0.0.0";
 	}
+	Console.WriteLine("4");
 	IEnumerable<AttributeSyntax> attributes = root
 		.DescendantNodes()
 		.OfType<AttributeSyntax>();
