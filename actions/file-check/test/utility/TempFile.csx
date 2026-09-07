@@ -14,7 +14,7 @@ public sealed class TempFile : IDisposable
 		{
 			Path =
 				SysPath.GetFullPath(
-					SysPath.Combine(SysPath.GetTempPath(), fileName);
+					SysPath.Combine(SysPath.GetTempPath(), fileName)
 				);
 		}
 		File.WriteAllText(Path, content);
