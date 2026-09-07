@@ -68,6 +68,11 @@ foreach (string projectFile in projectFiles)
 	]);
 }
 
+results.AddRange([
+	Validation.Bin(rootDir),
+	Validation.Obj(rootDir),
+]);
+
 Utility.OutputSummary(results, rootDir, repositoryUrl, sha);
 
 // 失敗が1件でもあれば、終了コード -1 を返す
