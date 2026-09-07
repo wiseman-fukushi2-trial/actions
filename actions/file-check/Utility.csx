@@ -120,6 +120,8 @@ static class Utility
 			string relativePath = Path.GetRelativePath(rootDir, result.File);
 			string projectName = relativePath.Split(['\\', '/'], StringSplitOptions.RemoveEmptyEntries)[0];
 
+			Console.WriteLine(projectName);
+
 			project_status_validation_results.TryAdd(projectName, []);
 			project_status_validation_results[projectName].TryAdd(result.Status, []);
 			project_status_validation_results[projectName][result.Status].TryAdd(result.ValidationName, []);
