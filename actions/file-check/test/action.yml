@@ -8,4 +8,4 @@ runs:
     - name: Unit Test
       shell: cmd
       run: |
-        dotnet-script "${{ github.action_path }}/UnitTest.csx"
+        dotnet-script "${{ github.action_path }}/UnitTest.csx" "${{ github.action_path }}"
