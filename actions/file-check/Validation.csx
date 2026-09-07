@@ -127,7 +127,7 @@ static class Validation
 			@"GrapeCity.Win.WorkBook.v40,\s*Version=4.0.2007.1225",
 		];
 
-		if (targetExtensions.Contains(Path.GetExtension(path)))
+		if (targetExtensions.Contains(Path.GetExtension(path)) == false)
 		{
 			return new ValidationResult(path, validationName, ValidationStatus.None);
 		}
