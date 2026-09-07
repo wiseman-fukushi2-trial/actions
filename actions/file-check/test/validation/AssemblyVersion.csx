@@ -130,7 +130,7 @@ static partial class ValidationTest
 			<Assembly: AssemblyVersion("8.0.0.0")>
 			"""
 			);
-
+		Console.WriteLine(dir.Root);
 		Assert.AreEqual(
 			ValidationStatus.Failure,
 			Validation.AssemblyVersion(file.Path, dir.Root).Status

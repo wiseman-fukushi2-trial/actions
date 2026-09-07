@@ -100,7 +100,7 @@ static class Validation
 		Version expectedVersion =
 			specialProject_versions.TryGetValue(projectName, out Version? specialVersion)
 			? specialVersion : defaultVersion;
-
+		Console.WriteLine(relativePath);
 		// AssemblyVersion の値を取得
 		// 指定されていない場合、または2つ以上指定されている場合はエラーとする
 		List<string> versionStrs = Utility.GetAssemblyAttributeValue(path, "AssemblyVersion");
