@@ -6,13 +6,16 @@ public sealed class TempFile : IDisposable
 
 	public TempFile(string fileName, string content)
 	{
-		if (SysPath.IsPathRooted(path)) // 絶対パスの場合
+		if (SysPath.IsPathRooted(fileName)) // 絶対パスの場合
 		{
-			Path = fileName;
+			Path = SysPath.GetFullPath(fileName);
 		}
-		else
+		else // 相対パスの場合
 		{
-			Path = SysPath.Combine(SysPath.GetTempPath(), fileName); // 相対パスの場合
+			Path =
+				SysPath.GetFullPath(
+					SysPath.Combine(SysPath.GetTempPath(), fileName);
+				);
 		}
 		File.WriteAllText(Path, content);
 	}
