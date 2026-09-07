@@ -159,4 +159,40 @@ static class Validation
 
 		return new ValidationResult(path, validationName, ValidationStatus.Success);
 	}
+
+	/// <summary>
+	/// bin ディレクトリ
+	/// </summary>
+	/// <param name="rootDir">ルートディレクトリ</param>
+	public static ValidationResult Bin(string rootDir)
+	{
+		const string validationName = "Bin";
+		string[] binDir = Directory.GetDirectories(rootDir, "bin", SearchOption.AllDirectories);
+		if(binDir.Length > 0)
+		{
+			return new ValidationResult(
+				rootDir, validationName, ValidationStatus.Failure,
+				$"bin ディレクトリが存在します: {string.Join(", ", binDir)}"
+			);
+		}
+		return new ValidationResult(rootDir, validationName, ValidationStatus.Success);
+	}
+
+	/// <summary>
+	/// obj ディレクトリ
+	/// </summary>
+	/// <param name="rootDir">ルートディレクトリ</param>
+	public static ValidationResult Obj(string rootDir)
+	{
+		const string validationName = "Obj";
+		string[] objDir = Directory.GetDirectories(rootDir, "obj", SearchOption.AllDirectories);
+		if (objDir.Length > 0)
+		{
+			return new ValidationResult(
+				rootDir, validationName, ValidationStatus.Failure,
+				$"obj ディレクトリが存在します: {string.Join(", ", objDir)}"
+			);
+		}
+		return new ValidationResult(rootDir, validationName, ValidationStatus.Success);
+	}
 }
