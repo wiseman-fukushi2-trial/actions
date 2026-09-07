@@ -1,0 +1,11 @@
+name: File Check Unit Test
+description: ファイルチェックの UnitTest
+
+runs:
+  using: composite
+
+  steps:
+    - name: Unit Test
+      shell: cmd
+      run: |
+        dotnet-script "${{ github.action_path }}/UnitTest.csx"
