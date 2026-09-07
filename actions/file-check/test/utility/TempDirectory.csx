@@ -1,4 +1,4 @@
-using SysPath = SysPath;
+using SysPath = System.IO.Path;
 
 public sealed class TempDirectory : IDisposable
 {
