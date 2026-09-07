@@ -2,6 +2,8 @@
 
 #load "./Definitions.csx"
 
+#r "nuget: Microsoft.CodeAnalysis.VisualBasic, 4.14.0"
+
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.VisualBasic;
 using Microsoft.CodeAnalysis.VisualBasic.Syntax;

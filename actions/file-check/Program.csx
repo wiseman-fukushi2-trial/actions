@@ -4,8 +4,6 @@
 #load "./Validation.csx"
 #load "./Utility.csx"
 
-#r "nuget: Microsoft.CodeAnalysis.VisualBasic, 4.14.0"
-
 using System.Xml.Linq;
 using static Definitions;
 
