@@ -136,6 +136,7 @@ static class Test_ValidationTest
 			<Assembly: AssemblyVersion("8.0.0.0")>
 			"""
 			);
+		Console.WriteLine("dir.Root");
 		Console.WriteLine(dir.Root);
 		Assert.AreEqual(
 			ValidationStatus.Failure,
