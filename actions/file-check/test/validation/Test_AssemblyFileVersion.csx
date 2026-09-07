@@ -5,9 +5,9 @@
 
 using static Definitions;
 
-static partial class ValidationTest
+static partial class Test_AssemblyFileVersion
 {
-	public static void AssemblyFileVersion()
+	public static void Exec()
 	{
 		Success();
 		Failure_Majorの不一致();

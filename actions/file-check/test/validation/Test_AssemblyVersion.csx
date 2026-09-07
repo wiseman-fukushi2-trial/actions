@@ -6,9 +6,9 @@
 
 using static Definitions;
 
-static partial class ValidationTest
+static partial class Test_ValidationTest
 {
-	public static void AssemblyVersion()
+	public static void Exec()
 	{
 		Success();
 		Success_特殊();

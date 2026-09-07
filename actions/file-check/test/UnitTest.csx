@@ -1,5 +1,5 @@
-#load "validation/AssemblyFileVersion.csx"
-#load "validation/AssemblyVersion.csx"
+#load "validation/Test_AssemblyFileVersion.csx"
+#load "validation/Test_AssemblyVersion.csx"
 
-ValidationTest.AssemblyFileVersion();
-ValidationTest.AssemblyVersion();
+Test_AssemblyFileVersion.Exec();
+Test_AssemblyFileVersion.Exec();
