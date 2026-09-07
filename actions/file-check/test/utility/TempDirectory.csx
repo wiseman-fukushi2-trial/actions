@@ -23,7 +23,7 @@ public sealed class TempDirectory : IDisposable
 		}
 
 		string relativePath = SysPath.GetRelativePath(tempDir, fullPath);
-		if (relativePath == "." || relativePath.StartWith(".."))
+		if (relativePath == "." || relativePath.StartsWith(".."))
 		{
 			throw new ArgumentException($"無効なパス : {path}");
 		}
