@@ -33,7 +33,7 @@ static partial class ValidationTest
 		using TempFile file = new(
 			"AssemblyInfo.vb",
 			"""
-			<Assembly:AssemblyFileVersion("20.9.6.0")>
+			<Assembly:AssemblyFileVersion("20.9.8.0")>
 			"""
 			);
 		Version version = new(20, 9, 6, 0);

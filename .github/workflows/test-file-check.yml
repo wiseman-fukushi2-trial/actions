@@ -1,10 +1,23 @@
 name: Test file-check
 
 on:
+  push:
+    branches:
+      - main
+
+  pull_request:
+    branches:
+      - main
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - ready_for_review
+
   workflow_dispatch:
 
 jobs:
   unit-test:
     runs-on: self-hosted
     steps:
-      - uses: wiseman-fukushi2-trial/actions/actions/file-check/test@test
+      - uses: wiseman-fukushi-dev/rv1.actions/actions/file-check/test@main
