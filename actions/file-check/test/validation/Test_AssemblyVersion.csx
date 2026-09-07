@@ -6,11 +6,10 @@
 
 using static Definitions;
 
-static class Test_ValidationTest
+static class Test_AssemblyVersion
 {
 	public static void Exec()
 	{
-		throw new("test");
 		Success();
 		Success_特殊();
 		Failure_Major不一致();

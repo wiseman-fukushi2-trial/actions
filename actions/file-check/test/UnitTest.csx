@@ -2,4 +2,4 @@
 #load "validation/Test_AssemblyVersion.csx"
 
 Test_AssemblyFileVersion.Exec();
-Test_AssemblyFileVersion.Exec();
+Test_AssemblyVersion.Exec();
