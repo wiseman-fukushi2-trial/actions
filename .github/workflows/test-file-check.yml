@@ -7,4 +7,7 @@ jobs:
   unit-test:
     runs-on: self-hosted
     steps:
-      - uses: wiseman-fukushi2-trial/actions/actions/file-check/test@test
+    - name: File Check
+      shell: cmd
+      run: |
+        echo "ok"
