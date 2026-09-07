@@ -9,6 +9,7 @@ static partial class ValidationTest
 {
 	public static void AssemblyFileVersion()
 	{
+		Console.WriteLine("AssemblyFileVersion");
 		正常系();
 	}
 
