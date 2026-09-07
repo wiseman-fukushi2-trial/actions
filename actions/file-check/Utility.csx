@@ -174,6 +174,11 @@ static class Utility
 						string relativePath = Path.GetRelativePath(rootDir, result.File);
 
 						string path = relativePath.Replace(" ", "");
+						if (path == ".")
+						{
+							path = "(root)";
+						}
+
 						string url = $"{repositoryUrl}/blob/{sha}/{relativePath}".Replace("\\", "/").Replace(" ", "%20");
 
 						if (string.IsNullOrWhiteSpace(result.Message) == false)
@@ -203,8 +208,9 @@ static class Utility
 			}
 
 			// プロジェクト単位のサマリーを追加
+			string displayProjectName = projectName == "." ? "(root)" : projectName;
 			summary.Add("");
-			summary.Add($"### {ValidationStatus_Icon[statusForProject]} {projectName}");
+			summary.Add($"### {ValidationStatus_Icon[statusForProject]} {displayProjectName}");
 			summary.AddRange(summaryForProject);
 		}
 
