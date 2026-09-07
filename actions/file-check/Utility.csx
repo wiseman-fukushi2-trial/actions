@@ -63,10 +63,10 @@ static class Utility
 			int.Parse(match.Groups[2].Value),
 			int.Parse(match.Groups[3].Value),
 			int.Parse(match.Groups[4].Value)
-			);
+		);
 	}
 
-	public static string? GetAssemblyAttributeValue(string assemblyInfoPath, string attributeName)
+	public static List<string> GetAssemblyAttributeValue(string assemblyInfoPath, string attributeName)
 	{
 		string source = File.ReadAllText(assemblyInfoPath);
 
@@ -76,6 +76,8 @@ static class Utility
 		IEnumerable<AttributeSyntax> attributes = root
 			.DescendantNodes()
 			.OfType<AttributeSyntax>();
+
+		List<string> result = [];
 
 		foreach (AttributeSyntax attribute in attributes)
 		{
@@ -95,11 +97,11 @@ static class Utility
 
 			if (arg?.GetExpression() is LiteralExpressionSyntax literal)
 			{
-				return literal.Token.ValueText;
+				result.Add(literal.Token.ValueText);
 			}
 		}
 
-		return null;
+		return result;
 	}
 
 	/// <summary>

@@ -25,16 +25,22 @@ static class Validation
 			return new ValidationResult(path, validationName, ValidationStatus.None);
 		}
 
-		// 期待されるバージョンと比較
-		// Major, Minor, Build が一致しない場合は失敗とする
-		// Revision が一致しない場合は警告とする（標準化資料に、Revision はインクリメントするという記載あり）
-		string? versionStr = Utility.GetAssemblyAttributeValue(path, "AssemblyFileVersion");
-		if (string.IsNullOrEmpty(versionStr))
+		// AssemblyFileVersion の値を取得
+		// 指定されていない場合、または2つ以上指定されている場合はエラーとする
+		List<string> versionStrs = Utility.GetAssemblyAttributeValue(path, "AssemblyFileVersion");
+		if (versionStrs.Count == 0)
 		{
 			return new ValidationResult(path, validationName, ValidationStatus.Failure, "AssemblyFileVersion が見つかりません");
 		}
+		else if(versionStrs.Count > 1)
+		{
+			return new ValidationResult(path, validationName, ValidationStatus.Failure, "AssemblyFileVersion が複数見つかりました");
+		}
 
-		Version version = new(versionStr);
+		// 期待されるバージョンと比較
+		// Major, Minor, Build が一致しない場合は失敗とする
+		// Revision が一致しない場合は警告とする（標準化資料に、Revision はインクリメントするという記載あり）
+		Version version = new(versionStrs[0]);
 		if (version.Major != expectedVersion.Major ||
 		   version.Minor != expectedVersion.Minor ||
 		   version.Build != expectedVersion.Build)
@@ -95,14 +101,20 @@ static class Validation
 			specialProject_versions.TryGetValue(projectName, out Version? specialVersion)
 			? specialVersion : defaultVersion;
 
-		// 期待されるバージョンと比較
-		string? versionStr = Utility.GetAssemblyAttributeValue(path, "AssemblyVersion");
-		if (string.IsNullOrEmpty(versionStr))
+		// AssemblyVersion の値を取得
+		// 指定されていない場合、または2つ以上指定されている場合はエラーとする
+		List<string> versionStrs = Utility.GetAssemblyAttributeValue(path, "AssemblyVersion");
+		if (versionStrs.Count == 0)
 		{
 			return new ValidationResult(path, validationName, ValidationStatus.Failure, "AssemblyVersion が見つかりません");
 		}
+		else if(versionStrs.Count > 1)
+		{
+			return new ValidationResult(path, validationName, ValidationStatus.Failure, "AssemblyVersion が複数見つかりました");
+		}
 
-		Version version = new(versionStr);
+		// 期待されるバージョンと比較
+		Version version = new(versionStrs[0]);
 
 		if (expectedVersion != version)
 		{
