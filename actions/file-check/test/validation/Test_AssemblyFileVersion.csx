@@ -5,7 +5,7 @@
 
 using static Definitions;
 
-static partial class Test_AssemblyFileVersion
+static class Test_AssemblyFileVersion
 {
 	public static void Exec()
 	{

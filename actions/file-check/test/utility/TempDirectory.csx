@@ -45,7 +45,7 @@ public sealed class TempDirectory : IDisposable
 	}
 
 	public TempDirectory(string basePath, string path)
-		: this(Path.Combine(basePath, path)) { }
+		: this(SysPath.Combine(basePath, path)) { }
 
 	public void Dispose()
 	{

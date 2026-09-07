@@ -6,7 +6,7 @@
 
 using static Definitions;
 
-static partial class Test_ValidationTest
+static class Test_ValidationTest
 {
 	public static void Exec()
 	{
@@ -27,7 +27,7 @@ static partial class Test_ValidationTest
 	{
 		using TempDirectory dir = new(@"testSolution\testProject\My Project");
 		using TempFile file = new(
-			dir.Path
+			dir.Path,
 			"AssemblyInfo.vb",
 			"""
 			' <Assembly: AssemblyVersion("1.0.*")>
@@ -45,7 +45,7 @@ static partial class Test_ValidationTest
 	{
 		using TempDirectory dir = new(@"testSolution\CMKCommonSUK\My Project");
 		using TempFile file = new(
-			dir.Path
+			dir.Path,
 			"AssemblyInfo.vb",
 			"""
 			<Assembly: AssemblyVersion("8.1.0.0")>
@@ -62,6 +62,7 @@ static partial class Test_ValidationTest
 	{
 		using TempDirectory dir = new(@"testSolution\testProject\My Project");
 		using TempFile file = new(
+			dir.Path,
 			"AssemblyInfo.vb",
 			"""
 			<Assembly: AssemblyVersion("9.0.0.0")>
@@ -78,6 +79,7 @@ static partial class Test_ValidationTest
 	{
 		using TempDirectory dir = new(@"testSolution\testProject\My Project");
 		using TempFile file = new(
+			dir.Path,
 			"AssemblyInfo.vb",
 			"""
 			<Assembly: AssemblyVersion("8.1.0.0")>
@@ -94,6 +96,7 @@ static partial class Test_ValidationTest
 	{
 		using TempDirectory dir = new(@"testSolution\testProject\My Project");
 		using TempFile file = new(
+			dir.Path,
 			"AssemblyInfo.vb",
 			"""
 			<Assembly: AssemblyVersion("8.0.1.0")>
@@ -110,6 +113,7 @@ static partial class Test_ValidationTest
 	{
 		using TempDirectory dir = new(@"testSolution\testProject\My Project");
 		using TempFile file = new(
+			dir.Path,
 			"AssemblyInfo.vb",
 			"""
 			<Assembly: AssemblyVersion("8.0.0.1")>
@@ -126,6 +130,7 @@ static partial class Test_ValidationTest
 	{
 		using TempDirectory dir = new(@"testSolution\CMKControlSUK\My Project");
 		using TempFile file = new(
+			dir.Path,
 			"AssemblyInfo.vb",
 			"""
 			<Assembly: AssemblyVersion("8.0.0.0")>
@@ -142,6 +147,7 @@ static partial class Test_ValidationTest
 	{
 		using TempDirectory dir = new(@"testSolution\testProject\My Project");
 		using TempFile file = new(
+			dir.Path,
 			"AssemblyInfo.vb",
 			"""
 			<Assembly: AssemblyVersion_("8.0.0.0")>
@@ -158,6 +164,7 @@ static partial class Test_ValidationTest
 	{
 		using TempDirectory dir = new(@"testSolution\testProject\My Project");
 		using TempFile file = new(
+			dir.Path,
 			"AssemblyInfo.vb",
 			"""
 			' <Assembly: AssemblyVersion("8.0.0.0")>
@@ -174,6 +181,7 @@ static partial class Test_ValidationTest
 	{
 		using TempDirectory dir = new(@"testSolution\testProject\My Project");
 		using TempFile file = new(
+			dir.Path,
 			"AssemblyInfo.vb",
 			"""
 			<Assembly: AssemblyVersion("8.0.0.0")>
@@ -191,6 +199,7 @@ static partial class Test_ValidationTest
 	{
 		using TempDirectory dir = new(@"testSolution\testProject\My Project");
 		using TempFile file = new(
+			dir.Path,
 			"AssemblyInfo_.vb",
 			"""
 			<Assembly:AssemblyVersion("20.9.6.0")>
