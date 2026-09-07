@@ -118,13 +118,13 @@ static class Validation
 	public static ValidationResult ElTabelle(string path)
 	{
 		const string validationName = "ElTabelle";
-		const List<string> targetExtensions = [".vbproj", ".licx", ".resx"];
+		List<string> targetExtensions = [".vbproj", ".licx", ".resx"];
 
-		const List<string> eliminateRegStrs = [
-			"GrapeCity.Win.BaseGrid.v40,\sVersion=4.0.2006.224",
-			"GrapeCity.Win.WorkBook.v40,\sVersion=4.0.2006.224",
-			"GrapeCity.Win.BaseGrid.v40,\sVersion=4.0.2007.1225",
-			"GrapeCity.Win.WorkBook.v40,\sVersion=4.0.2007.1225"
+		List<string> eliminateRegStrs = [
+			@"GrapeCity.Win.BaseGrid.v40,\s*Version=4.0.2006.224",
+			@"GrapeCity.Win.WorkBook.v40,\s*Version=4.0.2006.224",
+			@"GrapeCity.Win.BaseGrid.v40,\s*Version=4.0.2007.1225",
+			@"GrapeCity.Win.WorkBook.v40,\s*Version=4.0.2007.1225",
 		];
 
 		if (targetExtensions.Contains(Path.GetExtension(path)))
