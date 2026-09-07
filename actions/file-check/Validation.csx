@@ -167,12 +167,12 @@ static class Validation
 	public static ValidationResult Bin(string rootDir)
 	{
 		const string validationName = "Bin";
-		string[] binDir = Directory.GetDirectories(rootDir, "bin", SearchOption.AllDirectories);
-		if(binDir.Length > 0)
+		string[] binDirs = Directory.GetDirectories(rootDir, "bin", SearchOption.AllDirectories);
+		if(binDirs.Length > 0)
 		{
 			return new ValidationResult(
 				rootDir, validationName, ValidationStatus.Failure,
-				$"bin ディレクトリが存在します: {string.Join(", ", binDir)}"
+				$"bin ディレクトリが存在します: {string.Join(", ", binDirs)}"
 			);
 		}
 		return new ValidationResult(rootDir, validationName, ValidationStatus.Success);
@@ -185,12 +185,12 @@ static class Validation
 	public static ValidationResult Obj(string rootDir)
 	{
 		const string validationName = "Obj";
-		string[] objDir = Directory.GetDirectories(rootDir, "obj", SearchOption.AllDirectories);
-		if (objDir.Length > 0)
+		string[] objDirs = Directory.GetDirectories(rootDir, "obj", SearchOption.AllDirectories);
+		if (objDirs.Length > 0)
 		{
 			return new ValidationResult(
 				rootDir, validationName, ValidationStatus.Failure,
-				$"obj ディレクトリが存在します: {string.Join(", ", objDir)}"
+				$"obj ディレクトリが存在します: {string.Join(", ", objDirs)}"
 			);
 		}
 		return new ValidationResult(rootDir, validationName, ValidationStatus.Success);
