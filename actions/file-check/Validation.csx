@@ -115,6 +115,13 @@ static class Validation
 		return new ValidationResult(path, validationName, ValidationStatus.Success);
 	}
 
+	/// <summary>
+	/// ElTabelle
+	/// </summary>
+	/// <param name="path">ファイルパス</param>
+	/// <remarks>
+	/// 古いバージョンの ElTabelle が含まれていないかを検証する
+	/// </remarks>
 	public static ValidationResult ElTabelle(string path)
 	{
 		const string validationName = "ElTabelle";
