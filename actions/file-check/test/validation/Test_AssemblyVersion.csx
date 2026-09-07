@@ -136,7 +136,7 @@ static class Test_AssemblyVersion
 			<Assembly: AssemblyVersion("8.0.0.0")>
 			"""
 			);
-		Console.WriteLine($"dir.Root = {dir.Root}");
+
 		Assert.AreEqual(
 			ValidationStatus.Failure,
 			Validation.AssemblyVersion(file.Path, dir.Root).Status
