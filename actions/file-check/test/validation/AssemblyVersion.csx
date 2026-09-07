@@ -15,7 +15,8 @@ static partial class ValidationTest
 		Failure_Major不一致();
 		Failure_Minor不一致();
 		Failure_Build不一致();
-		Warning_Revision不一致();
+		Failure_Revision不一致();
+		Failure_特殊();
 		Failure_指定無し();
 		Failure_コメントアウト();
 		Failure_複数指定();
