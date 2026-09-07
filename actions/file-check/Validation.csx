@@ -3,12 +3,13 @@
 #load "./Definitions.csx"
 #load "./Utility.csx"
 
+using System.Text.RegularExpressions;
 using static Definitions;
 
 static class Validation
 {
 	/// <summary>
-	/// チェック AssemblyFileVersion
+	/// AssemblyFileVersion
 	/// </summary>
 	/// <param name="path">AssemblyInfo.vb のパス</param>
 	/// <param name="expectedVersion">期待されるバージョン</param>
@@ -53,6 +54,15 @@ static class Validation
 		return new ValidationResult(path, validationName, ValidationStatus.Success);
 	}
 
+	/// <summary>
+	/// AssemblyVersion
+	/// </summary>
+	/// <param name="path">AssemblyInfo.vb のパス</param>
+	/// <param name="rootDir">ソリューションのルートディレクトリ</param>
+	/// <remarks>
+	/// 基本的には 8.0.0.0
+	/// 一部プロジェクトは 8.1.0.0
+	/// </remarks>
 	public static ValidationResult AssemblyVersion(string path, string rootDir)
 	{
 		const string validationName = "AssemblyVersion";
@@ -99,6 +109,44 @@ static class Validation
 			return new ValidationResult(
 				path, validationName, ValidationStatus.Failure,
 				$"AssemblyVersion {version} が期待されるバージョン {expectedVersion} と一致しません"
+			);
+		}
+
+		return new ValidationResult(path, validationName, ValidationStatus.Success);
+	}
+
+	public static ValidationResult ElTabelle(string path)
+	{
+		const string validationName = "ElTabelle";
+		const List<string> targetExtensions = [".vbproj", ".licx", ".resx"];
+
+		const List<string> eliminateRegStrs = [
+			"GrapeCity.Win.BaseGrid.v40,\sVersion=4.0.2006.224",
+			"GrapeCity.Win.WorkBook.v40,\sVersion=4.0.2006.224",
+			"GrapeCity.Win.BaseGrid.v40,\sVersion=4.0.2007.1225",
+			"GrapeCity.Win.WorkBook.v40,\sVersion=4.0.2007.1225"
+		];
+
+		if (targetExtensions.Contains(path.GetExtension()))
+		{
+			return new ValidationResult(path, validationName, ValidationStatus.None);
+		}
+
+		string content = File.ReadAllText(path);
+		List<string> foundItems = [];
+		foreach (string regStr in eliminateRegStrs)
+		{
+			Match match = Regex.Match(content, regStr);
+			if (match.Success)
+			{
+				foundItems.Add(match.Value);
+			}
+		}
+		
+		if (foundItems.Count > 0) {
+			return new ValidationResult(
+				path, validationName, ValidationStatus.Failure,
+				$"古いバージョンの ElTabelle が見つかりました: {string.Join(", ", foundItems)}"
 			);
 		}
 

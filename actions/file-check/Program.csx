@@ -38,11 +38,16 @@ foreach (string file in files)
 	results.AddRange([
 		Validation.AssemblyFileVersion(file, expectedVersion),
 		Validation.AssemblyVersion(file, rootDir),
+		Validation.ElTabelle(file),
 	]);
 }
 
 foreach (string projectFile in projectFiles)
 {
+	results.AddRange([
+		Validation.ElTabelle(projectFile),
+	]);
+
 	// AssemblyInfo.vb のパス
 	IEnumerable<string> assemblyInfoFiles = Utility.GetAssemblyInfoPaths(projectFile);
 	// AssemblyInfo.vb が指定されていない場合、または2つ以上指定されている場合はエラーとする
