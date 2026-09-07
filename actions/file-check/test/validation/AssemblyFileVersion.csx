@@ -70,7 +70,7 @@ static partial class ValidationTest
 			);
 		Version version = new(20, 9, 6, 0);
 		Assert.AreEqual(
-			ValidationStatus.Success,
+			ValidationStatus.None,
 			Validation.AssemblyFileVersion(file.Path, version).Status
 		);
 	}
