@@ -21,10 +21,10 @@ static partial class ValidationTest
 			<Assembly:AssemblyFileVersion("20.9.6.0")>
 			"""
 			);
-		static Version version = new(20, 9, 6, 0);
+		Version version = new(20, 9, 6, 0);
 		Assert.AreEqual(
 			ValidationStatus.Success,
-			Validation.AssemblyFileVersion(file, version).Status
+			Validation.AssemblyFileVersion(file.Path, version).Status
 		);
 	}
 }
