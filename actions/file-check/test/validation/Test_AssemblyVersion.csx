@@ -10,6 +10,7 @@ static class Test_ValidationTest
 {
 	public static void Exec()
 	{
+		throw new("test");
 		Success();
 		Success_特殊();
 		Failure_Major不一致();
