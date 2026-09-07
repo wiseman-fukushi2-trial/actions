@@ -1,7 +1,7 @@
 #load "../utility/Assert.csx"
 #load "../utility/TempFile.csx"
-#load "../Validation.csx"
-#load "../Definitions.csx"
+#load "../../Validation.csx"
+#load "../../Definitions.csx"
 
 using static Definitions;
 
