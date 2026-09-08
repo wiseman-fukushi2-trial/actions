@@ -2,16 +2,22 @@ using System.Runtime.CompilerServices;
 
 public static class Assert
 {
-	public static void AreEqual<T>(T expected, T actual, string message = "",
-		[CallerMemberName] string memberName = "",
-		[CallerFilePath] string filePath = "")
+	public static void AreEqual<T>(
+		T expected, T actual,
+		string message = "",
+		[CallerFilePath] string filePath = ""
+		[CallerMemberName] string memberName = "")
 	{
-		if (!EqualityComparer<T>.Default.Equals(expected, actual))
+		bool result = EqualityComparer<T>.Default.Equals(expected, actual);
+		string displayMessage = "";
+		displayMessage += $"{expected} => {actual} ";
+		displayMessage += $"{Path.GetFileNameWithoutExtension(filePath)}.{memberName} ";
+		displayMessage += result == false ? message : "";
+		Console.WriteLine((result ? "::notice:: " : "::error:: ") + displayMessage);
+		if (result == false)
 		{
-			throw new Exception($"Assertion failed: Expected {expected}, but got {actual}. {message}");
+			throw new Exception(displayMessage);
 		}
-		Console.WriteLine(memberName);
-		Console.WriteLine(filePath);
 	}
 	public static void IsTrue(bool condition, string message = "")
 	{
