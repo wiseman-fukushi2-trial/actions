@@ -176,6 +176,9 @@ static class Utility
 						if (string.IsNullOrWhiteSpace(result.ErrorMessage) == false)
 						{
 							summaryForStatus.Add($"<sub>{result.ErrorMessage}</sub>");
+							summaryForStatus.Add($"<sub>FullPath : {result.Context.FullPath}</sub>");
+							summaryForStatus.Add($"<sub>RelativePath : {result.Context.RelativePath}</sub>");
+							summaryForStatus.Add($"<sub>RepositoryRoot : {result.Context.RepositoryRoot}</sub>");
 						}
 						summaryForStatus.Add($"[{path}]({url})");
 
