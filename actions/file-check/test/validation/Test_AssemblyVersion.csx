@@ -11,11 +11,11 @@ static class Test_AssemblyVersion
 	public static void Exec()
 	{
 		Success();
-		Success_特殊();
 		Failure_Major不一致();
 		Failure_Minor不一致();
 		Failure_Build不一致();
 		Failure_Revision不一致();
+		Success_特殊();
 		Failure_特殊();
 		Failure_指定無し();
 		Failure_コメントアウト();
@@ -32,23 +32,6 @@ static class Test_AssemblyVersion
 			"""
 			' <Assembly: AssemblyVersion("1.0.*")>
 			<Assembly: AssemblyVersion("8.0.0.0")>
-			"""
-			);
-
-		Assert.AreEqual(
-			ValidationStatus.Success,
-			Validation.AssemblyVersion(file.Path, dir.Root).Status
-		);
-	}
-
-	static void Success_特殊()
-	{
-		using TempDirectory dir = new(@"testSolution\CMKCommonSUK\My Project");
-		using TempFile file = new(
-			dir.Path,
-			"AssemblyInfo.vb",
-			"""
-			<Assembly: AssemblyVersion("8.1.0.0")>
 			"""
 			);
 
@@ -126,21 +109,70 @@ static class Test_AssemblyVersion
 		);
 	}
 
+	static void Success_特殊()
+	{
+		List<string> projects_8100 = [
+			"CMKCommonSUK",
+			"CMKControlSUK",
+			"CMKFieldSUK",
+			"CMKFormSUK",
+			"CMKGmnSUK",
+			"CMKManagerSUK",
+			"CMKPrintSUK",
+			"CMKTableSUK",
+			"CMKTableExtSUK",
+		];
+
+		foreach (string project in projects_8100)
+		{
+			using TempDirectory dir = new(@$"testSolution\{project}\My Project");
+			using TempFile file = new(
+				dir.Path,
+				"AssemblyInfo.vb",
+				"""
+				<Assembly: AssemblyVersion("8.1.0.0")>
+				"""
+				);
+
+			Assert.AreEqual(
+				ValidationStatus.Success,
+				Validation.AssemblyVersion(file.Path, dir.Root).Status,
+				memberName: $"{nameof(Success_特殊)}_{project}"
+			);
+		}
+	}
+
 	static void Failure_特殊()
 	{
-		using TempDirectory dir = new(@"testSolution\CMKControlSUK\My Project");
-		using TempFile file = new(
-			dir.Path,
-			"AssemblyInfo.vb",
-			"""
-			<Assembly: AssemblyVersion("8.0.0.0")>
-			"""
-			);
+		List<string> projects_8100 = [
+			"CMKCommonSUK",
+			"CMKControlSUK",
+			"CMKFieldSUK",
+			"CMKFormSUK",
+			"CMKGmnSUK",
+			"CMKManagerSUK",
+			"CMKPrintSUK",
+			"CMKTableSUK",
+			"CMKTableExtSUK",
+		];
 
-		Assert.AreEqual(
-			ValidationStatus.Failure,
-			Validation.AssemblyVersion(file.Path, dir.Root).Status
-		);
+		foreach (string project in projects_8100)
+		{
+			using TempDirectory dir = new(@$"testSolution\{project}\My Project");
+			using TempFile file = new(
+				dir.Path,
+				"AssemblyInfo.vb",
+				"""
+				<Assembly: AssemblyVersion("8.0.0.0")>
+				"""
+				);
+
+			Assert.AreEqual(
+				ValidationStatus.Failure,
+				Validation.AssemblyVersion(file.Path, dir.Root).Status,
+				memberName: $"{nameof(Failure_特殊)}_{project}"
+			);
+		}
 	}
 
 	static void Failure_指定無し()
