@@ -83,7 +83,7 @@ static class Validation
 		Version defaultVersion = new(8, 0, 0, 0);
 		Dictionary<string, Version> specialProject_versions = new()
 		{
-			//{ "CMKCommonSUK", new Version(8, 1, 0, 0) },
+			{ "CMKCommonSUK", new Version(8, 1, 0, 0) },
 			{ "CMKControlSUK", new Version(8, 1, 0, 0) },
 			{ "CMKFieldSUK", new Version(8, 1, 0, 0) },
 			{ "CMKFormSUK", new Version(8, 1, 0, 0) },
