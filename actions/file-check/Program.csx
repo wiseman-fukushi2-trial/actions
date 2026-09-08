@@ -64,8 +64,9 @@ foreach (string projectFile in projectFiles)
 		throw new Exception($"Multiple AssemblyInfo.vb found for {projectFile}");
 	}
 
+	// .vbproj が存在するディレクトリを起点として、AssemblyInfo.vb の相対パスを解決する
 	string assemblyInfoFile =
-		Path.Concat(
+		Path.Combine(
 			Path.GetDirectoryName(projectFile) ?? throw new Exception($"Failed to get directory name for {projectFile}"),
 			assemblyInfoFiles.First()
 		);
