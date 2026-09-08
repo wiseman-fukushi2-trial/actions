@@ -10,7 +10,6 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.VisualBasic;
 using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 using System.Text.RegularExpressions;
-using System.Web;
 using System.Xml.Linq;
 using static Definitions;
 
@@ -115,10 +114,6 @@ static class Utility
 			string projectName =
 				result.Context.RelativePath
 				.Split(Path.DirectorySeparatorChar, StringSplitOptions.RemoveEmptyEntries)[0];
-
-			Console.WriteLine("///");
-			Console.WriteLine(projectName);
-			Console.WriteLine("///");
 
 			project_status_validation_results.TryAdd(projectName, []);
 			project_status_validation_results[projectName].TryAdd(result.Status, []);

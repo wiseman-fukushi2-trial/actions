@@ -73,7 +73,7 @@ foreach (string projectFile in projectFiles)
 	]);
 }
 
-DirectoryValidationContext rootDirContext = new(rootDir, rootDir);
+DirectoryValidationContext rootDirContext = new(rootDir);
 results.AddRange([
 	Validation.Bin(rootDirContext),
 	Validation.Obj(rootDirContext),

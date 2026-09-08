@@ -1,8 +1,8 @@
-#load "validation/Test_AssemblyFileVersion.csx"
-#load "validation/Test_AssemblyVersion.csx"
-#load "validation/Test_ElTabelle.csx"
-#load "validation/Test_Bin.csx"
-#load "validation/Test_Obj.csx"
+#load "./Validations/Test_AssemblyFileVersion.csx"
+#load "./Validations/Test_AssemblyVersion.csx"
+#load "./Validations/Test_ElTabelle.csx"
+#load "./Validations/Test_Bin.csx"
+#load "./Validations/Test_Obj.csx"
 
 Test_AssemblyFileVersion.Exec();
 Test_AssemblyVersion.Exec();

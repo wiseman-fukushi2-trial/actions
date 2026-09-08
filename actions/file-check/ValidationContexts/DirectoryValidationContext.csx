@@ -6,6 +6,9 @@ public record DirectoryValidationContext : IValidationContext
 	public string FullPath { get; }
 	public string RelativePath { get; }
 
+	public DirectoryValidationContext(string path)
+		: this(path, path) { }
+
 	public DirectoryValidationContext(string path, string repositoryRoot)
 	{
 		string fullPath;
