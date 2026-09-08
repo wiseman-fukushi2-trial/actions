@@ -40,7 +40,7 @@ static class Test_Bin
 		);
 	}
 
-	static void Failure_ルートディレクトリ()
+	static void Success_ルートディレクトリ()
 	{
 		using TempDirectory dir = new(@"bin\testProject");
 

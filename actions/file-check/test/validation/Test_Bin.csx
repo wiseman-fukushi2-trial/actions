@@ -40,12 +40,12 @@ static class Test_Obj
 		);
 	}
 
-	static void Failure_ルートディレクトリ()
+	static void Success_ルートディレクトリ()
 	{
 		using TempDirectory dir = new(@"obj\testProject");
 
 		Assert.AreEqual(
-			ValidationStatus.Failure,
+			ValidationStatus.Success,
 			Validation.Obj(dir.Root).Status
 		);
 	}
