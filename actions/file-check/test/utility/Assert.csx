@@ -9,17 +9,22 @@ public static class Assert
 		[CallerMemberName] string memberName = "")
 	{
 		bool result = EqualityComparer<T>.Default.Equals(expected, actual);
-		
-		string displayMessage = "";
-		displayMessage += $"{Path.GetFileNameWithoutExtension(filePath)}.{memberName} ";
-		displayMessage += $"{expected} => {actual} ";
-		displayMessage += result == false ? message : "";
 
-		Console.WriteLine((result ? "::notice::" : "::error::") + displayMessage);
-
+		string memberFullName = $"{Path.GetFileNameWithoutExtension(filePath)}.{memberName}";
+		if (result)
+		{
+			Console.WriteLine($"::notice::{memberFullName}");
+			Console.WriteLine($"::notice::{expected} => {actual}");
+		}
 		if (result == false)
 		{
-			throw new Exception(displayMessage);
+			Console.WriteLine($"::error::{memberFullName}");
+			Console.WriteLine($"::error::{expected} => {actual}");
+			Console.WriteLine($"::error::{message}");
+		}
+		if (result == false)
+		{
+			throw new Exception($"Assertion failed: Expected {expected}, but got {actual}. {message}");
 		}
 	}
 
