@@ -7,6 +7,7 @@ public sealed class TempDirectory : IDisposable
 
 	public TempDirectory(string path)
 	{
+		Console.WriteLine(string.Join(" ", Directory.GetDirectories(SysPath.GetTempPath())))
 		string tempDir = SysPath.GetFullPath(SysPath.GetTempPath());
 
 		string fullPath;
