@@ -16,7 +16,7 @@ public static class Assert
 
 		if (result == false)
 		{
-			throw new Exception($"::error::Assertion failed: Expected {expected}, but got {actual}.");
+			throw new Exception($"Assertion failed: Expected {expected}, but got {actual}.");
 		}
 	}
 
