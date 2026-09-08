@@ -14,13 +14,13 @@ public static class Assert
 		if (result)
 		{
 			Console.WriteLine($"::notice::{memberFullName}");
-			Console.WriteLine($"::notice::{expected} => {actual}");
+			Console.WriteLine($"::notice::  {expected} => {actual}");
 		}
 		if (result == false)
 		{
 			Console.WriteLine($"::error::{memberFullName}");
-			Console.WriteLine($"::error::{expected} => {actual}");
-			Console.WriteLine($"::error::{message}");
+			Console.WriteLine($"::error::  {expected} => {actual}");
+			Console.WriteLine($"::error::  {message}");
 		}
 		if (result == false)
 		{
