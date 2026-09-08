@@ -18,11 +18,9 @@ static class Validation
 	/// </remarks>
 	public static ValidationResult AssemblyFileVersion(string path, Version expectedVersion)
 	{
-		const string validationName = "AssemblyFileVersion";
-
 		if (Path.GetFileName(path) != "AssemblyInfo.vb")
 		{
-			return new ValidationResult(path, validationName, ValidationStatus.None);
+			return new ValidationResult(path, ValidationStatus.None);
 		}
 
 		// AssemblyFileVersion の値を取得
@@ -30,11 +28,11 @@ static class Validation
 		List<string> versionStrs = Utility.GetAssemblyAttributeValue(path, "AssemblyFileVersion");
 		if (versionStrs.Count == 0)
 		{
-			return new ValidationResult(path, validationName, ValidationStatus.Failure, "AssemblyFileVersion が見つかりません");
+			return new ValidationResult(path, ValidationStatus.Failure, "AssemblyFileVersion が見つかりません");
 		}
 		else if(versionStrs.Count > 1)
 		{
-			return new ValidationResult(path, validationName, ValidationStatus.Failure, "AssemblyFileVersion が複数見つかりました");
+			return new ValidationResult(path, ValidationStatus.Failure, "AssemblyFileVersion が複数見つかりました");
 		}
 
 		// 期待されるバージョンと比較
@@ -46,18 +44,18 @@ static class Validation
 		   version.Build != expectedVersion.Build)
 		{
 			return new ValidationResult(
-				path, validationName, ValidationStatus.Failure,
+				path, ValidationStatus.Failure,
 				$"AssemblyFileVersion {version} が期待されるバージョン {expectedVersion} と一致しません"
 			);
 		}
 		if (version.Revision != expectedVersion.Revision)
 		{
 			return new ValidationResult(
-				path, validationName, ValidationStatus.Warning,
+				path, ValidationStatus.Warning,
 				$"AssemblyFileVersion {version} の Revision が期待されるバージョン {expectedVersion} と一致しません"
 			);
 		}
-		return new ValidationResult(path, validationName, ValidationStatus.Success);
+		return new ValidationResult(path, ValidationStatus.Success);
 	}
 
 	/// <summary>
@@ -71,11 +69,9 @@ static class Validation
 	/// </remarks>
 	public static ValidationResult AssemblyVersion(string path, string rootDir)
 	{
-		const string validationName = "AssemblyVersion";
-
 		if (Path.GetFileName(path) != "AssemblyInfo.vb")
 		{
-			return new ValidationResult(path, validationName, ValidationStatus.None);
+			return new ValidationResult(path, ValidationStatus.None);
 		}
 
 		// 基本的には 8.0.0.0
@@ -106,11 +102,11 @@ static class Validation
 		List<string> versionStrs = Utility.GetAssemblyAttributeValue(path, "AssemblyVersion");
 		if (versionStrs.Count == 0)
 		{
-			return new ValidationResult(path, validationName, ValidationStatus.Failure, "AssemblyVersion が見つかりません");
+			return new ValidationResult(path, ValidationStatus.Failure, "AssemblyVersion が見つかりません");
 		}
 		else if(versionStrs.Count > 1)
 		{
-			return new ValidationResult(path, validationName, ValidationStatus.Failure, "AssemblyVersion が複数見つかりました");
+			return new ValidationResult(path, ValidationStatus.Failure, "AssemblyVersion が複数見つかりました");
 		}
 
 		// 期待されるバージョンと比較
@@ -119,12 +115,12 @@ static class Validation
 		if (expectedVersion != version)
 		{
 			return new ValidationResult(
-				path, validationName, ValidationStatus.Failure,
+				path, ValidationStatus.Failure,
 				$"AssemblyVersion {version} が期待されるバージョン {expectedVersion} と一致しません"
 			);
 		}
 
-		return new ValidationResult(path, validationName, ValidationStatus.Success);
+		return new ValidationResult(path, ValidationStatus.Success);
 	}
 
 	/// <summary>
@@ -137,7 +133,6 @@ static class Validation
 	/// </remarks>
 	public static ValidationResult ElTabelle(string path)
 	{
-		const string validationName = "ElTabelle";
 		List<string> targetExtensions = [".vbproj", ".licx", ".resx"];
 
 		List<string> eliminateRegStrs = [
@@ -149,7 +144,7 @@ static class Validation
 
 		if (targetExtensions.Contains(Path.GetExtension(path)) == false)
 		{
-			return new ValidationResult(path, validationName, ValidationStatus.None);
+			return new ValidationResult(path, ValidationStatus.None);
 		}
 
 		string content = File.ReadAllText(path);
@@ -165,12 +160,12 @@ static class Validation
 		
 		if (foundItems.Count > 0) {
 			return new ValidationResult(
-				path, validationName, ValidationStatus.Failure,
+				path, ValidationStatus.Failure,
 				$"古いバージョンの ElTabelle モジュールが見つかりました: {string.Join(", ", foundItems)}"
 			);
 		}
 
-		return new ValidationResult(path, validationName, ValidationStatus.Success);
+		return new ValidationResult(path, ValidationStatus.Success);
 	}
 
 	/// <summary>
@@ -179,16 +174,15 @@ static class Validation
 	/// <param name="rootDir">ルートディレクトリ</param>
 	public static ValidationResult Bin(string rootDir)
 	{
-		const string validationName = "bin";
 		string[] binDirs = Directory.GetDirectories(rootDir, "bin", SearchOption.AllDirectories);
 		if(binDirs.Length > 0)
 		{
 			return new ValidationResult(
-				rootDir, validationName, ValidationStatus.Failure,
+				rootDir, ValidationStatus.Failure,
 				$"bin ディレクトリが存在します: {string.Join(", ", binDirs)}"
 			);
 		}
-		return new ValidationResult(rootDir, validationName, ValidationStatus.Success);
+		return new ValidationResult(rootDir, ValidationStatus.Success);
 	}
 
 	/// <summary>
@@ -197,15 +191,14 @@ static class Validation
 	/// <param name="rootDir">ルートディレクトリ</param>
 	public static ValidationResult Obj(string rootDir)
 	{
-		const string validationName = "obj";
 		string[] objDirs = Directory.GetDirectories(rootDir, "obj", SearchOption.AllDirectories);
 		if (objDirs.Length > 0)
 		{
 			return new ValidationResult(
-				rootDir, validationName, ValidationStatus.Failure,
+				rootDir, ValidationStatus.Failure,
 				$"obj ディレクトリが存在します: {string.Join(", ", objDirs)}"
 			);
 		}
-		return new ValidationResult(rootDir, validationName, ValidationStatus.Success);
+		return new ValidationResult(rootDir, ValidationStatus.Success);
 	}
 }

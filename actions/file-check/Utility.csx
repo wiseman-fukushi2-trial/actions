@@ -130,8 +130,8 @@ static class Utility
 
 			project_status_validation_results.TryAdd(projectName, []);
 			project_status_validation_results[projectName].TryAdd(result.Status, []);
-			project_status_validation_results[projectName][result.Status].TryAdd(result.ValidationName, []);
-			project_status_validation_results[projectName][result.Status][result.ValidationName].Add(result);
+			project_status_validation_results[projectName][result.Status].TryAdd(result.MemberName, []);
+			project_status_validation_results[projectName][result.Status][result.MemberName].Add(result);
 		}
 
 		foreach (var project_items in project_status_validation_results)

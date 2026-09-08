@@ -1,5 +1,7 @@
 #nullable enable
 
+using System.Runtime.CompilerServices;
+
 static class Definitions
 {
 	/// <summary>
@@ -10,9 +12,9 @@ static class Definitions
 	/// <param name="Status">検証ステータス</param>
 	public record ValidationResult(
 		string File,
-		string ValidationName,
 		ValidationStatus Status,
-		string Message = ""
+		string Message = "",
+		[CallerMemberName] string MemberName = ""
 	);
 
 	/// <summary>
