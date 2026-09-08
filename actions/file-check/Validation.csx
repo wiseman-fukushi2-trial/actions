@@ -180,6 +180,10 @@ static class Validation
 	public static ValidationResult Bin(string rootDir)
 	{
 		const string validationName = "bin";
+		if (Path.FileName == "bin")
+		{
+			$"bin ディレクトリが存在します: {rootDir}"
+		}
 		string[] binDirs = Directory.GetDirectories(rootDir, "bin", SearchOption.AllDirectories);
 		if(binDirs.Length > 0)
 		{
@@ -198,6 +202,10 @@ static class Validation
 	public static ValidationResult Obj(string rootDir)
 	{
 		const string validationName = "obj";
+		if (Path.FileName == "obj")
+		{
+			$"obj ディレクトリが存在します: {rootDir}"
+		}
 		string[] objDirs = Directory.GetDirectories(rootDir, "obj", SearchOption.AllDirectories);
 		if (objDirs.Length > 0)
 		{
