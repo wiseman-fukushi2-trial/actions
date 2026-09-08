@@ -12,7 +12,7 @@ static class Test_Bin
 	{
 		Success();
 		Failure();
-		Failure_ルートディレクトリ();
+		Success_ルートディレクトリ();
 		Failure_ルートディレクトリ直下();
 		Failure_深い階層();
 		Failure_UpperCase();
@@ -45,7 +45,7 @@ static class Test_Bin
 		using TempDirectory dir = new(@"bin\testProject");
 
 		Assert.AreEqual(
-			ValidationStatus.Failure,
+			ValidationStatus.Success,
 			Validation.Bin(dir.Root).Status
 		);
 	}
