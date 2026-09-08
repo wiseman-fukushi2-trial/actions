@@ -20,4 +20,4 @@ jobs:
   unit-test:
     runs-on: self-hosted
     steps:
-      - uses: wiseman-fukushi2-trial/actions/actions/file-check/test@test
+      - uses: wiseman-fukushi2-trial/actions/actions/file-check/test@main
