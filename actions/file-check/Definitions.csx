@@ -1,20 +1,7 @@
 #nullable enable
 
-static class Definitions
+public static class Definitions
 {
-	/// <summary>
-	/// 検証結果レコード
-	/// </summary>
-	/// <param name="File">ファイルパス</param>
-	/// <param name="ValidationName">検証名</param>
-	/// <param name="Status">検証ステータス</param>
-	public record ValidationResult(
-		string File,
-		string ValidationName,
-		ValidationStatus Status,
-		string Message = ""
-	);
-
 	/// <summary>
 	/// 検証ステータス
 	/// </summary>

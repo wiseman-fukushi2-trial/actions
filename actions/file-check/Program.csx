@@ -3,6 +3,8 @@
 #load "./Definitions.csx"
 #load "./Validation.csx"
 #load "./Utility.csx"
+#load "./ValidationContexts/DirectoryValidationContext.csx"
+#load "./ValidationContexts/FileValidationContext.csx"
 
 using System.Xml.Linq;
 using static Definitions;
@@ -33,21 +35,25 @@ List<ValidationResult> results = [];
 
 foreach (string file in files)
 {
+	FileValidationContext context = new(file, rootDir);
 	results.AddRange([
-		Validation.AssemblyFileVersion(file, expectedVersion),
-		Validation.AssemblyVersion(file, rootDir),
-		Validation.ElTabelle(file),
+		Validation.AssemblyFileVersion(context, expectedVersion),
+		Validation.AssemblyVersion(context),
+		Validation.ElTabelle(context),
 	]);
 }
 
 foreach (string projectFile in projectFiles)
 {
+	FileValidationContext projectFileContext = new(projectFile, rootDir);
 	results.AddRange([
-		Validation.ElTabelle(projectFile),
+		Validation.ElTabelle(projectFileContext),
 	]);
 
+	string projectFileContent = File.ReadAllText(projectFile);
+
 	// AssemblyInfo.vb のパス
-	IEnumerable<string> assemblyInfoFiles = Utility.GetAssemblyInfoPaths(projectFile);
+	IEnumerable<string> assemblyInfoFiles = Utility.GetAssemblyInfoPaths(projectFileContent);
 	// AssemblyInfo.vb が指定されていない場合、または2つ以上指定されている場合はエラーとする
 	if (assemblyInfoFiles.Any() == false)
 	{
@@ -59,16 +65,18 @@ foreach (string projectFile in projectFiles)
 	}
 
 	string assemblyInfoFile = assemblyInfoFiles.First();
+	FileValidationContext assemblyInfoFileContext = new(assemblyInfoFile, rootDir);
 
 	results.AddRange([
-		Validation.AssemblyFileVersion(assemblyInfoFile, expectedVersion),
-		Validation.AssemblyVersion(assemblyInfoFile, rootDir),
+		Validation.AssemblyFileVersion(assemblyInfoFileContext, expectedVersion),
+		Validation.AssemblyVersion(assemblyInfoFileContext),
 	]);
 }
 
+DirectoryValidationContext rootDirContext = new(rootDir);
 results.AddRange([
-	Validation.Bin(rootDir),
-	Validation.Obj(rootDir),
+	Validation.Bin(rootDirContext),
+	Validation.Obj(rootDirContext),
 ]);
 
 Utility.OutputSummary(results, rootDir, repositoryUrl, sha);

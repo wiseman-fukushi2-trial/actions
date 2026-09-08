@@ -1,5 +1,5 @@
-#load "../utility/Assert.csx"
-#load "../utility/TempFile.csx"
+#load "../Utilities/Assert.csx"
+#load "../Utilities/TempFile.csx"
 #load "../../Validation.csx"
 #load "../../Definitions.csx"
 
@@ -18,25 +18,29 @@ static class Test_ElTabelle
 		None_拡張子();
 	}
 
+	static string RepoRoot = Path.GetTempPath();
+
 	static void Success_licx()
 	{
-		using TempFile file = new(
+		FileValidationContext context = new(
 			"licenses.licx",
+			RepoRoot,
 			"""
 			GrapeCity.Win.ElTabelle.Sheet, GrapeCity.Win.WorkBook.v40, Version=4.0.2008.1215, Culture=neutral, PublicKeyToken=abc123def456ghi7
 			GrapeCity.Win.ElTabelle.Sheet, GrapeCity.Win.BaseGrid.v40, Version=4.0.2008.1215, Culture=neutral, PublicKeyToken=abc123def456ghi7
 			"""
-			);
+		);
 		Assert.AreEqual(
 			ValidationStatus.Success,
-			Validation.ElTabelle(file.Path).Status
+			Validation.ElTabelle(context).Status
 		);
 	}
 
 	static void Success_resx()
 	{
-		using TempFile file = new(
+		FileValidationContext context = new(
 			"Resources.resx",
+			RepoRoot,
 			"""
 			<?xml version="1.0" encoding="utf-8"?>
 			<root>
@@ -48,17 +52,18 @@ static class Test_ElTabelle
 			  </resheader>
 			</root>
 			"""
-			);
+		);
 		Assert.AreEqual(
 			ValidationStatus.Success,
-			Validation.ElTabelle(file.Path).Status
+			Validation.ElTabelle(context).Status
 		);
 	}
 
 	static void Success_vbproj()
 	{
-		using TempFile file = new(
+		FileValidationContext context = new(
 			"TestProject.vbproj",
+			RepoRoot,
 			"""
 			<?xml version="1.0" encoding="utf-8"?>
 			<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="Current">
@@ -76,32 +81,34 @@ static class Test_ElTabelle
 			  </ItemGroup>
 			</Project>
 			"""
-			);
+		);
 		Assert.AreEqual(
 			ValidationStatus.Success,
-			Validation.ElTabelle(file.Path).Status
+			Validation.ElTabelle(context).Status
 		);
 	}
 
 	static void Failure_licx()
 	{
-		using TempFile file = new(
+		FileValidationContext context = new(
 			"licenses.licx",
+			RepoRoot,
 			"""
 			GrapeCity.Win.ElTabelle.Sheet, GrapeCity.Win.WorkBook.v40, Version=4.0.2006.224, Culture=neutral, PublicKeyToken=abc123def456ghi7
 			GrapeCity.Win.ElTabelle.Sheet, GrapeCity.Win.BaseGrid.v40, Version=4.0.2008.1215, Culture=neutral, PublicKeyToken=abc123def456ghi7
 			"""
-			);
+		);
 		Assert.AreEqual(
 			ValidationStatus.Failure,
-			Validation.ElTabelle(file.Path).Status
+			Validation.ElTabelle(context).Status
 		);
 	}
 
 	static void Failure_resx()
 	{
-		using TempFile file = new(
+		FileValidationContext context = new(
 			"Resources.resx",
+			RepoRoot,
 			"""
 			<?xml version="1.0" encoding="utf-8"?>
 			<root>
@@ -113,17 +120,18 @@ static class Test_ElTabelle
 			  </resheader>
 			</root>
 			"""
-			);
+		);
 		Assert.AreEqual(
 			ValidationStatus.Failure,
-			Validation.ElTabelle(file.Path).Status
+			Validation.ElTabelle(context).Status
 		);
 	}
 
 	static void Failure_vbproj()
 	{
-		using TempFile file = new(
+		FileValidationContext context = new(
 			"TestProject.vbproj",
+			RepoRoot,
 			"""
 			<?xml version="1.0" encoding="utf-8"?>
 			<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="Current">
@@ -141,24 +149,25 @@ static class Test_ElTabelle
 			  </ItemGroup>
 			</Project>
 			"""
-			);
+		);
 		Assert.AreEqual(
 			ValidationStatus.Failure,
-			Validation.ElTabelle(file.Path).Status
+			Validation.ElTabelle(context).Status
 		);
 	}
 
 	static void None_拡張子()
 	{
-		using TempFile file = new(
+		FileValidationContext context = new(
 			"licenses.vb",
+			RepoRoot,
 			"""
 			GrapeCity.Win.ElTabelle.Sheet, GrapeCity.Win.WorkBook.v40, Version=4.0.2008.1215, Culture=neutral, PublicKeyToken=abc123def456ghi7
 			"""
-			);
+		);
 		Assert.AreEqual(
 			ValidationStatus.None,
-			Validation.ElTabelle(file.Path).Status
+			Validation.ElTabelle(context).Status
 		);
 	}
 }

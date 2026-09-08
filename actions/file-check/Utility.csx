@@ -1,6 +1,8 @@
 #nullable enable
 
 #load "./Definitions.csx"
+#load "./ValidationResult.csx"
+#load "./ValidationContexts/IValidationContext.csx"
 
 #r "nuget: Microsoft.CodeAnalysis.VisualBasic, 4.14.0"
 
@@ -8,7 +10,6 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.VisualBasic;
 using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 using System.Text.RegularExpressions;
-using System.Web;
 using System.Xml.Linq;
 using static Definitions;
 
@@ -17,28 +18,19 @@ static class Utility
 	/// <summary>
 	/// vbproj ファイルから AssemblyInfo.vb のパスを取得する
 	/// </summary>
-	/// <param name="vbprojPath">vbproj ファイルのパス</param>
+	/// <param name="vbprojContent">vbproj ファイルの内容</param>
 	/// <returns>AssemblyInfo.vb のパスのリスト</returns>
-	public static List<string> GetAssemblyInfoPaths(string vbprojPath)
+	public static List<string> GetAssemblyInfoPaths(string vbprojContent)
 	{
-		if (Path.GetExtension(vbprojPath) != ".vbproj")
-		{
-			return [];
-		}
-
-		// プロジェクトファイルが配置されているディレクトリをルートとする
-		string projectDir = Path.GetDirectoryName(vbprojPath) ?? throw new ArgumentException("vbprojPath is not valid.");
-
-		XDocument doc = XDocument.Load(vbprojPath);
+		XDocument doc = XDocument.Parse(vbprojContent);
 
 		// <Compile Include="My Project\AssemblyInfo.vb" />
 		return doc.Descendants()
 			.Where(x => x.Name.LocalName == "Compile")
 			.Select(x => x.Attribute("Include")?.Value)
 			.Where(x => string.IsNullOrWhiteSpace(x) == false)
+			.OfType<string>()
 			.Where(x => Path.GetFileName(x) == "AssemblyInfo.vb")
-			// ルートディレクトリと相対パスを結合する
-			.Select(x => Path.GetFullPath(Path.Combine(projectDir, x!)))
 			// 複数定義される可能性があるため、リストとして返す
 			.ToList();
 	}
@@ -66,11 +58,9 @@ static class Utility
 		);
 	}
 
-	public static List<string> GetAssemblyAttributeValue(string assemblyInfoPath, string attributeName)
+	public static List<string> GetAssemblyAttributeValue(string assemblyInfoContent, string attributeName)
 	{
-		string source = File.ReadAllText(assemblyInfoPath);
-
-		SyntaxTree tree = VisualBasicSyntaxTree.ParseText(source);
+		SyntaxTree tree = VisualBasicSyntaxTree.ParseText(assemblyInfoContent);
 		SyntaxNode root = tree.GetRoot();
 
 		IEnumerable<AttributeSyntax> attributes = root
@@ -121,17 +111,14 @@ static class Utility
 		foreach (ValidationResult result in resultItems)
 		{
 			// ソリューションルートからの相対パスで、先頭のディレクトリ名をプロジェクト名とする
-			string relativePath = Path.GetRelativePath(rootDir, result.File);
-			string projectName = relativePath.Split(['\\', '/'], StringSplitOptions.RemoveEmptyEntries)[0];
-
-			Console.WriteLine("///");
-			Console.WriteLine(projectName);
-			Console.WriteLine("///");
+			string projectName =
+				result.Context.RelativePath
+				.Split(Path.DirectorySeparatorChar, StringSplitOptions.RemoveEmptyEntries)[0];
 
 			project_status_validation_results.TryAdd(projectName, []);
 			project_status_validation_results[projectName].TryAdd(result.Status, []);
-			project_status_validation_results[projectName][result.Status].TryAdd(result.ValidationName, []);
-			project_status_validation_results[projectName][result.Status][result.ValidationName].Add(result);
+			project_status_validation_results[projectName][result.Status].TryAdd(result.MemberName, []);
+			project_status_validation_results[projectName][result.Status][result.MemberName].Add(result);
 		}
 
 		foreach (var project_items in project_status_validation_results)
@@ -175,19 +162,20 @@ static class Utility
 
 					foreach (ValidationResult result in results)
 					{
-						string relativePath = Path.GetRelativePath(rootDir, result.File);
-
-						string path = relativePath.Replace(" ", "");
+						string path = result.Context.RelativePath.Replace(" ", "");
 						if (path == ".")
 						{
 							path = "(root)";
 						}
 
-						string url = $"{repositoryUrl}/blob/{sha}/{relativePath}".Replace("\\", "/").Replace(" ", "%20");
+						string url =
+							$"{repositoryUrl}/blob/{sha}/{result.Context.RelativePath}"
+							.Replace("\\", "/")
+							.Replace(" ", "%20");
 
-						if (string.IsNullOrWhiteSpace(result.Message) == false)
+						if (string.IsNullOrWhiteSpace(result.ErrorMessage) == false)
 						{
-							summaryForStatus.Add($"<sub>{result.Message}</sub>");
+							summaryForStatus.Add($"<sub>{result.ErrorMessage}</sub>");
 						}
 						summaryForStatus.Add($"[{path}]({url})");
 
