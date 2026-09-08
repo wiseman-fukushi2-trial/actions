@@ -2,13 +2,16 @@ using System.Runtime.CompilerServices;
 
 public static class Assert
 {
-	public static void AreEqual<T>(T expected, T actual, string message = "", [CallerMemberName] string memberName = "")
+	public static void AreEqual<T>(T expected, T actual, string message = "",
+		[CallerMemberName] string memberName = "",
+		[CallerFilePath] string filePath = "")
 	{
 		if (!EqualityComparer<T>.Default.Equals(expected, actual))
 		{
 			throw new Exception($"Assertion failed: Expected {expected}, but got {actual}. {message}");
 		}
 		Console.WriteLine(memberName);
+		Console.WriteLine(filePath);
 	}
 	public static void IsTrue(bool condition, string message = "")
 	{
