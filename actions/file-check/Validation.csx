@@ -91,7 +91,7 @@ static class Validation
 			{ "CMKManagerSUK", new Version(8, 1, 0, 0) },
 			{ "CMKPrintSUK", new Version(8, 1, 0, 0) },
 			{ "CMKTableSUK", new Version(8, 1, 0, 0) },
-			{ "CMKTableExtSUK", new Version(8, 0, 0, 0) },
+			{ "CMKTableExtSUK", new Version(8, 1, 0, 0) },
 		};
 
 		// ソリューションルートからの相対パスで、先頭のディレクトリ名をプロジェクト名とする
