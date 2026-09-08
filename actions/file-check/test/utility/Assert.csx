@@ -5,7 +5,7 @@ public static class Assert
 	public static void AreEqual<T>(
 		T expected, T actual,
 		string message = "",
-		[CallerFilePath] string filePath = ""
+		[CallerFilePath] string filePath = "",
 		[CallerMemberName] string memberName = "")
 	{
 		bool result = EqualityComparer<T>.Default.Equals(expected, actual);
