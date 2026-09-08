@@ -64,7 +64,11 @@ foreach (string projectFile in projectFiles)
 		throw new Exception($"Multiple AssemblyInfo.vb found for {projectFile}");
 	}
 
-	string assemblyInfoFile = assemblyInfoFiles.First();
+	string assemblyInfoFile =
+		Path.Concat(
+			Path.GetDirectoryName(projectFile) ?? throw new Exception($"Failed to get directory name for {projectFile}"),
+			assemblyInfoFiles.First()
+		);
 	FileValidationContext assemblyInfoFileContext = new(assemblyInfoFile, rootDir);
 
 	results.AddRange([
