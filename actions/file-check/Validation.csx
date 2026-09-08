@@ -179,7 +179,7 @@ static class Validation
 	/// <param name="rootDir">ルートディレクトリ</param>
 	public static ValidationResult Bin(string rootDir)
 	{
-		const string validationName = "Bin";
+		const string validationName = "bin";
 		string[] binDirs = Directory.GetDirectories(rootDir, "bin", SearchOption.AllDirectories);
 		if(binDirs.Length > 0)
 		{
@@ -197,7 +197,7 @@ static class Validation
 	/// <param name="rootDir">ルートディレクトリ</param>
 	public static ValidationResult Obj(string rootDir)
 	{
-		const string validationName = "Obj";
+		const string validationName = "obj";
 		string[] objDirs = Directory.GetDirectories(rootDir, "obj", SearchOption.AllDirectories);
 		if (objDirs.Length > 0)
 		{
