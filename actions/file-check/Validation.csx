@@ -132,7 +132,8 @@ static class Validation
 	/// </summary>
 	/// <param name="path">ファイルパス</param>
 	/// <remarks>
-	/// 古いバージョンの ElTabelle が含まれていないかを検証する
+	/// 古いバージョンの ElTabelle モジュールが含まれていないかを検証する
+	/// コメントアウト等の考慮はしない
 	/// </remarks>
 	public static ValidationResult ElTabelle(string path)
 	{
@@ -140,10 +141,10 @@ static class Validation
 		List<string> targetExtensions = [".vbproj", ".licx", ".resx"];
 
 		List<string> eliminateRegStrs = [
-			@"GrapeCity.Win.BaseGrid.v40,\s*Version=4.0.2006.224",
-			@"GrapeCity.Win.WorkBook.v40,\s*Version=4.0.2006.224",
-			@"GrapeCity.Win.BaseGrid.v40,\s*Version=4.0.2007.1225",
-			@"GrapeCity.Win.WorkBook.v40,\s*Version=4.0.2007.1225",
+			@"GrapeCity\.Win\.BaseGrid\.v40,.*Version=4\.0\.2006\.224",
+			@"GrapeCity\.Win\.WorkBook\.v40,.*Version=4\.0\.2006\.224",
+			@"GrapeCity\.Win\.BaseGrid\.v40,.*Version=4\.0\.2007\.1225",
+			@"GrapeCity\.Win\.WorkBook\.v40,.*Version=4\.0\.2007\.1225",
 		];
 
 		if (targetExtensions.Contains(Path.GetExtension(path)) == false)
@@ -165,7 +166,7 @@ static class Validation
 		if (foundItems.Count > 0) {
 			return new ValidationResult(
 				path, validationName, ValidationStatus.Failure,
-				$"古いバージョンの ElTabelle が見つかりました: {string.Join(", ", foundItems)}"
+				$"古いバージョンの ElTabelle モジュールが見つかりました: {string.Join(", ", foundItems)}"
 			);
 		}
 
