@@ -12,7 +12,7 @@ static class Test_Obj
 	{
 		Success();
 		Failure();
-		Failure_ルートディレクトリ();
+		Success_ルートディレクトリ();
 		Failure_ルートディレクトリ直下();
 		Failure_深い階層();
 		Failure_UpperCase();
