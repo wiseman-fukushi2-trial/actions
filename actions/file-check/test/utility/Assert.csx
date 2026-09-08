@@ -10,6 +10,9 @@ public static class Assert
 	{
 		bool result = EqualityComparer<T>.Default.Equals(expected, actual);
 		string displayMessage = "";
+		Console.WriteLine("::notice::test");
+		Console.WriteLine("::warning::test");
+		Console.WriteLine("::error::test");
 		displayMessage += $"{expected} => {actual} ";
 		displayMessage += $"{Path.GetFileNameWithoutExtension(filePath)}.{memberName} ";
 		displayMessage += result == false ? message : "";
