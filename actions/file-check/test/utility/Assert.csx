@@ -25,7 +25,7 @@ public static class Assert
 		[CallerFilePath] string filePath = "",
 		[CallerMemberName] string memberName = "")
 	{
-		AreEqual(true, condition, message, filePath, memberName);
+		AreEqual(true, condition, filePath, memberName);
 	}
 
 	public static void IsFalse(
@@ -33,6 +33,6 @@ public static class Assert
 		[CallerFilePath] string filePath = "",
 		[CallerMemberName] string memberName = "")
 	{
-		AreEqual(false, condition, message, filePath, memberName);
+		AreEqual(false, condition, filePath, memberName);
 	}
 }
