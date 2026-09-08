@@ -29,7 +29,7 @@ static class Test_ElTabelle
 			);
 		Assert.AreEqual(
 			ValidationStatus.Success,
-			Validation.AssemblyFileVersion(file.Path).Status
+			Validation.ElTabelle(file.Path).Status
 		);
 	}
 
@@ -51,7 +51,7 @@ static class Test_ElTabelle
 			);
 		Assert.AreEqual(
 			ValidationStatus.Success,
-			Validation.AssemblyFileVersion(file.Path, version).Status
+			Validation.ElTabelle(file.Path, version).Status
 		);
 	}
 
@@ -79,7 +79,7 @@ static class Test_ElTabelle
 			);
 		Assert.AreEqual(
 			ValidationStatus.Success,
-			Validation.AssemblyFileVersion(file.Path, version).Status
+			Validation.ElTabelle(file.Path, version).Status
 		);
 	}
 
@@ -93,8 +93,8 @@ static class Test_ElTabelle
 			"""
 			);
 		Assert.AreEqual(
-			ValidationStatus.Success,
-			Validation.AssemblyFileVersion(file.Path).Status
+			ValidationStatus.Failure,
+			Validation.ElTabelle(file.Path).Status
 		);
 	}
 
@@ -115,8 +115,8 @@ static class Test_ElTabelle
 			"""
 			);
 		Assert.AreEqual(
-			ValidationStatus.Success,
-			Validation.AssemblyFileVersion(file.Path, version).Status
+			ValidationStatus.Failure,
+			Validation.ElTabelle(file.Path, version).Status
 		);
 	}
 
@@ -143,8 +143,8 @@ static class Test_ElTabelle
 			"""
 			);
 		Assert.AreEqual(
-			ValidationStatus.Success,
-			Validation.AssemblyFileVersion(file.Path, version).Status
+			ValidationStatus.Failure,
+			Validation.ElTabelle(file.Path, version).Status
 		);
 	}
 
@@ -158,7 +158,7 @@ static class Test_ElTabelle
 			);
 		Assert.AreEqual(
 			ValidationStatus.None,
-			Validation.AssemblyFileVersion(file.Path, version).Status
+			Validation.ElTabelle(file.Path, version).Status
 		);
 	}
 }
