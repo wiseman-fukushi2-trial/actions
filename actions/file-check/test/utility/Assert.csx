@@ -1,11 +1,14 @@
+using System.Runtime.CompilerServices;
+
 public static class Assert
 {
-	public static void AreEqual<T>(T expected, T actual, string message = "")
+	public static void AreEqual<T>(T expected, T actual, string message = "", [CallerMemberName] string memberName = "")
 	{
 		if (!EqualityComparer<T>.Default.Equals(expected, actual))
 		{
 			throw new Exception($"Assertion failed: Expected {expected}, but got {actual}. {message}");
 		}
+		Console.WriteLine(memberName);
 	}
 	public static void IsTrue(bool condition, string message = "")
 	{
