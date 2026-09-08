@@ -51,7 +51,7 @@ static class Test_ElTabelle
 			);
 		Assert.AreEqual(
 			ValidationStatus.Success,
-			Validation.ElTabelle(file.Path, version).Status
+			Validation.ElTabelle(file.Path).Status
 		);
 	}
 
@@ -79,7 +79,7 @@ static class Test_ElTabelle
 			);
 		Assert.AreEqual(
 			ValidationStatus.Success,
-			Validation.ElTabelle(file.Path, version).Status
+			Validation.ElTabelle(file.Path).Status
 		);
 	}
 
@@ -116,7 +116,7 @@ static class Test_ElTabelle
 			);
 		Assert.AreEqual(
 			ValidationStatus.Failure,
-			Validation.ElTabelle(file.Path, version).Status
+			Validation.ElTabelle(file.Path).Status
 		);
 	}
 
@@ -144,7 +144,7 @@ static class Test_ElTabelle
 			);
 		Assert.AreEqual(
 			ValidationStatus.Failure,
-			Validation.ElTabelle(file.Path, version).Status
+			Validation.ElTabelle(file.Path).Status
 		);
 	}
 
@@ -158,7 +158,7 @@ static class Test_ElTabelle
 			);
 		Assert.AreEqual(
 			ValidationStatus.None,
-			Validation.ElTabelle(file.Path, version).Status
+			Validation.ElTabelle(file.Path).Status
 		);
 	}
 }
