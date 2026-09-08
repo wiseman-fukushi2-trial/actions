@@ -16,7 +16,7 @@ public static class Assert
 		displayMessage += $"{expected} => {actual} ";
 		displayMessage += $"{Path.GetFileNameWithoutExtension(filePath)}.{memberName} ";
 		displayMessage += result == false ? message : "";
-		Console.WriteLine((result ? "::notice:: " : "::error:: ") + displayMessage);
+		Console.WriteLine((result ? "::notice::" : "::error::") + displayMessage);
 		if (result == false)
 		{
 			throw new Exception(displayMessage);
