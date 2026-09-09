@@ -14,6 +14,11 @@ IEnumerable<string> relativePaths = Args.Skip(1);
 // 差分プロジェクトのリスト
 IEnumerable<string> absolutePaths = relativePaths.Select(relative => Path.Combine(root, relative));
 
+if (absolutePaths.Any() == false)
+{
+	return;
+}
+
 string result = string.Join(" ", absolutePaths.Select(x => $"'{x}'"));
 
 // 出力

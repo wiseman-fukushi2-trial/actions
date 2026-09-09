@@ -25,12 +25,16 @@ foreach (string file in changedFiles)
 	changedProjects.Add(projFilePath);
 }
 
+if(changedProjects.Count == 0)
+{
+	return;
+}
+
 string result = string.Join(" ", changedProjects.Select(x => $"'{x}'"));
 
 // 出力
 string outputFile = Environment.GetEnvironmentVariable("GITHUB_OUTPUT") ?? "GITHUB_OUTPUT.log";
 File.AppendAllText(outputFile, $"changed_projects={result}" + Environment.NewLine);
-
 
 static string? GetProjFilePath(DirectoryInfo directory)
 {

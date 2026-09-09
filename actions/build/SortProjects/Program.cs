@@ -47,6 +47,11 @@ namespace SortProjects
 					Console.WriteLine(project);
 				}
 
+				if (sortedProjects.Any() == false)
+				{
+					return;
+				}
+
 				string result = string.Join(" ", sortedProjects.Select(x => $"'{x}'"));
 
 				// 出力
