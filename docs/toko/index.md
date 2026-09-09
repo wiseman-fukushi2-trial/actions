@@ -58,7 +58,7 @@ flowchart TD
 
     click Start "https://github.com/wiseman-fukushi-dev/rv1.actions/blob/main/.github/workflows/toko.yml#L5"
     click Checkout "https://github.com/wiseman-fukushi-dev/rv1.actions/blob/main/.github/workflows/toko.yml#L12"
-    click actions/checkout "https://github.com/wiseman-fukushi-dev/rv1.actions/tree/main/actions/checkout"
+    click checkout "https://github.com/wiseman-fukushi-dev/rv1.actions/tree/main/actions/checkout"
     click Diff "https://github.com/wiseman-fukushi-dev/rv1.actions/blob/main/.github/workflows/toko.yml#L18"
     click diff "https://github.com/wiseman-fukushi-dev/rv1.actions/tree/main/actions/diff"
     click Build "https://github.com/wiseman-fukushi-dev/rv1.actions/blob/main/.github/workflows/toko.yml#L23"
