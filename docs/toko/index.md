@@ -1,7 +1,7 @@
-# toko
+# .github/workflows/toko.yml
 
 ## 概要
-このモジュールは、従来の投稿確認作業に相当する成果物チェックを実行する CI モジュールである。
+```.github/workflows/toko.yml``` は、従来のビルド投稿作業に相当する成果物チェックを実行する CI モジュールです。
 
 ## フロー
 ```mermaid
@@ -60,13 +60,15 @@ flowchart TD
 ## 環境構築
 ### GitHub
 #### Actions 内で Pull Request を参照できるようにする
-Organization と 当リポジトリ それぞれで、以下にチェックを入れる。
+Organization と 当リポジトリ それぞれで、以下にチェックを入れてください。
 ```
 Settings > Actions > General
 Workflow permissions > Allow GitHub Actions to create and approve pull requests
 ```
 
 ### Server
+このモジュールは、self-hosted runner 上で実行されます。
+ランナーを登録したサーバーで以下の環境を構築してください。
 #### PowerShell7(pws) をインストールする
 ```powershell
 winget install --id Microsoft.PowerShell --source winget --installer-type wix
