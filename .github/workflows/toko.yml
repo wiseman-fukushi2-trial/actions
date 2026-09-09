@@ -22,7 +22,6 @@ jobs:
       # ビルド
       - name: Build
         id: build
-				if: steps.filter.outputs.changed == 'true'
         uses: wiseman-fukushi2-trial/actions/actions/build@DX-RKuji
         with:
           project-files: ${{ steps.diff.outputs.changed_projects }}
