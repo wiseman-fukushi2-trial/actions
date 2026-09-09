@@ -7,6 +7,7 @@
 ```mermaid
 flowchart TD
     Start([workflow_call])
+    
     CheckoutGroup[リポジトリのチェックアウト]
     Checkout[Checkout Caller Repository]
     checkout[[actions/checkout]]
@@ -55,6 +56,7 @@ flowchart TD
     BuildGroup --> End
     FileCheckGroup --> End
 
+    click Start "https://github.com/wiseman-fukushi-dev/rv1.actions/blob/main/.github/workflows/toko.yml#L5" "workflow_call"
     click Checkout "https://github.com/wiseman-fukushi-dev/rv1.actions/blob/main/.github/workflows/toko.yml#L12" "Checkout"
     click actions/checkout "https://github.com/wiseman-fukushi-dev/rv1.actions/tree/main/actions/checkout" "actions/checkout"
     click Diff "https://github.com/wiseman-fukushi-dev/rv1.actions/blob/main/.github/workflows/toko.yml#L18" "Get Diff"
