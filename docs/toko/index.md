@@ -56,15 +56,15 @@ flowchart TD
     BuildGroup --> End
     FileCheckGroup --> End
 
-    click Start ".github/workflows/toko.yml#L5"
+    click Start "{{ site.github.repository_url }}/blob/{{ site.github.build_revision }}/.github/workflows/toko.yml#L5"
     click Checkout "{{ site.github.repository_url }}/blob/{{ site.github.build_revision }}/.github/workflows/toko.yml#L12"
     click checkout "{{ site.github.repository_url }}/blob/{{ site.github.build_revision }}/actions/checkout"
     click Diff "{{ site.github.repository_url }}/blob/{{ site.github.build_revision }}/.github/workflows/toko.yml#L18"
-    click diff "https://github.com/wiseman-fukushi-dev/rv1.actions/tree/main/actions/diff"
+    click diff "{{ site.github.repository_url }}/blob/{{ site.github.build_revision }}/tree/main/actions/diff"
     click Build "{{ site.github.repository_url }}/blob/{{ site.github.build_revision }}/.github/workflows/toko.yml#L23"
-    click build "https://github.com/wiseman-fukushi-dev/rv1.actions/tree/main/actions/build"
+    click build "{{ site.github.repository_url }}/blob/{{ site.github.build_revision }}/tree/main/actions/build"
     click FileCheck "{{ site.github.repository_url }}/blob/{{ site.github.build_revision }}/.github/workflows/toko.yml#L47"
-    click filecheck "https://github.com/wiseman-fukushi-dev/rv1.actions/tree/main/actions/file-check"
+    click filecheck "{{ site.github.repository_url }}/blob/{{ site.github.build_revision }}/tree/main/actions/file-check"
 ```
 
 ## 環境構築
