@@ -47,7 +47,8 @@ flowchart TD
     
     BuildGroup --> End
     FileCheckGroup --> End
-    
+
+    click Checkout "https://github.com/wiseman-fukushi-dev/rv1.actions/blob/main/.github/workflows/toko.yml#L12" "Checkout"
     click Diff "https://github.com/wiseman-fukushi-dev/rv1.actions/blob/main/.github/workflows/toko.yml#L18" "Get Diff"
     click diff "https://github.com/wiseman-fukushi-dev/rv1.actions/tree/main/actions/diff" "actions/diff"
     click Build "https://github.com/wiseman-fukushi-dev/rv1.actions/blob/main/.github/workflows/toko.yml#L23" "Build"
