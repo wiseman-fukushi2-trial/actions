@@ -38,8 +38,7 @@ flowchart TD
     Build --> build
     end
     
-    DiffGroup -- changed_projects --> FileCheckGroup
-    DiffGroup -- changed_files --> FileCheckGroup
+    DiffGroup -- changed_projects/changed_files --> FileCheckGroup
     
     subgraph FileCheckGroup[ファイルチェック]
     direction TB
@@ -51,6 +50,8 @@ flowchart TD
     
     click Diff "https://github.com/wiseman-fukushi-dev/rv1.actions/blob/main/.github/workflows/toko.yml#L18" "Get Diff"
     click diff "https://github.com/wiseman-fukushi-dev/rv1.actions/tree/main/actions/diff" "actions/diff"
+    click changed_projects "https://github.com/wiseman-fukushi-dev/rv1.actions/blob/main/.github/workflows/toko.yml#L17" "changed_projects"
+    click changed_projects/changed_files "https://github.com/wiseman-fukushi-dev/rv1.actions/blob/main/.github/workflows/toko.yml#L40-L41" "changed_projects/changed_files"
     click Build "https://github.com/wiseman-fukushi-dev/rv1.actions/blob/main/.github/workflows/toko.yml#L23" "Build"
     click build "https://github.com/wiseman-fukushi-dev/rv1.actions/tree/main/actions/build" "actions/build"
     click FileCheck "https://github.com/wiseman-fukushi-dev/rv1.actions/blob/main/.github/workflows/toko.yml#L47" "File Check"
