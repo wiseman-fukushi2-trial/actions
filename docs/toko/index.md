@@ -56,15 +56,15 @@ flowchart TD
     BuildGroup --> End
     FileCheckGroup --> End
 
-    click Start "https://github.com/wiseman-fukushi-dev/rv1.actions/blob/main/.github/workflows/toko.yml#L5" "workflow_call"
-    click Checkout "https://github.com/wiseman-fukushi-dev/rv1.actions/blob/main/.github/workflows/toko.yml#L12" "Checkout"
-    click actions/checkout "https://github.com/wiseman-fukushi-dev/rv1.actions/tree/main/actions/checkout" "actions/checkout"
-    click Diff "https://github.com/wiseman-fukushi-dev/rv1.actions/blob/main/.github/workflows/toko.yml#L18" "Get Diff"
-    click diff "https://github.com/wiseman-fukushi-dev/rv1.actions/tree/main/actions/diff" "actions/diff"
-    click Build "https://github.com/wiseman-fukushi-dev/rv1.actions/blob/main/.github/workflows/toko.yml#L23" "Build"
-    click build "https://github.com/wiseman-fukushi-dev/rv1.actions/tree/main/actions/build" "actions/build"
-    click FileCheck "https://github.com/wiseman-fukushi-dev/rv1.actions/blob/main/.github/workflows/toko.yml#L47" "File Check"
-    click filecheck "https://github.com/wiseman-fukushi-dev/rv1.actions/tree/main/actions/file-check" "actions/file-check"
+    click Start "https://github.com/wiseman-fukushi-dev/rv1.actions/blob/main/.github/workflows/toko.yml#L5"
+    click Checkout "https://github.com/wiseman-fukushi-dev/rv1.actions/blob/main/.github/workflows/toko.yml#L12"
+    click actions/checkout "https://github.com/wiseman-fukushi-dev/rv1.actions/tree/main/actions/checkout"
+    click Diff "https://github.com/wiseman-fukushi-dev/rv1.actions/blob/main/.github/workflows/toko.yml#L18"
+    click diff "https://github.com/wiseman-fukushi-dev/rv1.actions/tree/main/actions/diff"
+    click Build "https://github.com/wiseman-fukushi-dev/rv1.actions/blob/main/.github/workflows/toko.yml#L23"
+    click build "https://github.com/wiseman-fukushi-dev/rv1.actions/tree/main/actions/build"
+    click FileCheck "https://github.com/wiseman-fukushi-dev/rv1.actions/blob/main/.github/workflows/toko.yml#L47"
+    click filecheck "https://github.com/wiseman-fukushi-dev/rv1.actions/tree/main/actions/file-check"
 ```
 
 ## 環境構築
