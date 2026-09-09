@@ -12,9 +12,6 @@ flowchart TD
     DiffGroup[差分取得]
     Diff[Get Diff]
     diff[[actions/diff]]
-    click DiffGroup "https://github.com/wiseman-fukushi-dev/rv1.actions/blob/main/.github/workflows/toko.yml#L18" "差分取得"
-    click Diff "https://github.com/wiseman-fukushi-dev/rv1.actions/blob/main/.github/workflows/toko.yml#L18" "Get Diff"
-    click diff "https://github.com/wiseman-fukushi-dev/rv1.actions/tree/main/actions/diff" "actions/diff"
     
     BuildGroup[ビルド]
     Build[Build]
@@ -41,6 +38,7 @@ flowchart TD
     Build --> build
     end
     
+    DiffGroup -- changed_projects --> FileCheckGroup
     DiffGroup -- changed_files --> FileCheckGroup
     
     subgraph FileCheckGroup[ファイルチェック]
@@ -50,6 +48,13 @@ flowchart TD
     
     BuildGroup --> End
     FileCheckGroup --> End
+    
+    click Diff "https://github.com/wiseman-fukushi-dev/rv1.actions/blob/main/.github/workflows/toko.yml#L18" "Get Diff"
+    click diff "https://github.com/wiseman-fukushi-dev/rv1.actions/tree/main/actions/diff" "actions/diff"
+    click Build "https://github.com/wiseman-fukushi-dev/rv1.actions/blob/main/.github/workflows/toko.yml#L23" "Build"
+    click build "https://github.com/wiseman-fukushi-dev/rv1.actions/tree/main/actions/build" "actions/build"
+    click FileCheck "https://github.com/wiseman-fukushi-dev/rv1.actions/blob/main/.github/workflows/toko.yml#L47" "File Check"
+    click filecheck "https://github.com/wiseman-fukushi-dev/rv1.actions/tree/main/actions/file-check" "actions/file-check"
 ```
 
 ## 環境構築
