@@ -10,9 +10,9 @@ using System.Xml.Linq;
 using static Definitions;
 
 // 引数が空の場合は処理を終了する
-if (Args is null || Args.Count < 6)
+if (Args is null || Args.Count < 4)
 {
-	throw new("required workspace repositoryUrl branchName sha file1 [file2 ...] projectFile1 [projectFile2 ...]");
+	throw new("required workspace repositoryUrl branchName sha [file1 ...] [projectFile1 ...]");
 }
 
 // ルートディレクトリ
