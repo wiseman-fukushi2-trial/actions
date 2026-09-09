@@ -12,6 +12,9 @@ flowchart TD
     DiffGroup[差分取得]
     Diff[Get Diff]
     diff[[actions/diff]]
+    click DiffGroup "https://github.com/wiseman-fukushi-dev/rv1.actions/blob/main/.github/workflows/toko.yml#L18" "差分取得"
+    click Diff "https://github.com/wiseman-fukushi-dev/rv1.actions/blob/main/.github/workflows/toko.yml#L18" "Get Diff"
+    click diff "https://github.com/wiseman-fukushi-dev/rv1.actions/tree/main/actions/diff" "actions/diff"
     
     BuildGroup[ビルド]
     Build[Build]
