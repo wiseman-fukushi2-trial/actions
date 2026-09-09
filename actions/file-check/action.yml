@@ -12,7 +12,7 @@ inputs:
     description: 処理対象ファイルのリスト
     required: true
   project-files:
-    description: 処理対象プロジェクトのリスト
+    description: 処理対象 .vbproj のリスト
     required: true
 
 runs:
