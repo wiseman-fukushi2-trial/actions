@@ -60,11 +60,11 @@ flowchart TD
     click Checkout "{{ site.github.repository_url }}/blob/{{ site.github.build_revision }}/.github/workflows/toko.yml#L12"
     click checkout "{{ site.github.repository_url }}/tree/{{ site.github.build_revision }}/actions/checkout"
     click Diff "{{ site.github.repository_url }}/blob/{{ site.github.build_revision }}/.github/workflows/toko.yml#L18"
-    click diff "{{ site.github.repository_url }}/tree/{{ site.github.build_revision }}/main/actions/diff"
+    click diff "{{ site.github.repository_url }}/tree/{{ site.github.build_revision }}/actions/diff"
     click Build "{{ site.github.repository_url }}/blob/{{ site.github.build_revision }}/.github/workflows/toko.yml#L23"
-    click build "{{ site.github.repository_url }}/tree/{{ site.github.build_revision }}/main/actions/build"
+    click build "{{ site.github.repository_url }}/tree/{{ site.github.build_revision }}/actions/build"
     click FileCheck "{{ site.github.repository_url }}/blob/{{ site.github.build_revision }}/.github/workflows/toko.yml#L47"
-    click filecheck "{{ site.github.repository_url }}/tree/{{ site.github.build_revision }}/main/actions/file-check"
+    click filecheck "{{ site.github.repository_url }}/tree/{{ site.github.build_revision }}/actions/file-check"
 ```
 
 ## 環境構築
