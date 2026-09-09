@@ -1,7 +1,7 @@
 # .github/workflows/toko.yml
 
 ## 概要
-```.github/workflows/toko.yml``` は、従来のビルド投稿作業に相当する成果物チェックを実行する CI モジュールです。
+[.github/workflows/toko.yml](https://github.com/wiseman-fukushi-dev/rv1.actions/blob/main/.github/workflows/toko.yml) は、従来のビルド投稿作業に相当する成果物チェックを実行する CI モジュールです。
 
 ## フロー
 ```mermaid
