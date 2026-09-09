@@ -1,7 +1,7 @@
 # .github/workflows/toko.yml
 
 ## 概要
-[.github/workflows/toko.yml]({{ site.github.repository_url }}/.github/workflows/toko.yml) は、従来のビルド投稿作業に相当する成果物チェックを実行する CI モジュールです。
+[.github/workflows/toko.yml]({{ site.github.repository_url }}/blob/{{ site.github.build_revision }}/.github/workflows/toko.yml) は、従来のビルド投稿作業に相当する成果物チェックを実行する CI モジュールです。
 
 ## フロー
 ```mermaid
