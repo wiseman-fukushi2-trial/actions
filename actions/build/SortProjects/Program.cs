@@ -51,7 +51,7 @@ namespace SortProjects
 
 				// 出力
 				string outputFile = Environment.GetEnvironmentVariable("GITHUB_OUTPUT") ?? "GITHUB_OUTPUT.log";
-				File.AppendAllText(outputFile, $"sorted_projects=\"{result}\"" + Environment.NewLine);
+				File.AppendAllText(outputFile, $"sorted_projects={result}" + Environment.NewLine);
 			}
 			catch (Exception ex)
 			{
