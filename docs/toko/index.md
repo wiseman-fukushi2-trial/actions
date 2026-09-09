@@ -29,28 +29,28 @@ flowchart TD
     
     subgraph CheckoutGroup[リポジトリのチェックアウト]
     direction TB
-    Checkout --> checkout
+    Checkout -> checkout
     end
     
     CheckoutGroup --> DiffGroup
     
     subgraph DiffGroup[差分取得]
     direction TB
-    Diff --> diff
+    Diff -> diff
     end
     
     DiffGroup -- changed_projects --> BuildGroup
     
     subgraph BuildGroup[ビルド]
     direction TB
-    Build --> build
+    Build -> build
     end
     
     DiffGroup -- changed_projects<br>changed_files --> FileCheckGroup
     
     subgraph FileCheckGroup[ファイルチェック]
     direction TB
-    FileCheck --> filecheck
+    FileCheck -> filecheck
     end
     
     BuildGroup --> End
