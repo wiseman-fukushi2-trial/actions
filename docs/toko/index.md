@@ -45,7 +45,7 @@ flowchart TD
     Build --> build
     end
     
-    DiffGroup -- changed_projects/changed_files --> FileCheckGroup
+    DiffGroup -- changed_projects<br>changed_files --> FileCheckGroup
     
     subgraph FileCheckGroup[ファイルチェック]
     direction TB
