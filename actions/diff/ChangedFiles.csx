@@ -18,4 +18,4 @@ string result = string.Join(" ", absolutePaths.Select(x => $"'{x}'"));
 
 // 出力
 string outputFile = Environment.GetEnvironmentVariable("GITHUB_OUTPUT") ?? "GITHUB_OUTPUT.log";
-File.AppendAllText(outputFile, $"changed_files=\"{result}\"" + Environment.NewLine);
+File.AppendAllText(outputFile, $"changed_files={result}" + Environment.NewLine);
