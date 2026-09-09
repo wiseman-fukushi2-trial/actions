@@ -23,6 +23,7 @@ runs:
             changed:
               - '**'
 
+    # 差分ファイルを絶対パスに変換
     - name: Convert To Absolute Path
       id: changed_files
       shell: cmd

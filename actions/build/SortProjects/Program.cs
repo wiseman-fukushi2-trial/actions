@@ -15,9 +15,9 @@ namespace SortProjects
 		{
 			try
 			{
-				if (args.Length < 2)
+				if (args.Length < 1)
 				{
-					throw new ArgumentException("required solutionFilePath projectFile1 [projectFile2 ...]");
+					throw new ArgumentException("required solutionFilePath [projectFile1 ...]");
 				}
 
 				string workspace = args[0];
@@ -47,11 +47,11 @@ namespace SortProjects
 					Console.WriteLine(project);
 				}
 
-				string result = string.Join(" ", sortedProjects);
+				string result = string.Join(" ", sortedProjects.Select(x => $"'{x}'"));
 
 				// 出力
 				string outputFile = Environment.GetEnvironmentVariable("GITHUB_OUTPUT") ?? "GITHUB_OUTPUT.log";
-				File.AppendAllText(outputFile, $"sorted_projects={result}" + Environment.NewLine);
+				File.AppendAllText(outputFile, $"sorted_projects=\"{result}\"" + Environment.NewLine);
 			}
 			catch (Exception ex)
 			{

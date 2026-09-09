@@ -1,10 +1,6 @@
 #nullable enable
 
-// 引数が空の場合は処理を終了する
-if(Args is null || Args.Count == 0)
-{
-	throw new("required relativePath1 [relativePath2 ...]");
-}
+//required [relativePath1 ...]
 
 // 差分ファイルパスのリスト
 IList<string> changedFiles = Args;
@@ -29,9 +25,11 @@ foreach (string file in changedFiles)
 	changedProjects.Add(projFilePath);
 }
 
+string result = string.Join(" ", changedProjects.Select(x => $"'{x}'"));
+
 // 出力
 string outputFile = Environment.GetEnvironmentVariable("GITHUB_OUTPUT") ?? "GITHUB_OUTPUT.log";
-File.AppendAllText(outputFile, $"changed_projects={string.Join(' ', changedProjects)}" + Environment.NewLine);
+File.AppendAllText(outputFile, $"changed_projects=\"{result}\"" + Environment.NewLine);
 
 
 static string? GetProjFilePath(DirectoryInfo directory)
