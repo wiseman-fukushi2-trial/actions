@@ -68,15 +68,15 @@ flowchart TD
 ## 環境構築
 ### GitHub
 #### Actions 内で Pull Request を参照できるようにする
-Organization と 当リポジトリ それぞれで、以下にチェックを入れてください。
+Organization と 当リポジトリ それぞれで、以下にチェックを入れる。
 ```
 Settings > Actions > General
 Workflow permissions > Allow GitHub Actions to create and approve pull requests
 ```
 
 ### Server
-このモジュールは、self-hosted runner 上で実行されます。
-ランナーを登録したサーバーで以下の環境を構築してください。
+このモジュールは、self-hosted runner 上で実行される。  
+ランナーを登録したサーバーで以下の環境を構築する。
 #### PowerShell7(pws) をインストールする
 ```powershell
 winget install --id Microsoft.PowerShell --source winget --installer-type wix
