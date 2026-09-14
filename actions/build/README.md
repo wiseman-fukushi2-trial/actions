@@ -44,6 +44,7 @@ project-files: .vbproj のリスト
    [https://my.visualstudio.com/downloads](https://my.visualstudio.com/downloads?q=build%20tools%20for%20visual%20studio)
 2. それぞれのインストーラーを実行し、インストールを行う。
 3. それぞれの MSBuild が配置されているパスに、**システム環境変数** を設定する。(末尾のバックスラッシュは無し)
+   
    `MSBUILD`
    ```
    C:\Program Files (x86)\Microsoft Visual Studio\18\BuildTools\MSBuild\Current\Bin
