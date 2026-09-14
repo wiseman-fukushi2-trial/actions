@@ -115,5 +115,8 @@ dotnet-script -v
 # 出力例 : 2.0.1
 ```
 
-#### actions/build に関する実行環境
-https://github.com/wiseman-fukushi2-trial/actions/tree/main/actions/build#%E5%AE%9F%E8%A1%8C%E7%92%B0%E5%A2%83
+#### actions/checkout に関する実行環境を構築する
+[actions/actions#実行環境]({{ site.github.repository_url }}/tree/{{ site.github.build_revision }}/actions/checkout#%E5%AE%9F%E8%A1%8C%E7%92%B0%E5%A2%83)
+
+#### actions/build に関する実行環境を構築する
+[actions/build#実行環境]({{ site.github.repository_url }}/tree/{{ site.github.build_revision }}/actions/build#%E5%AE%9F%E8%A1%8C%E7%92%B0%E5%A2%83)
