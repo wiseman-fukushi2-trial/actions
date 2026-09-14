@@ -82,7 +82,7 @@ Workflow permissions > Allow GitHub Actions to create and approve pull requests
 #### PowerShell 7(pws) をインストールする
 `powershell` で以下を実行する。
 ```powershell
-winget install --id Microsoft.PowerShell --source winget --installer-type wix
+winget install --id Microsoft.PowerShell -e --source winget --scope machine --installer-type wix
 pwsh -v
 # 出力例
 # PowerShell 7.6.5
@@ -96,7 +96,7 @@ pwsh -v
 $new_path = "path/to/dotnet-script/dir"
 
 # .Net SDK 10 をインストール
-winget install Microsoft.DotNet.SDK.10
+winget install --id=Microsoft.DotNet.SDK.10 -e --source winget --scope machine
 
 # インストール済み SDK を確認
 dotnet --list-sdks
