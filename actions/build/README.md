@@ -39,7 +39,7 @@ project-files: .vbproj のリスト
 
 1. **Build Tools for Visual Studio** のインストーラーをダウンロードする。
    - 最新版（執筆当時 2026）
-   - 2019
+   - 2019   
    [https://my.visualstudio.com/downloads](https://my.visualstudio.com/downloads?q=build%20tools%20for%20visual%20studio)
 2. それぞれのインストーラーを実行し、インストールを行う。
 3. それぞれの MSBuild が配置されているパスに、**システム環境変数** を設定する。(末尾のバックスラッシュは無し)
@@ -56,17 +56,17 @@ project-files: .vbproj のリスト
    ```cmd
    "%MSBUILD%\msbuild.exe" -version
    "%MSBUILD_2019%\msbuild.exe" -version
+   # 出力例
+   # 
+   # C:\Windows\System32> "%MSBUILD%\msbuild.exe" -version
+   # MSBuild のバージョン 18.9.1+a81b43525 (.NET Framework)
+   # 18.9.1.35102
+   # 
+   # C:\Windows\System32> "%MSBUILD_2019%\msbuild.exe" -version
+   # .NET Framework 向け Microsoft (R) Build Engine バージョン 16.0.462+g62fb89029d
+   # Copyright (C) Microsoft Corporation.All rights reserved.
+   # 16.0.462.64354
    ```
-   実行例
-   ```cmd
-   C:\Windows\System32>   "%MSBUILD%\msbuild.exe" -version
-   MSBuild のバージョン 18.9.1+a81b43525 (.NET Framework)
-   18.9.1.35102
    
-   C:\Windows\System32>   "%MSBUILD_2019%\msbuild.exe" -version
-   .NET Framework 向け Microsoft (R) Build Engine バージョン 16.0.462+g62fb89029d
-   Copyright (C) Microsoft Corporation.All rights reserved.
-   16.0.462.64354
-   ```
 > [!NOTE]
 > 以上の手順と同様に、**Visual Studio** や **SDK** をインストールすることで MSBuild を取得することも可能です。
