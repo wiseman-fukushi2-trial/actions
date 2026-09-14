@@ -1,2 +1,10 @@
+kramdown:
+  math_engine: mathjax
+  syntax_highlighter: rouge
+
+remote_theme: pages-themes/minimal@v0.2.0
+
 markdown: kramdown
 highlighter: rouge
+plugins:
+  - jekyll-remote-theme
