@@ -1,5 +1,5 @@
 # actions/build
-```actions/build``` は、指定されたプロジェクトのビルドを実施し、その成否をサマリーとして出力するモジュールです。
+`actions/build` は、指定されたプロジェクトのビルドを実施し、その成否をサマリーとして出力するモジュールです。
 
 ## 使い方
 ```yaml
@@ -32,8 +32,8 @@ project-files: .vbproj のリスト
 
 ## 実行環境
 このモジュールは、実行マシン上に、以下の条件が整っていることを前提として動作します。
-- **最新版** の ```MSBuild``` がインストールされており、システム環境変数 ``MSBUILD`` で参照できる。
-- **2019版** の ```MSBuild``` がインストールされており、システム環境変数 ``MSBUILD_2019`` で参照できる。
+- **最新版** の `MSBuild` がインストールされており、システム環境変数 ``MSBUILD`` で参照できる。
+- **2019版** の `MSBuild` がインストールされており、システム環境変数 ``MSBUILD_2019`` で参照できる。
 
 以下では、**Build Tools for Visual Studio のインストールによって、MSBuild を取得する** 手順を紹介します。
 
@@ -43,11 +43,11 @@ project-files: .vbproj のリスト
    https://my.visualstudio.com/downloads?q=build%20tools%20for%20visual%20studio
 2. それぞれのインストーラーを実行し、インストールを行う。
 3. それぞれの MSBuild が配置されているパスに、**システム環境変数** を設定する。(末尾のバックスラッシュは無し)
-   ```MSBUILD```
+   `MSBUILD`
    ```
    C:\Program Files (x86)\Microsoft Visual Studio\18\BuildTools\MSBuild\Current\Bin
    ```
-   ```MSBUILD_2019```
+   `MSBUILD_2019`
    ```
    MSBuild 2019 のパス
    C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\MSBuild\Current\Bin

@@ -1,5 +1,5 @@
 # actions/diff
-```actions/diff``` は、変更されたファイルと、それに対応する .vbproj のリストを出力するモジュールです。
+`actions/diff` は、変更されたファイルと、それに対応する .vbproj のリストを出力するモジュールです。
 
 ## 使い方
 ```yaml
