@@ -106,7 +106,7 @@ dotnet --list-sdks
 # dotnet-script をインストール
 dotnet tool install dotnet-script --tool-path $new_path
 
-# システム環境変数に `$new_path` を追加
+# システム環境変数にパスを追加
 $paths = [Environment]::GetEnvironmentVariable("Path", "Machine")
 [Environment]::SetEnvironmentVariable("Path", "$paths;$new_path", "Machine")
 
