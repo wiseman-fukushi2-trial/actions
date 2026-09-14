@@ -79,18 +79,41 @@ Workflow permissions > Allow GitHub Actions to create and approve pull requests
 ### Server
 このモジュールは、self-hosted runner 上で実行される。  
 ランナーを登録したサーバーで以下の環境を構築する。
-#### PowerShell7(pws) をインストールする
+#### PowerShell 7(pws) をインストールする
+`powershell` で以下を実行する。
 ```powershell
 winget install --id Microsoft.PowerShell --source winget --installer-type wix
 pwsh -v
+# 出力例
+# PowerShell 7.6.5
 ```
 
 #### dotnet-script(csx) をインストールする
+**管理者権限** で起動した `powershell` で以下を実行する。
 ```powershell
-winget install Microsoft.DotNet.SDK.10
-dotnet --list-sdks
+# dotnet-script をインストールするディレクトリを指定する（ユーザーディレクトリは不可）
+# 入力例：C:\tool
+$new_path = "path/to/dotnet-script/dir"
 
-dotnet tool install dotnet-script --tool-path [PATH]
-# システム環境変数に ```[PATH]``` を追加
+# .Net SDK 10 をインストール
+winget install Microsoft.DotNet.SDK.10
+
+# インストール済み SDK を確認
+dotnet --list-sdks
+# 出力例
+# 10.0.400 [C:\Program Files\dotnet\sdk]
+
+# dotnet-script をインストール
+dotnet tool install dotnet-script --tool-path $new_path
+
+# システム環境変数に ```$new_path``` を追加
+$paths = [Environment]::GetEnvironmentVariable("Path", "Machine")
+[Environment]::SetEnvironmentVariable("Path", "$paths;$new_path", "Machine")
+
+# インストール確認
 dotnet-script -v
+# 出力例 : 2.0.1
 ```
+
+#### actions/build に関する実行環境
+https://github.com/wiseman-fukushi2-trial/actions/tree/main/actions/build#%E5%AE%9F%E8%A1%8C%E7%92%B0%E5%A2%83

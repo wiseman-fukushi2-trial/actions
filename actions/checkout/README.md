@@ -26,3 +26,18 @@ jobs:
 outputs.branch : 対象のブランチ名
 outputs.sha : 対象のコミット SHA
 ```
+
+## 実行環境
+このモジュールは、実行マシン上に、以下の条件が整っていることを前提として動作します。
+- `Git` がインストールされている。
+- システム環境変数 Path に Git インストールディレクトリが追加されている。
+
+以下では、`winget` でインストールを実行する方法を紹介します。
+
+**管理者権限** で起動した `powershell` で以下を実行する。
+```powershell
+winget install --id Git.Git -e --source winget --scope machine
+git -v
+# 出力例
+# git version 2.55.0.windows.3
+```
