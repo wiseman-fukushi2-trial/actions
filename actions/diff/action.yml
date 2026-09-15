@@ -26,20 +26,20 @@ runs:
     # 差分ファイルを絶対パスに変換
     - name: Convert To Absolute Path
       id: changed_files
-      shell: cmd
+      shell: pwsh
       run: |
         dotnet-script "${{ github.action_path }}/ChangedFiles.csx" "${{ github.workspace }}" ${{ steps.changed_files_relative.outputs.changed_files }}
 
     # 差分プロジェクトの .vbproj を取得
     - name: Get Changed Projects
       id: changed_projects
-      shell: cmd
+      shell: pwsh
       run: |
         dotnet-script "${{ github.action_path }}/ChangedProjects.csx" ${{ steps.changed_files.outputs.changed_files }}
 
-    # 出力
-    - name: Output
-      shell: cmd
+    # 結果表示
+    - name: Display Results
+      shell: pwsh
       run: |
-        echo steps.changed_files.outputs.changed_files : ${{ steps.changed_files.outputs.changed_files }}
-        echo steps.changed_projects.outputs.changed_projects : ${{ steps.changed_projects.outputs.changed_projects }}
+        Write-Host "steps.changed_files.outputs.changed_files : ${{ steps.changed_files.outputs.changed_files }}"
+        Write-Host "steps.changed_projects.outputs.changed_projects : ${{ steps.changed_projects.outputs.changed_projects }}"

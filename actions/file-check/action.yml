@@ -20,7 +20,7 @@ runs:
 
   steps:
     - name: File Check
-      shell: cmd
+      shell: pwsh
       run: |
         dotnet-script "${{ github.action_path }}/Program.csx" ^
           "${{ github.workspace }}" ^
