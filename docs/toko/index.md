@@ -120,3 +120,6 @@ dotnet-script -v
 
 #### actions/build に関する実行環境を構築する
 [actions/build#実行環境]({{ site.github.repository_url }}/tree/{{ site.github.build_revision }}/actions/build#%E5%AE%9F%E8%A1%8C%E7%92%B0%E5%A2%83)
+
+## ユニットテスト
+当リポジトリの main に対して push/pull request が実行されると、[.github/workflows/toko-test.yml]({{ site.github.repository_url }}/blob/{{ site.github.build_revision }}/.github/workflows/toko-test.yml) によって、自動ユニットテストが開始されます。
