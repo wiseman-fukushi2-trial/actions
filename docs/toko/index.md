@@ -4,6 +4,7 @@
 [.github/workflows/toko.yml]({{ site.github.repository_url }}/blob/{{ site.github.build_revision }}/.github/workflows/toko.yml) は、従来のビルド投稿作業に相当する成果物チェックを実行する CI モジュールです。
 
 ## フロー
+各ノードをクリックすると、ファイルの該当箇所にジャンプできます。
 ```mermaid
 flowchart TD
     Start([workflow_call])
