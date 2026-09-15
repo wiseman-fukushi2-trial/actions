@@ -28,8 +28,7 @@ runs:
       id: changed_files
       shell: pwsh
       run: |
-        dotnet-script `
-          "${{ github.action_path }}/ChangedFiles.csx" `
+        dotnet-script "${{ github.action_path }}/ChangedFiles.csx" `
           "${{ github.workspace }}" `
           ${{ steps.changed_files_relative.outputs.changed_files }}
 
@@ -38,8 +37,7 @@ runs:
       id: changed_projects
       shell: pwsh
       run: |
-        dotnet-script `
-          "${{ github.action_path }}/ChangedProjects.csx" `
+        dotnet-script "${{ github.action_path }}/ChangedProjects.csx" `
           ${{ steps.changed_files.outputs.changed_files }}
 
     # 結果表示
