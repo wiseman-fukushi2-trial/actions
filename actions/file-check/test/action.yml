@@ -6,6 +6,6 @@ runs:
 
   steps:
     - name: Unit Test
-      shell: cmd
+      shell: pwsh
       run: |
         dotnet-script "${{ github.action_path }}/UnitTest.csx"
