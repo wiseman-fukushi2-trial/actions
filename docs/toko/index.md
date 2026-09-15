@@ -92,8 +92,7 @@ pwsh -v
 **管理者権限** で起動した `powershell` で以下を実行する。
 ```powershell
 # dotnet-script をインストールするディレクトリを指定する（ユーザーディレクトリは不可）
-# 入力例：C:\tool
-$new_path = "path/to/dotnet-script/dir"
+$new_path = "C:\tool"
 
 # .Net SDK 10 をインストール
 winget install --id=Microsoft.DotNet.SDK.10 -e --source winget --scope machine
