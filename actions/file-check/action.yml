@@ -22,10 +22,11 @@ runs:
     - name: File Check
       shell: pwsh
       run: |
-        dotnet-script "${{ github.action_path }}/Program.csx" ^
-          "${{ github.workspace }}" ^
-          "${{ github.server_url }}/${{ github.repository }}" ^
-          "${{ inputs.branch }}" ^
-          "${{ inputs.sha }}" ^
-          ${{ inputs.files }} ^
+        dotnet-script `
+          "${{ github.action_path }}/Program.csx" `
+          "${{ github.workspace }}" `
+          "${{ github.server_url }}/${{ github.repository }}" `
+          "${{ inputs.branch }}" `
+          "${{ inputs.sha }}" `
+          ${{ inputs.files }} `
           ${{ inputs.project-files }}
