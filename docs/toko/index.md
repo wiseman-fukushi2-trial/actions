@@ -81,7 +81,7 @@ Workflow permissions > Allow GitHub Actions to create and approve pull requests
 このモジュールは、self-hosted runner 上で実行される。  
 ランナーを登録したサーバーで以下の環境を構築する。
 #### PowerShell 7(pws) をインストールする
-`powershell` で以下を実行する。
+**管理者権限** で起動した `powershell` で以下を実行する。
 ```powershell
 winget install --id Microsoft.PowerShell -e --source winget --scope machine --installer-type wix
 pwsh -v
@@ -122,4 +122,4 @@ dotnet-script -v
 [actions/build#実行環境]({{ site.github.repository_url }}/tree/{{ site.github.build_revision }}/actions/build#%E5%AE%9F%E8%A1%8C%E7%92%B0%E5%A2%83)
 
 ## ユニットテスト
-当リポジトリの main に対して push/pull request が実行されると、[.github/workflows/toko-test.yml]({{ site.github.repository_url }}/blob/{{ site.github.build_revision }}/.github/workflows/toko-test.yml) によって、自動ユニットテストが開始されます。
+当リポジトリの main に対する push/pull request や、手動実行をトリガーとして、[.github/workflows/toko-test.yml]({{ site.github.repository_url }}/blob/{{ site.github.build_revision }}/.github/workflows/toko-test.yml) が実行され、自動ユニットテストが開始されます。
